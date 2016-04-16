@@ -92,7 +92,7 @@ class PlgSystemSocialmeta extends JPlugin
 					});
 				  });
 				  ";
-		$document->addScript(JURI::root( true ) . '/plugins/system/facebookmeta/js/jquery.charactercounter.js');
+		$document->addScript(JURI::root( true ) . '/plugins/system/socialmeta/js/jquery.charactercounter.js');
 		$document->addScriptDeclaration($script);
 
 		// css to style the counter
@@ -332,11 +332,11 @@ echo '</pre>';
 			$document->addCustomTag('<!-- OG Article specific meta -->');
 			// article:author
 			if ($this->params->get('article_author')) {
-				$document->addCustomTag($metaauth);
+				$document->addCustomTag(@$metaauth);
 			}
 			// article:publisher
 			if ($this->params->get('article_publisher')) {
-				$document->addCustomTag($metapublisher);
+				$document->addCustomTag(@$metapublisher);
 			}
 			
 			// article:modified_time || article:published_time || article:expiration_time
@@ -540,7 +540,7 @@ echo '</pre>';
 			$fbprofile = $userparams->facebookmeta_fbuserprofile;
 		}		
 		
-		return $fbprofile;
+		return $fbprofile ? $fbprofile : '';
 	}
 
 	/**
@@ -566,8 +566,8 @@ echo '</pre>';
 		if ($userparams) {
 			$userparams = json_decode($userparams);
 			$twprofile = $userparams->facebookmeta_twitteruser;
-		}		
+		}	
 		
-		return $twprofile;
+		return $twprofile ? $twprofile : '';
 	}
 }
