@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+    <fields name="attribs" >
+        <fieldset name="metafb" addfieldpath="/plugins/system/socialmeta/fields">
+            <field
+            name="facebookmeta_image"
+            class="span8"
+            type="media"
+            label="PLG_SYSTEM_SOCIALMETA_IMAGE"
+			description="PLG_SYSTEM_SOCIALMETA_IMAGE_DESC"
+			directory=""
+            />
+            <field 
+            name="noteimagesize" 
+            type="separator"
+            default="PLG_SYSTEM_SOCIALMETA_IMAGENOTE_DESC" 
+			level="level3"
+            />
+<!--
+            <field 
+            name="noteimagesize" 
+            type="notextd"
+            close="true"  
+            class="alert span7" 
+            label="PLG_SYSTEM_SOCIALMETA_IMAGENOTE" 
+            description="PLG_SYSTEM_SOCIALMETA_IMAGENOTE_DESC" 
+            />
+-->
+            <field
+            name="facebookmeta_title"
+            type="text"
+            class="span6"
+            label="PLG_SYSTEM_SOCIALMETA_TITLE"
+			description="PLG_SYSTEM_SOCIALMETA_TITLE_DESC"
+            />
+            <field
+            name="facebookmeta_desc"
+            type="textarea"
+            rows="4"
+            cols="5"
+            class="span6"
+            label="PLG_SYSTEM_SOCIALMETA_DESC"
+			description="PLG_SYSTEM_SOCIALMETA_DESC_DESC"
+            />
+            <field
+            name="facebookmeta_seealso1"
+            type="item"
+            class="span8"
+            label="PLG_SYSTEM_SOCIALMETA_SEEALSO"
+			description="PLG_SYSTEM_SOCIALMETA_SEEALSO_DESC"
+            />
+            <field
+            name="facebookmeta_seealso2"
+            type="item"
+            class="span9"
+            label="PLG_SYSTEM_SOCIALMETA_SEEALSO"
+			description="PLG_SYSTEM_SOCIALMETA_SEEALSO_DESC"
+            />
+            <field
+            name="facebookmeta_seealso3"
+            type="item"
+            class="span10"
+            label="PLG_SYSTEM_SOCIALMETA_SEEALSO"
+			description="PLG_SYSTEM_SOCIALMETA_SEEALSO_DESC"
+            />
+            <field
+            name="facebookmeta_video"
+            type="video"
+            class="span12"
+            label="PLG_SYSTEM_SOCIALMETA_VIDEOURL"
+			description="PLG_SYSTEM_SOCIALMETA_VIDEOURL_DESC"
+            />
+			<field
+            name="facebookmeta_video_type"
+            type="text"
+            label="PLG_SYSTEM_SOCIALMETA_VIDEOTYPE"
+			description="PLG_SYSTEM_SOCIALMETA_VIDEOTYPE_DESC"
+            />
+			<field
+            name="facebookmeta_video_width"
+            type="text"
+            filter="integer"
+            label="PLG_SYSTEM_SOCIALMETA_VIDEOWIDTH"
+			description="PLG_SYSTEM_SOCIALMETA_VIDEOWIDTH_DESC"
+            />
+			<field
+            name="facebookmeta_video_height"
+            type="text"
+            filter="integer"
+            label="PLG_SYSTEM_SOCIALMETA_VIDEOHEIGHT"
+			description="PLG_SYSTEM_SOCIALMETA_VIDEOHEIGHT_DESC"
+            />
+			<field 
+			name="facebookmeta_og_type" 
+			type="radio"
+			class="btn-group btn-group-yesno"
+			default="article"
+            label="PLG_SYSTEM_SOCIALMETA_TYPE"
+			description="PLG_SYSTEM_SOCIALMETA_TYPE_DESC"
+			>
+				<option value="article">Article</option>
+				<option value="video">Video</option>
+			</field>
+        </fieldset>
+    </fields>
+</form>

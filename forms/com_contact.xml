@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+    <fields name="params" >
+        <fieldset name="metafb" addfieldpath="/plugins/system/socialmeta/fields">
+            <field 
+            name="notecontact" 
+            type="notextd" 
+            close="true"  
+            class="alert" 
+            label="PLG_SYSTEM_SOCIALMETA_CONTACTNOTE" 
+            description="PLG_SYSTEM_SOCIALMETA_CONTACTNOTE_DESC" 
+            />
+            <field
+            name="facebookmeta_fbuserprofile"
+            type="text"
+            label="PLG_SYSTEM_SOCIALMETA_FBUSERPROFILE"
+			description="PLG_SYSTEM_SOCIALMETA_FBUSERPROFILE_DESC"
+			directory=""
+            />
+            <field
+            name="facebookmeta_twitteruser"
+            type="text"
+            label="PLG_SYSTEM_SOCIALMETA_TWITTERUSERNAME"
+			description="PLG_SYSTEM_SOCIALMETA_TWITTERUSERNAME_DESC"
+			directory=""
+            />
+        </fieldset>
+    </fields>
+</form>
