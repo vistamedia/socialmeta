@@ -24,311 +24,311 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic" addfieldpath="/plugins/system/socialmeta/fields">
-	            <field 
-	            name="facebookmeta_note" 
-	            type="notextd"
-	            class="alert alert-warning" 
-	            label="PLG_SYSTEM_SOCIALMETA_NOTE" 
-	            description="PLG_SYSTEM_SOCIALMETA_NOTE_DESC" 
-	            />
-	            <field
-	            name="facebookmeta_defaultimage"
-	            type="media"
-	            label="PLG_SYSTEM_SOCIALMETA_DEFAULT_IMAGE"
+				<field
+				name="facebookmeta_note"
+				type="notextd"
+				class="alert alert-warning"
+				label="PLG_SYSTEM_SOCIALMETA_NOTE"
+				description="PLG_SYSTEM_SOCIALMETA_NOTE_DESC"
+				/>
+				<field
+				name="facebookmeta_defaultimage"
+				type="media"
+				label="PLG_SYSTEM_SOCIALMETA_DEFAULT_IMAGE"
 				description="PLG_SYSTEM_SOCIALMETA_DEFAULT_IMAGE_DESC"
 				directory=""
-	            />
-	            <field
-	            name="facebookmeta_appid"
-	            type="text"
-	            label="PLG_SYSTEM_SOCIALMETA_FBAPPID"
+				/>
+				<field
+				name="facebookmeta_appid"
+				type="text"
+				label="PLG_SYSTEM_SOCIALMETA_FBAPPID"
 				description="PLG_SYSTEM_SOCIALMETA_FBAPPID_DESC"
-	            />
-	            <field
-	            name="facebookmeta_appadmin"
-	            type="text"
-	            label="PLG_SYSTEM_SOCIALMETA_ADMINS"
+				/>
+				<field
+				name="facebookmeta_appadmin"
+				type="text"
+				label="PLG_SYSTEM_SOCIALMETA_ADMINS"
 				description="PLG_SYSTEM_SOCIALMETA_ADMINS_DESC"
-	            />
-	            <field
-	            name="facebookmeta_default_userid"
-	            type="text"
-	            label="PLG_SYSTEM_SOCIALMETA_FBUSERPROFILE"
+				/>
+				<field
+				name="facebookmeta_default_userid"
+				type="text"
+				label="PLG_SYSTEM_SOCIALMETA_FBUSERPROFILE"
 				description="PLG_SYSTEM_SOCIALMETA_FBUSERPROFILE_DESC"
-	            />
-	            <field
-	            name="facebookmeta_pageid"
-	            type="text"
-	            label="PLG_SYSTEM_SOCIALMETA_PAGEURL"
+				/>
+				<field
+				name="facebookmeta_pageid"
+				type="text"
+				label="PLG_SYSTEM_SOCIALMETA_PAGEURL"
 				description="PLG_SYSTEM_SOCIALMETA_PAGEURL_DESC"
-	            />
-	            <field
-	            name="facebookmeta_twittersite"
-	            type="text"
-	            default=""
-	            label="PLG_SYSTEM_SOCIALMETA_TWITTERSITE"
+				/>
+				<field
+				name="facebookmeta_twittersite"
+				type="text"
+				default=""
+				label="PLG_SYSTEM_SOCIALMETA_TWITTERSITE"
 				description="PLG_SYSTEM_SOCIALMETA_TWITTERSITE_DESC"
-	            />
-	            <field
-	            name="facebookmeta_titlelimit"
-	            type="text"
-	            default="68"
-	            label="PLG_SYSTEM_SOCIALMETA_TITLELIMIT"
+				/>
+				<field
+				name="facebookmeta_titlelimit"
+				type="text"
+				default="68"
+				label="PLG_SYSTEM_SOCIALMETA_TITLELIMIT"
 				description="PLG_SYSTEM_SOCIALMETA_TITLELIMIT_DESC"
-	            />
-	            <field
-	            name="facebookmeta_desclimit"
-	            type="text"
-	            default="200"
-	            label="PLG_SYSTEM_SOCIALMETA_DESCLIMIT"
+				/>
+				<field
+				name="facebookmeta_desclimit"
+				type="text"
+				default="200"
+				label="PLG_SYSTEM_SOCIALMETA_DESCLIMIT"
 				description="PLG_SYSTEM_SOCIALMETA_DESCLIMIT_DESC"
-	            />
+				/>
 			</fieldset>
 			<fieldset name="advanced" addfieldpath="/plugins/system/socialmeta/fields">
-	            <field 
-	            name="facebookmeta_noteadv" 
-	            type="notextd"
-	            class="alert alert-warning" 
-	            label="PLG_SYSTEM_SOCIALMETA_NOTE2" 
-	            description="PLG_SYSTEM_SOCIALMETA_NOTE2_DESC" 
-	            />
-				<field 
-				name="generallabel" 
-				type="spacer" 
+				<field
+				name="facebookmeta_noteadv"
+				type="notextd"
+				class="alert alert-warning"
+				label="PLG_SYSTEM_SOCIALMETA_NOTE2"
+				description="PLG_SYSTEM_SOCIALMETA_NOTE2_DESC"
+				/>
+				<field
+				name="generallabel"
+				type="spacer"
 				class="text"
 				label="Common OG Meta"
 				/>
-				<field 
-				name="og_site_name" 
+				<field
+				name="og_site_name"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="og:site_name"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="og_type" 
+				<field
+				name="og_type"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="og:type"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="og_url" 
+				<field
+				name="og_url"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="og:url"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="og_locale" 
+				<field
+				name="og_locale"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="og:locale"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="og_title" 
+				<field
+				name="og_title"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="og:title"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="og_description" 
+				<field
+				name="og_description"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="og:description"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="og_updated_time" 
+				<field
+				name="og_updated_time"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="og:updated_time"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="og_image" 
+				<field
+				name="og_image"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="og:image"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="og_video" 
+				<field
+				name="og_video"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="og:video"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="article_author" 
+				<field
+				name="article_author"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="article:author"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="og_see_also" 
+				<field
+				name="og_see_also"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="og:see_also"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="article_publisher" 
+				<field
+				name="article_publisher"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="article:publisher"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="article_published_time" 
+				<field
+				name="article_published_time"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="article:published_time"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="article_section" 
+				<field
+				name="article_section"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="article:section"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="article_tag" 
+				<field
+				name="article_tag"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="article:tag"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="facebooklabel" 
-				type="spacer" 
+				<field
+				name="facebooklabel"
+				type="spacer"
 				class="text"
 				label="Facebook specific"
 				/>
-				<field 
-				name="fb_app_id" 
+				<field
+				name="fb_app_id"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="fb:app_id"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="fb_admins" 
+				<field
+				name="fb_admins"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="fb:admins"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="twitterlabel" 
-				type="spacer" 
+				<field
+				name="twitterlabel"
+				type="spacer"
 				class="text"
 				label="Twitter specific"
 				/>
-				<field 
-				name="twitter_card" 
+				<field
+				name="twitter_card"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="twitter:card"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="twitter_site" 
+				<field
+				name="twitter_site"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="twitter:site"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
-				<field 
-				name="twitter_video" 
+				<field
+				name="twitter_video"
 				type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
 				description=""
 				label="twitter:video"
 				>
-					<option value="1">JSHOW</option>
-					<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
 				</field>
 			</fieldset>
 		</fields>

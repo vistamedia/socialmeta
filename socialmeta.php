@@ -42,10 +42,10 @@ class PlgSystemSocialmeta extends JPlugin
 		parent::__construct($subject, $config);
 
 		// Set some vars...
-		$this->defaultimage 			= $this->params->get('facebookmeta_defaultimage');
-		$this->fbappid 					= $this->params->get('facebookmeta_appid');
-		$this->facebookmeta_auth		= $this->params->get('facebookmeta_default_userid');
-		$this->facebookmeta_pub			= $this->params->get('facebookmeta_pageid');
+		$this->defaultimage 						= $this->params->get('facebookmeta_defaultimage');
+		$this->fbappid 									= $this->params->get('facebookmeta_appid');
+		$this->facebookmeta_auth				= $this->params->get('facebookmeta_default_userid');
+		$this->facebookmeta_pub					= $this->params->get('facebookmeta_pageid');
 		$this->facebookmeta_twittersite	= $this->params->get('facebookmeta_twittersite');
 		$this->facebookmeta_admin		= $this->params->get('facebookmeta_appadmin');
 		$this->facebookmeta_titlelimit	= $this->params->get('facebookmeta_titlelimit', 68);
@@ -56,7 +56,7 @@ class PlgSystemSocialmeta extends JPlugin
 		{
 			$this->app = JFactory::getApplication();
 		}
-		
+
 	}
 
 	/**
@@ -73,7 +73,7 @@ class PlgSystemSocialmeta extends JPlugin
 		$objectype	= "article"; // set a default object type
 
 		// A small test to integrate a character counter for the title
-		$script = "jQuery(document).ready(function($){    
+		$script = "jQuery(document).ready(function($){
 					$('#jform_attribs_facebookmeta_title').characterCounter({
 						limit: ".$this->facebookmeta_titlelimit.",
 						counterFormat: '%1 ".JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT')."'
@@ -101,15 +101,15 @@ class PlgSystemSocialmeta extends JPlugin
 
  		// Exclude the admin for performance purposes
 		if ($this->app->isAdmin())
-		{ 
+		{
 			return true;
 		}
-		
+
 		// Find the language code of your page
 		$lang = JFactory::getLanguage();
 		$locale = $lang->getTag();
 		$locale = str_replace('-', '_', $locale);
-		
+
 		// We intialize the meta image property with the default image if set
 		if ($this->defaultimage)
 		{
@@ -119,7 +119,7 @@ class PlgSystemSocialmeta extends JPlugin
 			$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 			$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
 		}
-		
+
 		$metaurl 		= '<meta property="og:url" content="' . JURI::current() .'" />';
 		$metatype 		= '<meta property="og:type" content="article" />';
 		$metatypetw 	= '<meta name="twitter:card" content="summary_large_image" />';
@@ -133,12 +133,12 @@ class PlgSystemSocialmeta extends JPlugin
 		{
 			$metafbadmins 	= '<meta property="fb:admins" content="'.$this->facebookmeta_admin.'" />';
 		}
-		
+
 		$jinput = JFactory::getApplication()->input;
 		$option	= $jinput->get('option', '', 'CMD');
 		$view 	= $jinput->get('view', '', 'CMD');
 		$id 	= (int)$jinput->get('id', '', 'CMD');
-		
+
 		// Restrict the context
 		if ( ( $option == 'com_content' && $view == 'article') || ( $option == 'com_flexicontent' && $view == 'item') ) {
 			$article 		= $this->getObjectContent($id);
@@ -151,7 +151,7 @@ class PlgSystemSocialmeta extends JPlugin
 				$article->tags->getItemTags('com_content.article', $article->id);
 			}
 			$attribs = json_decode($article->attribs);
-			
+
 			// we set the article type as default type if no data is provided
 			$facebookmeta_ogtype		= @$attribs->facebookmeta_og_type ? $attribs->facebookmeta_og_type : "article";
 			$facebookmeta_image			= @$attribs->facebookmeta_image;
@@ -169,21 +169,21 @@ class PlgSystemSocialmeta extends JPlugin
 
 
 			// We have to set the article sharing image https://developers.facebook.com/docs/sharing/best-practices#images
-			if ($facebookmeta_image) {				
+			if ($facebookmeta_image) {
 				$size 				= getimagesize(JURI::base() . $facebookmeta_image);
 				$metaimage 			= '<meta property="og:image" content="' . JURI::base() . $facebookmeta_image .'" />';
 				$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 				$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 				$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
 			}
-			if ($article->modified) {				
+			if ($article->modified) {
 				$metaupdated  		= '<meta property="og:updated_time" content="'. $this->to8601($article->modified) . '" />';
 			}
-			if ($this->facebookmeta_auth) {				
+			if ($this->facebookmeta_auth) {
 				$metaauth  			= '<meta property="article:author" content="'. ( $facebookmeta_author ? $facebookmeta_author : $this->facebookmeta_auth ) . '" />';
 				$metaauthtw 		= '<meta name="twitter:site" content="'. ( $facebookmeta_authortw ? $facebookmeta_authortw : $this->facebookmeta_twittersite ) . '" />';
 			}
-			if ($this->facebookmeta_pub) {				
+			if ($this->facebookmeta_pub) {
 				$metapublisher  	= '<meta property="article:publisher" content="'. $this->facebookmeta_pub . '" />';
 			}
 			$metasection  			= '<meta property="article:section" content="'. $category->title . '" />';
@@ -193,22 +193,22 @@ class PlgSystemSocialmeta extends JPlugin
 			if ($article->publish_down != '0000-00-00 00:00:00') {
 				$metapub['publish_down']	= '<meta property="article:expiration_time" content="'. $this->to8601($article->publish_down) . '" />';
 			}
-			if (count($article->tags->itemTags)) {	
+			if (count($article->tags->itemTags)) {
 				$metatags = array();
 				foreach ($article->tags->itemTags as $tag) {
 					$metatags[] = '<meta property="article:tag" content="' . $tag->title .'" />';
 				}
 			}
-			if ($facebookmeta_seealso1) {				
+			if ($facebookmeta_seealso1) {
 				$metaseealso1  	= '<meta property="og:see_also" content="'. JURI::base().substr(JRoute::_(ContentHelperRoute::getArticleRoute($facebookmeta_seealso1,$article->catid)), strlen(JURI::base(true)) + 1) . '" />';
 			}
-			if ($facebookmeta_seealso2) {				
+			if ($facebookmeta_seealso2) {
 				$metaseealso2  	= '<meta property="og:see_also" content="'. JURI::base().substr(JRoute::_(ContentHelperRoute::getArticleRoute($facebookmeta_seealso2,$article->catid)), strlen(JURI::base(true)) + 1) . '" />';
 			}
-			if ($facebookmeta_seealso3) {				
+			if ($facebookmeta_seealso3) {
 				$metaseealso3  	= '<meta property="og:see_also" content="'. JURI::base().substr(JRoute::_(ContentHelperRoute::getArticleRoute($facebookmeta_seealso3,$article->catid)), strlen(JURI::base(true)) + 1) . '" />';
 			}
-			
+
 			// We create the video object if video link has been provided
 			if ($facebookmeta_video) {
 				$url_scheme 		= parse_url($facebookmeta_video, PHP_URL_SCHEME); // hhtp || https
@@ -228,17 +228,17 @@ class PlgSystemSocialmeta extends JPlugin
 							$metatype 				= '<meta property="og:type" content="video" />';
 							$metatypetw				= '<meta name="twitter:card" content="player" />';
 						}
-	
+
 					} else {
 						$metavideosecureourl = "";
 					}
-				
+
 				}
 			}
-			
+
 
 			// We use the title of the article if none is provided
-			if ($facebookmeta_title) {			
+			if ($facebookmeta_title) {
 				$metatitle = '<meta property="og:title" content="' . $this->striptagsandcut ( $facebookmeta_title ) .'" />';
 			} else {
 				$metatitle = '<meta property="og:title" content="' . $this->striptagsandcut ( $article->title, $this->facebookmeta_titlelimit ) .'" />';
@@ -250,13 +250,13 @@ class PlgSystemSocialmeta extends JPlugin
 				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $article->introtext, $this->facebookmeta_desclimit ) .'" />';
 			}
 		}
-		
+
 /*
 echo '<pre>';
 print_r($category);
 echo '</pre>';
 */
-		
+
 		$document->addCustomTag('<!-- BOF Facebookmeta plugin for Joomla! -->');
 		// og:site_name
 		if ($this->params->get('og_site_name')) {
@@ -281,7 +281,7 @@ echo '</pre>';
 		}
 		// og:description
 		if ($this->params->get('og_description')) {
-			$document->addCustomTag($metadesc);		
+			$document->addCustomTag($metadesc);
 		}
 		// og:updated_time
 		if ($this->params->get('og_updated_time')) {
@@ -327,7 +327,7 @@ echo '</pre>';
 				$document->addCustomTag($metaseealso3);
 			}
 		}
-		
+
 		if ($facebookmeta_ogtype == "article") {
 			$document->addCustomTag('<!-- OG Article specific meta -->');
 			// article:author
@@ -338,7 +338,7 @@ echo '</pre>';
 			if ($this->params->get('article_publisher')) {
 				$document->addCustomTag(@$metapublisher);
 			}
-			
+
 			// article:modified_time || article:published_time || article:expiration_time
 			if ($this->params->get('article_published_time')) {
 				foreach ($metapub as $m) {
@@ -395,7 +395,7 @@ echo '</pre>';
 
 		$document->addCustomTag('<!-- EOF Socialmeta plugin for Joomla! -->');
 	}
-	
+
 	/**
 	 * Add the forms.
 	 *
@@ -406,7 +406,7 @@ echo '</pre>';
 	function onContentPrepareForm($form, $data) {
 		$app = JFactory::getApplication();
 		$option = $app->input->get('option');
-		
+
 		switch($option) {
 			case 'com_content':
 				if ($app->isAdmin()) {
@@ -439,19 +439,19 @@ echo '</pre>';
 	 *
 	 * @since   1.0
 	 */
-	private function getObjectContent($id, $table = 'content') 
+	private function getObjectContent($id, $table = 'content')
 	{
 		$db = JFactory::getDbo ();
-		
+
 		$dataobject	= JTable::getInstance($table);
 		$dataobject->load($id);
-		
+
 		return $dataobject;
 	}
-	
+
 	/**
 	 * Strip html tags and cut after x characters
-	 * Borrowed from FLEXIcontent www.flexicontent.org 
+	 * Borrowed from FLEXIcontent www.flexicontent.org
 	 *
 	 * @param 	string 		$text
 	 * @param 	int 		$nb
@@ -462,14 +462,14 @@ echo '</pre>';
 	{
 		// Convert html entities to characters so that they will not be removed ... by strip_tags
 		$text = html_entity_decode ($text, ENT_NOQUOTES, 'UTF-8');
-		
+
 		// Strip SCRIPT tags AND their containing code
 		$text = preg_replace( '#<script\b[^>]*>(.*?)<\/script>#is', '', $text );
-		
+
 		// Add whitespaces at start/end of tags so that words will not be joined,
 		//$text = preg_replace('/(<\/[^>]+>((?!\P{L})|(?=[0-9])))|(<[^>\/][^>]*>)/u', ' $1', $text);
 		$text = preg_replace('/(<\/[^>]+>(?![\:|\.|,|:|"|\']))|(<[^>\/][^>]*>)/u', ' $1', $text);
-		
+
 		// Strip html tags
 		$cleantext = strip_tags($text);
 
@@ -478,30 +478,30 @@ echo '</pre>';
 		$patterns[] = '#\[(.*?)\]#';
 		$patterns[] = '#{(.*?)}#';
 		$patterns[] = '#&(.*?);#';
-		
+
 		foreach ($patterns as $pattern) {
 			$cleantext = preg_replace( $pattern, '', $cleantext );
 		}
-		
+
 		// Replace multiple spaces, tabs, newlines, etc with a SINGLE whitespace so that text length will be calculated correctly
 		$cleantext = preg_replace('/[\p{Z}\s]{2,}/u', ' ', $cleantext);  // Unicode safe whitespace replacing
-		
+
 		// Calculate length according to UTF-8 encoding
 		$uncut_length = JString::strlen($cleantext);
-		
+
 		// Cut off the text if required but reencode html entities before doing so
 		if ($chars) {
 			if ($uncut_length > $chars) {
 				$cleantext = JString::substr( $cleantext, 0, $chars ).'...';
 			}
 		}
-		
+
 		// Reencode HTML special characters, (but do not encode UTF8 characters)
 		$cleantext = htmlspecialchars($cleantext, ENT_QUOTES, 'UTF-8');
-		
+
 		return $cleantext;
 	}
-	
+
 	/**
 	 * Returns a formated ISO8601 date
 	 *
@@ -509,7 +509,7 @@ echo '</pre>';
 	 * @return 	string
 	 * @since 1.0
 	 */
-	private function to8601 ( $datetime ) 
+	private function to8601 ( $datetime )
 	{
 		$date = new DateTime( $datetime );
 		return $date->format(DateTime::ISO8601);
@@ -523,23 +523,23 @@ echo '</pre>';
 	 * @return 	string		Facebook profile URL of the user
 	 * @since 1.0
 	 */
-	private function getUserFacebookProfile ( $userid ) 
+	private function getUserFacebookProfile ( $userid )
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('params');
 		$query->from($db->quoteName('#__contact_details'));
 		$query->where($db->quoteName('user_id')." = ".$db->quote($userid));
-		 
+
 		// Reset the query using our newly populated query object.
 		$db->setQuery($query);
 		$userparams = $db->loadResult();
-		
+
 		if ($userparams) {
 			$userparams = json_decode($userparams);
 			$fbprofile = $userparams->facebookmeta_fbuserprofile;
-		}		
-		
+		}
+
 		return $fbprofile ? $fbprofile : '';
 	}
 
@@ -551,23 +551,23 @@ echo '</pre>';
 	 * @return 	string		Facebook profile URL of the user
 	 * @since 1.0
 	 */
-	private function getUserTwitterProfile ( $userid ) 
+	private function getUserTwitterProfile ( $userid )
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('params');
 		$query->from($db->quoteName('#__contact_details'));
 		$query->where($db->quoteName('user_id')." = ".$db->quote($userid));
-		 
+
 		// Reset the query using our newly populated query object.
 		$db->setQuery($query);
 		$userparams = $db->loadResult();
-		
+
 		if ($userparams) {
 			$userparams = json_decode($userparams);
 			$twprofile = $userparams->facebookmeta_twitteruser;
-		}	
-		
+		}
+
 		return $twprofile ? $twprofile : '';
 	}
 }
