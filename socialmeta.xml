@@ -209,7 +209,7 @@
 				<option value="0">JHIDE</option>
 				</field>
 				<field
-				name="facebooklabel"
+				name="articlelabel"
 				type="spacer"
 				class="text"
 				label="OG Article specific"
