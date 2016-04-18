@@ -22,35 +22,34 @@ Up to now Socialmeta is only compatible with Joomla articles (com_content) and F
 If you are looking for an open graph solution for implementing the product type to your ecommerce, you should have a look to the [JED](http://extensions.joomla.org)
 ## Requirements
 Joomla! 3+ (it should also be compatible with 2.5 soon)
-## References
-**Official documents and recommendations:**
-[The open graph protocol](http://ogp.me/)
-[Sharing Best Practices for Websites & Mobile Apps](https://developers.facebook.com/docs/sharing/best-practices)
-[The article object](https://developers.facebook.com/docs/reference/opengraph/object-type/article/)
-[Twitter cards official documentation](https://dev.twitter.com/cards/overview)
+## Useful ressources
+**Official documents and recommendations**  
+[The open graph protocol](http://ogp.me/)  
+[Sharing Best Practices for Websites & Mobile Apps](https://developers.facebook.com/docs/sharing/best-practices)  
+[The article object](https://developers.facebook.com/docs/reference/opengraph/object-type/article/)  
+[Twitter cards official documentation](https://dev.twitter.com/cards/overview)  
 
-**Testing tools:**
-[Open Graph Object debugger](https://developers.facebook.com/tools/debug/og/object/)
-[Twitter Card Validator](https://cards-dev.twitter.com/validator)
+**Testing tools**  
+[Open Graph Object debugger](https://developers.facebook.com/tools/debug/og/object/)  
+[Twitter Card Validator](https://cards-dev.twitter.com/validator)  
 
-**General articles:**
-[What You Need to Know About Open Graph Meta Tags for Total Facebook and Twitter Mastery](https://blog.kissmetrics.com/open-graph-meta-tags/)
-[How to implement opengraph for video](http://www.marketing-mojo.com/blog/how-to-implement-open-graph-tags-for-videos/)
-[Increase your Social Impact with OpenGraph – Related Articles](http://wersm.com/increase-your-social-impact-with-opengraph-related-articles/)
-[Some meta templates](https://moz.com/blog/meta-data-templates-123)
-[New Open Graph tags for media publishers](https://developers.facebook.com/blog/post/2013/06/19/platform-updates--new-open-graph-tags-for-media-publishers-and-more/)
-[7 Common Meta Tag Mistakes That Publishers Make](http://www.trueanthem.com/blog/7-common-meta-tag-mistakes-that-publishers-make/)
-[Social Metadata: More Important than You Think](http://www.trueanthem.com/blog/social-metadata-more-important-than-you-think/)
-[Using Author Tags with Facebook Story Previews](http://www.trueanthem.com/blog/using-author-tags-with-facebook-story-previews/)
+**General articles**  
+[What You Need to Know About Open Graph Meta Tags for Total Facebook and Twitter Mastery](https://blog.kissmetrics.com/open-graph-meta-tags/)  
+[How to implement opengraph for video](http://www.marketing-mojo.com/blog/how-to-implement-open-graph-tags-for-videos/)  
+[Increase your Social Impact with OpenGraph – Related Articles](http://wersm.com/increase-your-social-impact-with-opengraph-related-articles/)  
+[Some meta templates](https://moz.com/blog/meta-data-templates-123)  
+[New Open Graph tags for media publishers](https://developers.facebook.com/blog/post/2013/06/19/platform-updates--new-open-graph-tags-for-media-publishers-and-more/)  
+[7 Common Meta Tag Mistakes That Publishers Make](http://www.trueanthem.com/blog/7-common-meta-tag-mistakes-that-publishers-make/)  
+[Social Metadata: More Important than You Think](http://www.trueanthem.com/blog/social-metadata-more-important-than-you-think/)  
+[Using Author Tags with Facebook Story Previews](http://www.trueanthem.com/blog/using-author-tags-with-facebook-story-previews/)  
 
-**Articles about video tags and strategy:**
-[Video SEO - basics, essentials & best practises](https://www.speechpad.com/video-seo)
-[How Video Marketing Creates Immediate SEO Results](https://blog.shareaholic.com/video-marketing-seo-results/)
-[Setting Videos not Hosted on Brightcove to Play within Facebook](https://support.brightcove.com/en/video-cloud/docs/setting-videos-not-hosted-brightcove-play-within-facebook)
-[](http://www.blogdumoderateur.com/facebook-domine-partages-sociaux/)
-[Facebook](http://blog.naytev.com/facebook-is-king/)
+**Articles about video tags and strategy**  
+[Video SEO - basics, essentials & best practises](https://www.speechpad.com/video-seo)  
+[How Video Marketing Creates Immediate SEO Results](https://blog.shareaholic.com/video-marketing-seo-results/)  
+[Setting Videos not Hosted on Brightcove to Play within Facebook](https://support.brightcove.com/en/video-cloud/docs/setting-videos-not-hosted-brightcove-play-within-facebook)  
+[Shared contents - Facebook is king](http://blog.naytev.com/facebook-is-king/)
 
-**Less interesting but still some information to grab:**
-[Social Meta Tags for Google, Twitter and Facebook](http://www.9lessons.info/2014/01/social-meta-tags-for-google-twitter-and.html)
-[Facebook Open Graph Meta Tags Tutorial](http://qnimate.com/open-graph-protocol-in-facebook/)
-[Social Media Tags: 11 Most Important Facebook Meta Tags](http://www.saleoid.com/blog/social-media-tags-11-most-important-facebook-meta-tags/)
+**Less interesting but still some information to grab**  
+[Social Meta Tags for Google, Twitter and Facebook](http://www.9lessons.info/2014/01/social-meta-tags-for-google-twitter-and.html)  
+[Facebook Open Graph Meta Tags Tutorial](http://qnimate.com/open-graph-protocol-in-facebook/)  
+[Social Media Tags: 11 Most Important Facebook Meta Tags](http://www.saleoid.com/blog/social-media-tags-11-most-important-facebook-meta-tags/)  
