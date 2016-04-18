@@ -198,6 +198,23 @@
 				<option value="0">JHIDE</option>
 				</field>
 				<field
+				name="og_see_also"
+				type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				description=""
+				label="og:see_also"
+				>
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
+				</field>
+				<field
+				name="facebooklabel"
+				type="spacer"
+				class="text"
+				label="OG Article specific"
+				/>
+				<field
 				name="article_author"
 				type="radio"
 				class="btn-group btn-group-yesno"
