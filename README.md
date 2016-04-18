@@ -1,5 +1,7 @@
 # Socialmeta plugin for Joomla!
-Social-meta is a system plugin for Joomla! which creates [open graph](http://og.me) and [twitter](https://dev.twitter.com/cards/overview) meta tags in the head of the document. The idea is to allow the writer to configure properly the way his article will appear in the social streams.
+Social-meta is a system plugin for Joomla! which creates [open graph](http://og.me) and [twitter](https://dev.twitter.com/cards/overview) meta tags in the head of the document. The idea is to allow the writer to configure properly the way his article will appear on the streams of the social networks.
+> PLEASE NOTE that this document is in progress ;)
+
 ## Installation
 Download the project zip and install it like any other extension. Go to extensions > plugins and find System - Socialmeta, publish it.
 
@@ -19,7 +21,7 @@ Figure 2
 ### Automatical mode
 The plugin functions automatically pretty good.
 ### Manual article override
-What makes this extension different from other implementations is precisely THIS feature. Socialmeta gives you the ability to override the automatic meta creation by your own input for each article. It gives the author/publisher a lot of flexibility on his settings.
+What makes this extension different from other implementations is precisely THIS feature. Socialmeta gives you the ability to override the automatic meta creation by your own input for each article. It gives the author/publisher a total flexibility on the way his content will be rendered on the social networks.
 
 This is how it looks in the Joomla! article view.
 ![screenshot of the article view](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-article-form.jpg)
