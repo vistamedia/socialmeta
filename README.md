@@ -10,13 +10,25 @@ Download the project zip and install it like any other extension. Go to extensio
 Go to extensions > plugins and find System - Socialmeta
 ### Basic
 ![screenshot of the basic options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-basic-conf.jpg)
+Figure 1
 ### Advanced
 Don't be scared, there's nothing to do here except if you get some specific compatibility issues. In this case it allows to disable globally the creation of some specific meta. It may be the case for example if you have some kind of sharing button extension which already creates the fb:app_id meta.
 ![screenshot of the advanced options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-advanced-conf.jpg)
+Figure 2
 ## Usage
+### Automatical mode
+The plugin functions automatically pretty good.
+### Manual article override
+What makes this extension different from other implementations is precisely THIS feature. Socialmeta gives you the ability to override the automatic meta creation by your own input for each article. It gives the author/publisher a lot of flexibility on his settings.
+
 This is how it looks in the Joomla! article view.
 ![screenshot of the article view](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-article-form.jpg)
+Figure 3
 ## Sites with multiple authors
+> NOTE:  
+Before taking any decision on the values you will provide for fig.1-4, fig.1-5, fig.5-1 and fig.5-2, I strongly recommend you the reading of the following articles: [New Open Graph tags for media publishers](https://developers.facebook.com/blog/post/2013/06/19/platform-updates--new-open-graph-tags-for-media-publishers-and-more/) & [Using Author Tags with Facebook Story Previews](http://www.trueanthem.com/blog/using-author-tags-with-facebook-story-previews/)    
+These articles will help you do decide about your author/publisher strategy.
+
 If you wish each author to be linked with his publications on the facebook stream you can add his own Facebook profile URL and Twitter @username in the Contact component.
 To perform this just create a contact for each user for which you would like to override the general settings.  
 - Create a new contact  
@@ -24,11 +36,13 @@ To perform this just create a contact for each user for which you would like to 
 - Go the social tab (fig.2)
 
 ![screenshot of the contact creation](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-contact-form-link.jpg)  
+Figure 4
 
 - Provide Facebook (fig.1) and Twitter (fig.2) credentials. Note Facebook must be an Url and Twitter a @username
 - Save the new contact.
 
 ![screenshot of the contact creation social tab](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-contact-form-social.jpg)
+Figure 5
 
 > NOTE  
 > You absolutely don't need to use the contact component. I just use its table to store the data. The contact doesn't need to be published. You can even disable the component if you wish ;)  
@@ -55,17 +69,17 @@ Joomla! 3+ (it should also be compatible with 2.5 soon)
 
 **General articles**  
 [What You Need to Know About Open Graph Meta Tags for Total Facebook and Twitter Mastery](https://blog.kissmetrics.com/open-graph-meta-tags/)  
-[How to implement opengraph for video](http://www.marketing-mojo.com/blog/how-to-implement-open-graph-tags-for-videos/)  
 [Increase your Social Impact with OpenGraph – Related Articles](http://wersm.com/increase-your-social-impact-with-opengraph-related-articles/)  
 [Some meta templates](https://moz.com/blog/meta-data-templates-123)  
 [New Open Graph tags for media publishers](https://developers.facebook.com/blog/post/2013/06/19/platform-updates--new-open-graph-tags-for-media-publishers-and-more/)  
+[Using Author Tags with Facebook Story Previews](http://www.trueanthem.com/blog/using-author-tags-with-facebook-story-previews/)  
 [7 Common Meta Tag Mistakes That Publishers Make](http://www.trueanthem.com/blog/7-common-meta-tag-mistakes-that-publishers-make/)  
 [Social Metadata: More Important than You Think](http://www.trueanthem.com/blog/social-metadata-more-important-than-you-think/)  
-[Using Author Tags with Facebook Story Previews](http://www.trueanthem.com/blog/using-author-tags-with-facebook-story-previews/)  
 [Facebook is King, Other Networks Fight for Scraps](http://blog.naytev.com/facebook-is-king/)  
 
 
 **Articles about video tags and strategy**  
+[How to implement opengraph for video](http://www.marketing-mojo.com/blog/how-to-implement-open-graph-tags-for-videos/)  
 [Video SEO - basics, essentials & best practises](https://www.speechpad.com/video-seo)  
 [How Video Marketing Creates Immediate SEO Results](https://blog.shareaholic.com/video-marketing-seo-results/)  
 [Setting Videos not Hosted on Brightcove to Play within Facebook](https://support.brightcove.com/en/video-cloud/docs/setting-videos-not-hosted-brightcove-play-within-facebook)  
