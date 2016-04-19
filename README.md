@@ -5,6 +5,7 @@ Social-meta is a system plugin for Joomla! which creates Facebook [open graph](h
 > PLEASE NOTE that this document is in progress ;)
 
 ## Installation
+
 Download the project zip and install it like any other extension:
 - Go to extensions > plugins
 - Find System - Socialmeta
@@ -14,12 +15,16 @@ Download the project zip and install it like any other extension:
 > **Open and save the configuration of the plugin at least once** - even if you didn't provide any data - to set up automatically some default parameters values and be sure to avoid any PHP notices.
 
 ## Configuration
+
 - Go to extensions > plugins
 - Find System - Socialmeta
 - Open it
 
 ### Basic
-Actually no parameter is really required but if you wish the application to be really efficient, I recommend you to fill up these options (I will now order the option by priority for lazy people same I am)
+Actually no parameter is really required but if you wish the application to be really efficient, I recommend you to fill up at least the parameters 1, 4 and 6
+
+![screenshot of the basic options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-basic-conf.jpg)
+Figure 1
 
 1. **Default's site image**  
 You can set a default image for any page shared on Facebook except on those set manually with the content plugin. Leave it empty if you don't want to use it.
@@ -47,9 +52,6 @@ You can modify here the size of the title in the character counter. The accurate
 8. **Description limit**  
 You can modify here the size of the description in the character counter. The accurate setting is 200 today, but this value may change in the future depending on Facebook recommendations.
 
-
-![screenshot of the basic options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-basic-conf.jpg)
-Figure 1
 ### Advanced
 Don't be scared, there's nothing to do here except if you get some specific compatibility issues. In this case it allows to disable globally the creation of some specific meta. It may be the case for example if you have some kind of sharing button extension which already creates the fb:app_id meta.
 ![screenshot of the advanced options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-advanced-conf.jpg)
@@ -94,18 +96,36 @@ Figure 4
 Figure 5
 
 > NOTE  
-> You absolutely don't need to use the contact component. I just use its table to store the data. The contact doesn't need to be published. You can even disable the component if you wish ;)  
+> You absolutely don't need to use the contact component except once to do what I said previously. I just use its database table to store the user social profiles. The contact doesn't need to be published. You can even disable the component if you wish ;)  
 I made this choice to avoid having to create a user plugin which may conflict with other extensions which will also override the user management.  
 It may change in the future but that's the most reliable solution I found up to now.
 
 ## Disclaimer
-This plugin was created for a friend of mine runing a Joomla! website. It was supposed to serve a particular purpose, because IMHO there was a lack on that particular matter. As it could be useful for anyone using Joomla!, we now **try to improve** it and to make it really **generic**. So, be confident, send me suggestions, and we will build together **the** solution to fix that **ONE FOR ALL** ;)
+This plugin was created for a friend of mine running a Joomla! website. It was supposed to serve a particular purpose, because IMHO there was a lack on that particular matter. As it could be useful for anyone using Joomla!, we now **try to improve** it and to make it really **generic**. So, be confident, send me suggestions, and we will build together **the** solution to fix that **ONE FOR ALL** ;)
+
+## Known issues and ... todo ;)
+- Create parameters to choose the automatical image creation mode
+- Use meta description from the object before using the text field (up to now it is how the description is fetched from the facebook url scrapper)
+- Manage JS errors of the video properties fetching engine (see fig.3-5)  
+  - no image...   
+  - no description...  
+  - no video data...
+- Creation settings for visible elements
+  - Images: use image field or parse html
+  - og:author (contact view) add or override
+  - Add twitter:creator or override twitter:site
+- Implement category view (soon - everything is ready, I just want to cleanup the `onBeforeCompileHead{...}` method)
+- Implement menu component (soon - everything is ready, I just want to cleanup the `onBeforeCompileHead{...}` method)
+
 ## Limitation
-Up to now Socialmeta is only compatible with Joomla articles (com_content) and FLEXIcontent items (com_flexicontent). It only implements 2 objects from the open graph protocol: article and video.
-If you are looking for an open graph solution for implementing the product type to your ecommerce, you should have a further look to the [JED](http://extensions.joomla.org)
+Up to now Socialmeta is only compatible with Joomla articles (com_content) and FLEXIcontent items (com_flexicontent). It only implements 2 objects from the open graph protocol: article and video.  
+If you are looking for an open graph solution for implementing the product object type to your ecommerce (that would be an extremely wise decision by the way), you should have a further look to the [JED](http://extensions.joomla.org)
+
 ## Requirements
-Joomla! 3+ (it should also be compatible with 2.5 soon)
+Joomla! 3+
+
 ## Useful ressources
+
 **Official documents and recommendations**  
 [The open graph protocol](http://ogp.me/)  
 [Sharing Best Practices for Websites & Mobile Apps](https://developers.facebook.com/docs/sharing/best-practices)  

@@ -70,43 +70,56 @@ class PlgSystemSocialmeta extends JPlugin
 	{
 		$document 	= JFactory::getDocument();
 		$config 	= JFactory::getConfig();
+		$jinput 	= JFactory::getApplication()->input;
+		$option		= $jinput->get('option', '', 'CMD');
+		$view 		= $jinput->get('view', '', 'CMD');
+		$context	= $option . '.' . $view;
+		$id 		= (int)$jinput->get('id', '', 'CMD');
+
 		$objectype	= "article"; // set a default object type
 
-		// A small test to integrate a character counter for the title
-		$script = "jQuery(document).ready(function($){
-					$('#jform_attribs_facebookmeta_title').characterCounter({
-						limit: ".$this->facebookmeta_titlelimit.",
-						counterFormat: '%1 ".JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT')."'
-					});
-					$('#jform_attribs_facebookmeta_desc').characterCounter({
-						limit: ".$this->facebookmeta_desclimit.",
-						counterFormat: '%1 ".JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT')."'
-					});
-					$('#jform_params_facebookmeta_title').characterCounter({
-						limit: ".$this->facebookmeta_titlelimit.",
-						counterFormat: '%1 ".JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT')."'
-					});
-					$('#jform_params_facebookmeta_desc').characterCounter({
-						limit: ".$this->facebookmeta_desclimit.",
-						counterFormat: '%1 ".JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT')."'
-					});
-				  });
-				  ";
-		$document->addScript(JURI::root( true ) . '/plugins/system/socialmeta/js/jquery.charactercounter.js');
-		$document->addScriptDeclaration($script);
-
-		// css to style the counter
-		$css = "span.exceeded { color: #E00B0B; } .help-block { font-size: 11px; }";
-		$document->addStyleDeclaration($css);
-
- 		// Exclude the admin for performance purposes
+ 		// Add some JS to the forms and Exclude meta creation in the Admin
 		if ($this->app->isAdmin())
 		{
+			// A small test to integrate a character counter for the title
+			$script = "jQuery(document).ready(function($){
+						$('#jform_attribs_facebookmeta_title').characterCounter({
+							limit: ".$this->facebookmeta_titlelimit.",
+							counterFormat: '%1 ".JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT')."'
+						});
+						$('#jform_attribs_facebookmeta_desc').characterCounter({
+							limit: ".$this->facebookmeta_desclimit.",
+							counterFormat: '%1 ".JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT')."'
+						});
+						$('#jform_params_facebookmeta_title').characterCounter({
+							limit: ".$this->facebookmeta_titlelimit.",
+							counterFormat: '%1 ".JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT')."'
+						});
+						$('#jform_params_facebookmeta_desc').characterCounter({
+							limit: ".$this->facebookmeta_desclimit.",
+							counterFormat: '%1 ".JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT')."'
+						});
+					  });
+					  ";
+			$document->addScript(JURI::root( true ) . '/plugins/system/socialmeta/js/jquery.charactercounter.js');
+			$document->addScriptDeclaration($script);
+	
+			// css to style the counter
+			$css = "span.exceeded { color: #E00B0B; } .help-block { font-size: 11px; }";
+			$document->addStyleDeclaration($css);
+
 			return true;
 		}
+		
+		// Don't process meta on RSS feeds to avoid crashes
+        if ($jinput->get('format', '', 'CMD') == 'feed')
+        {
+            return true;
+        }
+
 
 		// Find the language code of your page
-		$lang = JFactory::getLanguage();
+		$lang 	= JFactory::getLanguage();
 		$locale = $lang->getTag();
 		$locale = str_replace('-', '_', $locale);
 
@@ -134,10 +147,11 @@ class PlgSystemSocialmeta extends JPlugin
 			$metafbadmins 	= '<meta property="fb:admins" content="'.$this->facebookmeta_admin.'" />';
 		}
 
-		$jinput = JFactory::getApplication()->input;
-		$option	= $jinput->get('option', '', 'CMD');
-		$view 	= $jinput->get('view', '', 'CMD');
-		$id 	= (int)$jinput->get('id', '', 'CMD');
+/*
+echo '<pre>';
+print_r($context);
+echo '</pre>';
+*/
 
 		// Restrict the context
 		if ( ( $option == 'com_content' && $view == 'article') || ( $option == 'com_flexicontent' && $view == 'item') ) {
@@ -236,7 +250,6 @@ class PlgSystemSocialmeta extends JPlugin
 				}
 			}
 
-
 			// We use the title of the article if none is provided
 			if ($facebookmeta_title) {
 				$metatitle = '<meta property="og:title" content="' . $this->striptagsandcut ( $facebookmeta_title ) .'" />';
@@ -250,12 +263,6 @@ class PlgSystemSocialmeta extends JPlugin
 				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $article->introtext, $this->facebookmeta_desclimit ) .'" />';
 			}
 		}
-
-/*
-echo '<pre>';
-print_r($category);
-echo '</pre>';
-*/
 
 		$document->addCustomTag('<!-- BOF Facebookmeta plugin for Joomla! -->');
 		// og:site_name
