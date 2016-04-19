@@ -31,11 +31,13 @@ You can set a default image for any page shared on Facebook except on those set 
 
 2. **Facebook Application ID**  
 If you have an Application ID for you site you can put it here. The plugin will generate the meta property. Leave it empty if you don't want to use it.  
-https://developers.facebook.com/docs/apps/register
+https://developers.facebook.com/docs/apps/register  
+Only useful for [Facebook insights](https://www.facebook.com/help/336893449723054/)
 
 3. **Admin ID**  
 Enter the Facebook ID of the user who will be able to access to the sharing stats of the pages. See Facebook insights for more information.  
-http://findmyfbid.com/
+http://findmyfbid.com/  
+Only useful for [Facebook insights](https://www.facebook.com/help/336893449723054/)
 
 4. **Facebook profile URL**  
 Enter the user profile URL with the https:// prefix. It will define the default author of your website's. This setting can be overridden for each author in the contact component under the Facebook tab.
@@ -53,15 +55,16 @@ You can modify here the size of the title in the character counter. The accurate
 You can modify here the size of the description in the character counter. The accurate setting is 200 today, but this value may change in the future depending on Facebook recommendations.
 
 ### Advanced
-Don't be scared, there's nothing to do here except if you get some specific compatibility issues. In this case it allows to disable globally the creation of some specific meta. It may be the case for example if you have some kind of sharing button extension which already creates the fb:app_id meta.
+Don't be scared, there's nothing to do here except if you get some specific compatibility issues. In this particular case this settings will allow you to **disable globally** the creation of **some specific meta**. It may be the case for example if you have some kind of sharing button extension which already creates the fb:app_id meta.  
+
 ![screenshot of the advanced options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-advanced-conf.jpg)
 Figure 2
 
 ## Usage
 
-### Automatical mode ()
+### Automatical mode
 The plugin functions automatically pretty good but if you come to this extension, it's probably because you wish to make your post more beautiful and get more impact, right?  
-That was my purpose too. Thus the automatical mode only serves one purpose: work the best at it can with the existing articles.  
+That was my purpose too. Thus the automatical mode only serves one purpose: to work the best at it can with the existing articles.  
 If, for whatever reason, the automatical mode does not produce the result you expect, you can just edit the article and use the manual override.
 
 #### Meta tags creation: rules and default values
