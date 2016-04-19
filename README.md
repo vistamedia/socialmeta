@@ -1,31 +1,78 @@
 # Socialmeta plugin for Joomla!
-Social-meta is a system plugin for Joomla! which creates [open graph](http://og.me) and [twitter](https://dev.twitter.com/cards/overview) meta tags in the head of the document. The idea is to allow the writer to configure properly the way his article will appear on the streams of the social networks.
+
+Social-meta is a system plugin for Joomla! which creates Facebook [open graph](http://og.me) and Twitter [meta tags](https://dev.twitter.com/cards/overview) in the head of the document. The idea is to allow the writer to configure properly the way his article will appear on the streams of the social networks.
+
 > PLEASE NOTE that this document is in progress ;)
 
 ## Installation
-Download the project zip and install it like any other extension. Go to extensions > plugins and find System - Socialmeta, publish it.
+Download the project zip and install it like any other extension:
+- Go to extensions > plugins
+- Find System - Socialmeta
+- Publish it.
 
 > IMPORTANT  
-> Open and save the configuration of the plugin at least once - even if you didn't provide any data - to set up automatically some default parameters values and be sure to avoid any PHP notices.
+> **Open and save the configuration of the plugin at least once** - even if you didn't provide any data - to set up automatically some default parameters values and be sure to avoid any PHP notices.
 
 ## Configuration
-Go to extensions > plugins and find System - Socialmeta
+- Go to extensions > plugins
+- Find System - Socialmeta
+- Open it
+
 ### Basic
+Actually no parameter is really required but if you wish the application to be really efficient, I recommend you to fill up these options (I will now order the option by priority for lazy people same I am)
+
+1. **Default's site image**  
+You can set a default image for any page shared on Facebook except on those set manually with the content plugin. Leave it empty if you don't want to use it.
+
+2. **Facebook Application ID**  
+If you have an Application ID for you site you can put it here. The plugin will generate the meta property. Leave it empty if you don't want to use it.  
+https://developers.facebook.com/docs/apps/register
+
+3. **Admin ID**  
+Enter the Facebook ID of the user who will be able to access to the sharing stats of the pages. See Facebook insights for more information.  
+http://findmyfbid.com/
+
+4. **Facebook profile URL**  
+Enter the user profile URL with the https:// prefix. It will define the default author of your website's. This setting can be overridden for each author in the contact component under the Facebook tab.
+
+5. **Facebook page URL**  
+Enter the user profile URL with the https:// prefix. It will define the publisher of the articles.  
+
+6. **Twitter @username**  
+Enter here the twitter @username of your whole site. Enter the Twitter account of a default author/entity to follow. This setting can be overridden for each author in the contact component under the Facebook tab
+
+7. **Title limit**  
+You can modify here the size of the title in the character counter. The accurate setting is 68 today, but this value may change in the future depending on Facebook recommendations.
+
+8. **Description limit**  
+You can modify here the size of the description in the character counter. The accurate setting is 200 today, but this value may change in the future depending on Facebook recommendations.
+
+
 ![screenshot of the basic options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-basic-conf.jpg)
 Figure 1
 ### Advanced
 Don't be scared, there's nothing to do here except if you get some specific compatibility issues. In this case it allows to disable globally the creation of some specific meta. It may be the case for example if you have some kind of sharing button extension which already creates the fb:app_id meta.
 ![screenshot of the advanced options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-advanced-conf.jpg)
 Figure 2
+
 ## Usage
+
 ### Automatical mode
-The plugin functions automatically pretty good.
+The plugin functions automatically pretty good but if you come to this extension, it's because you wish to make your post more beautiful and efficient, right?  
+That was my purpose too. Thus the automatical mode only serves one purpose: work the best at it can with the existing articles.  
+If, for whatever reason, the automatical mode does not produce the result you expect, you can just edit the article and use the manual override.
+
+#### Meta tags creation: rules and default values
+
+Coming soon ... :)
+
 ### Manual article override
 What makes this extension different from other implementations is precisely THIS feature. Socialmeta gives you the ability to override the automatic meta creation by your own input for each article. It gives the author/publisher a total flexibility on the way his content will be rendered on the social networks.
 
 This is how it looks in the Joomla! article view.
 ![screenshot of the article view](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-article-form.jpg)
 Figure 3
+
 ## Sites with multiple authors
 > NOTE:  
 Before taking any decision on the values you will provide for fig.1-4, fig.1-5, fig.5-1 and fig.5-2, I strongly recommend you the reading of the following articles: [New Open Graph tags for media publishers](https://developers.facebook.com/blog/post/2013/06/19/platform-updates--new-open-graph-tags-for-media-publishers-and-more/) & [Using Author Tags with Facebook Story Previews](http://www.trueanthem.com/blog/using-author-tags-with-facebook-story-previews/)    
