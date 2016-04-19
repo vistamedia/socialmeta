@@ -59,8 +59,8 @@ Figure 2
 
 ## Usage
 
-### Automatical mode
-The plugin functions automatically pretty good but if you come to this extension, it's because you wish to make your post more beautiful and efficient, right?  
+### Automatical mode ()
+The plugin functions automatically pretty good but if you come to this extension, it's probably because you wish to make your post more beautiful and get more impact, right?  
 That was my purpose too. Thus the automatical mode only serves one purpose: work the best at it can with the existing articles.  
 If, for whatever reason, the automatical mode does not produce the result you expect, you can just edit the article and use the manual override.
 
@@ -82,18 +82,19 @@ These articles will help you do decide about your author/publisher strategy.
 
 If you wish each author to be linked with his publications on the facebook stream you can add his own Facebook profile URL and Twitter @username in the Contact component.
 To perform this just create a contact for each user for which you would like to override the general settings.  
-- Create a new contact  
-- Give him a name and link it with a existing user (fig.1)  
-- Go the social tab (fig.2)
-
 ![screenshot of the contact creation](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-contact-form-link.jpg)  
 Figure 4
 
-- Provide Facebook (fig.1) and Twitter (fig.2) credentials. Note Facebook must be an Url and Twitter a @username
-- Save the new contact.
+1. Create a new contact  
+1. Give him a name and link it with a existing user (fig.4-1)  
+1. Go the social tab (fig.4-2)
 
 ![screenshot of the contact creation social tab](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-contact-form-social.jpg)
 Figure 5
+
+1. Provide Facebook (fig.5-1) and Twitter (fig.5-2) credentials.  
+_Note that Facebook must be an Url and Twitter a @username_
+1. Save the new contact.
 
 > NOTE  
 > You absolutely don't need to use the contact component except once to do what I said previously. I just use its database table to store the user social profiles. The contact doesn't need to be published. You can even disable the component if you wish ;)  
@@ -101,21 +102,22 @@ I made this choice to avoid having to create a user plugin which may conflict wi
 It may change in the future but that's the most reliable solution I found up to now.
 
 ## Disclaimer
-This plugin was created for a friend of mine running a Joomla! website. It was supposed to serve a particular purpose, because IMHO there was a lack on that particular matter. As it could be useful for anyone using Joomla!, we now **try to improve** it and to make it really **generic**. So, be confident, send me suggestions, and we will build together **the** solution to fix that **ONE FOR ALL** ;)
+This plugin was created for a friend of mine running a Joomla! website. It was supposed to serve a particular purpose, because IMHO there was a lack on that particular matter. As it could be useful for anyone using Joomla!, we now **try to improve** it and to make it really **generic**. So, be confident, send me suggestions, and we will build together **THE** solution to fix that **once for all** ;)  
 
 ## Known issues and ... todo ;)
-- Create parameters to choose the automatical image creation mode
-- Use meta description from the object before using the text field (up to now it is how the description is fetched from the facebook url scrapper)
-- Manage JS errors of the video properties fetching engine (see fig.3-5)  
+- Create parameters to choose the automatical **image creation mode**
+- Use **meta description** from the object before using the text field (up to now it is how the description is fetched from the facebook url scrapper)
+- Manage **JS errors** of the video properties fetching engine (see fig.3-5)  
   - no image...   
   - no description...  
   - no video data...
-- Creation settings for visible elements
+- **Creation settings** for visible elements
   - Images: use image field or parse html
   - og:author (contact view) add or override
   - Add twitter:creator or override twitter:site
-- Implement category view (soon - everything is ready, I just want to cleanup the `onBeforeCompileHead{...}` method)
-- Implement menu component (soon - everything is ready, I just want to cleanup the `onBeforeCompileHead{...}` method)
+- Implement **category view** (soon - everything is ready, I just want to cleanup the `onBeforeCompileHead{...}` method)
+- Implement **menu component** (soon - everything is ready, I just want to cleanup the `onBeforeCompileHead{...}` method)
+- Implement **Google+** as well (soon - I didn't have to study the effects of the markup up to now as I don't often use Google+ myself.)
 
 ## Limitation
 Up to now Socialmeta is only compatible with Joomla articles (com_content) and FLEXIcontent items (com_flexicontent). It only implements 2 objects from the open graph protocol: article and video.  
