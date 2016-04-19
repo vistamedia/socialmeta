@@ -2,22 +2,18 @@
 
 Social-meta is a system plugin for Joomla! which creates Facebook [open graph](http://og.me) and Twitter [meta tags](https://dev.twitter.com/cards/overview) in the head of the document. The idea is to allow the writer to configure properly the way his article will appear on the streams of the social networks.
 
-> PLEASE NOTE that this document is in progress ;)
+> PLEASE NOTE...  
+... that this document as well as the extension are in progress ;-)
 
 ## Do I need Socialmeta?
 
 Hummm... Difficult to say, but just let me ask you a simple question first...
 
-When you share a page of your Joomla! site on Facebook, do you want this ?
+When you share a page of your Joomla! site on Facebook, what do you want to see ?
 -----
-![screenshot of the basic options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/post-de-merde.jpg)
+![screenshot of the basic options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/post-compare.jpg)
 
-OR THIS ?
------
-
-![screenshot of the basic options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/karim-full.jpg)
-
-**If you prefer the second option, you can keep on reading :P**
+**If you prefer the second option (right side... just to be sure), you can keep on reading :P**
 
 
 ## Installation
@@ -37,7 +33,7 @@ Download the project zip and install it like any other extension:
 - Open it
 
 ### Basic
-Actually no parameter is really required but if you wish the application to be really efficient, I recommend you to fill up at least the parameters 1, 4 and 6
+Actually no parameter is really required but if you wish the application to be really efficient, I recommend you to fill up at least the parameters **1, 4 and 6**.
 
 ![screenshot of the basic options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-basic-conf.jpg)
 Figure 1
@@ -90,9 +86,11 @@ Coming soon ... :)
 ### Manual article override
 What makes this extension different from other implementations is precisely THIS feature. Socialmeta gives you the ability to override the automatic meta creation by your own input for each article. It gives the author/publisher a total flexibility on the way his content will be rendered on the social networks.
 
-This is how it looks in the Joomla! article view.
+This is how it looks in the Joomla! article view.  
 ![screenshot of the article view](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-article-form.jpg)
 Figure 3
+
+(explanations coming soon)
 
 ## Sites with multiple authors
 > NOTE:  
