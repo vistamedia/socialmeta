@@ -103,14 +103,14 @@ class PlgSystemSocialmeta extends JPlugin
 					  ";
 			$document->addScript(JURI::root( true ) . '/plugins/system/socialmeta/js/jquery.charactercounter.js');
 			$document->addScriptDeclaration($script);
-	
+
 			// css to style the counter
 			$css = "span.exceeded { color: #E00B0B; } .help-block { font-size: 11px; }";
 			$document->addStyleDeclaration($css);
 
 			return true;
 		}
-		
+
 		// Don't process meta on RSS feeds to avoid crashes
         if ($jinput->get('format', '', 'CMD') == 'feed')
         {
@@ -264,10 +264,10 @@ echo '</pre>';
 			}
 		}
 
-		$document->addCustomTag('<!-- BOF Facebookmeta plugin for Joomla! -->');
+		$document->addCustomTag('<!-- BOF Facebookmeta plugin for Joomla! https://github.com/vistamedia/socialmeta -->');
 		// og:site_name
 		if ($this->params->get('og_site_name')) {
-			$document->addCustomTag('<!-- OG common meta -->');
+			$document->addCustomTag('<!-- og common meta -->');
 			$document->addCustomTag($metasitename);
 		}
 		// og:type
@@ -336,7 +336,7 @@ echo '</pre>';
 		}
 
 		if ($facebookmeta_ogtype == "article") {
-			$document->addCustomTag('<!-- OG Article specific meta -->');
+			$document->addCustomTag('<!-- og:article specific meta -->');
 			// article:author
 			if ($this->params->get('article_author')) {
 				$document->addCustomTag(@$metaauth);
@@ -400,7 +400,7 @@ echo '</pre>';
 			}
 		}
 
-		$document->addCustomTag('<!-- EOF Socialmeta plugin for Joomla! -->');
+		$document->addCustomTag('<!-- EOF Socialmeta plugin for Joomla! https://github.com/vistamedia/socialmeta -->');
 	}
 
 	/**
