@@ -4,6 +4,22 @@ Social-meta is a system plugin for Joomla! which creates Facebook [open graph](h
 
 > PLEASE NOTE that this document is in progress ;)
 
+## Do I need Socialmeta?
+
+Hummm... Difficult to say, but just let me ask you a simple question first...
+
+When you share a page of your Joomla! site on Facebook, do you want this ?
+-----
+![screenshot of the basic options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/post-de-merde.jpg)
+
+OR THIS ?
+-----
+
+![screenshot of the basic options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/karim-full.jpg)
+
+**If you prefer the second option, you can keep on reading :P**
+
+
 ## Installation
 
 Download the project zip and install it like any other extension:
