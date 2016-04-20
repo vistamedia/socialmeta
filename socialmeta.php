@@ -554,10 +554,12 @@ echo '</pre>';
 
 		if ($userparams) {
 			$userparams = json_decode($userparams);
-			$fbprofile = $userparams->facebookmeta_fbuserprofile;
+			$fbprofile = $userparams->facebookmeta_fbuserprofile ? $userparams->facebookmeta_fbuserprofile : '';
+		} else {
+			$fbprofile = '';
 		}
 
-		return $fbprofile ? $fbprofile : '';
+		return $fbprofile;
 	}
 
 	/**
@@ -582,7 +584,9 @@ echo '</pre>';
 
 		if ($userparams) {
 			$userparams = json_decode($userparams);
-			$twprofile = $userparams->facebookmeta_twitteruser;
+			$twprofile = $userparams->facebookmeta_twitteruser ? $userparams->facebookmeta_twitteruser : '';
+		} else {
+			$twprofile = '';
 		}
 
 		return $twprofile ? $twprofile : '';
