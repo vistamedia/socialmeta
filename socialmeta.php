@@ -42,14 +42,14 @@ class PlgSystemSocialmeta extends JPlugin
 		parent::__construct($subject, $config);
 
 		// Set some vars...
-		$this->defaultimage 						= $this->params->get('facebookmeta_defaultimage');
-		$this->fbappid 									= $this->params->get('facebookmeta_appid');
-		$this->facebookmeta_auth				= $this->params->get('facebookmeta_default_userid');
-		$this->facebookmeta_pub					= $this->params->get('facebookmeta_pageid');
-		$this->facebookmeta_twittersite	= $this->params->get('facebookmeta_twittersite');
-		$this->facebookmeta_admin		= $this->params->get('facebookmeta_appadmin');
+		$this->defaultimage 						= $this->params->get('facebookmeta_defaultimage','');
+		$this->fbappid 									= $this->params->get('facebookmeta_appid','');
+		$this->facebookmeta_auth				= $this->params->get('facebookmeta_default_userid','');
+		$this->facebookmeta_pub					= $this->params->get('facebookmeta_pageid','');
+		$this->facebookmeta_twittersite	= $this->params->get('facebookmeta_twittersite','');
+		$this->facebookmeta_admin				= $this->params->get('facebookmeta_appadmin','');
 		$this->facebookmeta_titlelimit	= $this->params->get('facebookmeta_titlelimit', 68);
-		$this->facebookmeta_desclimit	= $this->params->get('facebookmeta_desclimit', 200);
+		$this->facebookmeta_desclimit		= $this->params->get('facebookmeta_desclimit', 200);
 
 		// Get the application if not done by JPlugin. This may happen during upgrades from Joomla 2.5.
 		if (empty($this->app))
@@ -74,7 +74,7 @@ class PlgSystemSocialmeta extends JPlugin
 		$option		= $jinput->get('option', '', 'CMD');
 		$view 		= $jinput->get('view', '', 'CMD');
 		$context	= $option . '.' . $view;
-		$id 		= (int)$jinput->get('id', '', 'CMD');
+		$id 			= (int)$jinput->get('id', '', 'CMD');
 
 		$objectype	= "article"; // set a default object type
 
@@ -138,13 +138,15 @@ class PlgSystemSocialmeta extends JPlugin
 		$metatypetw 	= '<meta name="twitter:card" content="summary_large_image" />';
 		$metasitename	= '<meta property="og:site_name" content="' . $config->get( 'sitename' ) .'" />';
 		$metalocale		= '<meta property="og:locale" content="' . $locale .'" />';
-		if ($this->fbappid)
-		{
+		if ($this->fbappid) {
 			$metafbappid 	= '<meta property="fb:app_id" content="'.$this->fbappid.'" />';
+		} else {
+			$metafbappid = '';
 		}
-		if ($this->facebookmeta_auth)
-		{
+		if ($this->facebookmeta_admin) 	{
 			$metafbadmins 	= '<meta property="fb:admins" content="'.$this->facebookmeta_admin.'" />';
+		} else {
+			$metafbadmins		= '';
 		}
 
 /*
@@ -167,35 +169,43 @@ echo '</pre>';
 			$attribs = json_decode($article->attribs);
 
 			// we set the article type as default type if no data is provided
-			$facebookmeta_ogtype		= @$attribs->facebookmeta_og_type ? $attribs->facebookmeta_og_type : "article";
-			$facebookmeta_image			= @$attribs->facebookmeta_image;
-			$facebookmeta_title			= @$attribs->facebookmeta_title;
-			$facebookmeta_desc			= @$attribs->facebookmeta_desc;
-			$facebookmeta_author		= $this->getUserFacebookProfile ( $article->created_by );
-			$facebookmeta_authortw		= $this->getUserTwitterProfile ( $article->created_by );
-			$facebookmeta_seealso1		= @$attribs->facebookmeta_seealso1;
-			$facebookmeta_seealso2		= @$attribs->facebookmeta_seealso2;
-			$facebookmeta_seealso3		= @$attribs->facebookmeta_seealso3;
-			$facebookmeta_video			= @$attribs->facebookmeta_video;
-			$facebookmeta_video_type	= @$attribs->facebookmeta_video_type;
-			$facebookmeta_video_width	= @$attribs->facebookmeta_video_width;
+			$facebookmeta_ogtype				= @$attribs->facebookmeta_og_type ? $attribs->facebookmeta_og_type : "article";
+			$facebookmeta_image					= @$attribs->facebookmeta_image;
+			$facebookmeta_title					= @$attribs->facebookmeta_title;
+			$facebookmeta_desc					= @$attribs->facebookmeta_desc;
+			$facebookmeta_author				= $this->getUserFacebookProfile ( $article->created_by );
+			$facebookmeta_authortw			= $this->getUserTwitterProfile ( $article->created_by );
+			$facebookmeta_seealso1			= @$attribs->facebookmeta_seealso1;
+			$facebookmeta_seealso2			= @$attribs->facebookmeta_seealso2;
+			$facebookmeta_seealso3			= @$attribs->facebookmeta_seealso3;
+			$facebookmeta_video					= @$attribs->facebookmeta_video;
+			$facebookmeta_video_type		= @$attribs->facebookmeta_video_type;
+			$facebookmeta_video_width		= @$attribs->facebookmeta_video_width;
 			$facebookmeta_video_height	= @$attribs->facebookmeta_video_height;
 
 
 			// We have to set the article sharing image https://developers.facebook.com/docs/sharing/best-practices#images
 			if ($facebookmeta_image) {
-				$size 				= getimagesize(JURI::base() . $facebookmeta_image);
-				$metaimage 			= '<meta property="og:image" content="' . JURI::base() . $facebookmeta_image .'" />';
+				$size 						= getimagesize(JURI::base() . $facebookmeta_image);
+				$metaimage 				= '<meta property="og:image" content="' . JURI::base() . $facebookmeta_image .'" />';
 				$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 				$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 				$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
 			}
 			if ($article->modified) {
-				$metaupdated  		= '<meta property="og:updated_time" content="'. $this->to8601($article->modified) . '" />';
+				$metaupdated  = '<meta property="og:updated_time" content="'. $this->to8601($article->modified) . '" />';
+			} else {
+				$metaupdated	= '';
 			}
 			if ($this->facebookmeta_auth) {
-				$metaauth  			= '<meta property="article:author" content="'. ( $facebookmeta_author ? $facebookmeta_author : $this->facebookmeta_auth ) . '" />';
-				$metaauthtw 		= '<meta name="twitter:site" content="'. ( $facebookmeta_authortw ? $facebookmeta_authortw : $this->facebookmeta_twittersite ) . '" />';
+				$metaauth  	= '<meta property="article:author" content="'. ( $facebookmeta_author ? $facebookmeta_author : $this->facebookmeta_auth ) . '" />';
+			} else {
+				$metaauth		= '';
+			}
+			if ($this->facebookmeta_twittersite) {
+				$metaauthtw 	= '<meta name="twitter:site" content="'. ( $facebookmeta_authortw ? $facebookmeta_authortw : $this->facebookmeta_twittersite ) . '" />';
+			} else {
+				$metaauthtw		= '';
 			}
 			if ($this->facebookmeta_pub) {
 				$metapublisher  	= '<meta property="article:publisher" content="'. $this->facebookmeta_pub . '" />';
@@ -266,36 +276,36 @@ echo '</pre>';
 
 		$document->addCustomTag('<!-- BOF Facebookmeta plugin for Joomla! https://github.com/vistamedia/socialmeta -->');
 		// og:site_name
-		if ($this->params->get('og_site_name')) {
+		if ($this->params->get('og_site_name',1)) {
 			$document->addCustomTag('<!-- og common meta -->');
 			$document->addCustomTag($metasitename);
 		}
 		// og:type
-		if ($this->params->get('og_type')) {
+		if ($this->params->get('og_type',1)) {
 			$document->addCustomTag($metatype);
 		}
 		// og:url
-		if ($this->params->get('og_url')) {
+		if ($this->params->get('og_url',1)) {
 			$document->addCustomTag($metaurl);
 		}
 		// og:locale
-		if ($this->params->get('og_locale')) {
+		if ($this->params->get('og_locale',1)) {
 			$document->addCustomTag($metalocale);
 		}
 		// og:title
-		if ($this->params->get('og_title')) {
+		if ($this->params->get('og_title',1)) {
 			$document->addCustomTag($metatitle);
 		}
 		// og:description
-		if ($this->params->get('og_description')) {
+		if ($this->params->get('og_description',1)) {
 			$document->addCustomTag($metadesc);
 		}
 		// og:updated_time
-		if ($this->params->get('og_updated_time')) {
+		if ($this->params->get('og_updated_time',1)) {
 			$document->addCustomTag($metaupdated);
 		}
 		// og:image
-		if ($this->params->get('og_image') && @$metaimage) {
+		if ($this->params->get('og_image',1) && @$metaimage) {
 			$document->addCustomTag($metaimage);
 			// og:image:width
 			$document->addCustomTag($metaimagewidth);
@@ -305,7 +315,7 @@ echo '</pre>';
 			$document->addCustomTag($metaimagemime);
 		}
 		// og:video (has sub-properties)
-		if ($this->params->get('og_video')) {
+		if ($this->params->get('og_video',1)) {
 			if (@$metavideo) {
 				$document->addCustomTag($metavideo);
 			}
@@ -323,7 +333,7 @@ echo '</pre>';
 			}
 		}
 		// og:see_also (array)
-		if ($this->params->get('og_see_also')) {
+		if ($this->params->get('og_see_also',1)) {
 			if (@$metaseealso1) {
 				$document->addCustomTag($metaseealso1);
 			}
@@ -338,26 +348,26 @@ echo '</pre>';
 		if ($facebookmeta_ogtype == "article") {
 			$document->addCustomTag('<!-- og:article specific meta -->');
 			// article:author
-			if ($this->params->get('article_author')) {
+			if ($this->params->get('article_author',1)) {
 				$document->addCustomTag(@$metaauth);
 			}
 			// article:publisher
-			if ($this->params->get('article_publisher')) {
+			if ($this->params->get('article_publisher',1)) {
 				$document->addCustomTag(@$metapublisher);
 			}
 
 			// article:modified_time || article:published_time || article:expiration_time
-			if ($this->params->get('article_published_time')) {
+			if ($this->params->get('article_published_time',1)) {
 				foreach ($metapub as $m) {
 					$document->addCustomTag($m);
 				}
 			}
 			// article:section
-			if ($this->params->get('article_section')) {
+			if ($this->params->get('article_section',1)) {
 				$document->addCustomTag($metasection);
 			}
 			// article:tag (array)
-			if ($this->params->get('article_tag')) {
+			if ($this->params->get('article_tag',1)) {
 				if (@$metatags) {
 					foreach ($metatags as $metatag) {
 						$document->addCustomTag($metatag);
@@ -367,27 +377,27 @@ echo '</pre>';
 		}
 
 		// fb:app_id
-		if ($this->params->get('fb_app_id')) {
+		if ($this->params->get('fb_app_id',1)) {
 			$document->addCustomTag('<!-- Facebook specific -->');
 			$document->addCustomTag($metafbappid);
 		}
 		// fb:admins
-		if ($this->params->get('fb_admins')) {
+		if ($this->params->get('fb_admins',1)) {
 			$document->addCustomTag($metafbadmins);
 		}
 
 		// twitter:card
-		if ($this->params->get('twitter_card')) {
+		if ($this->params->get('twitter_card',1)) {
 			$document->addCustomTag('<!-- Twitter Specific -->');
 			$document->addCustomTag($metatypetw);
 		}
 		// twitter:site
-		if ($this->params->get('twitter_site')) {
+		if ($this->params->get('twitter_site',1)) {
 			$document->addCustomTag($metaauthtw);
 		}
 		// twitter:video
 		if ($facebookmeta_ogtype == "video") {
-			if ($this->params->get('twitter_video')) {
+			if ($this->params->get('twitter_video',1)) {
 				if ($metavideo) {
 					$document->addCustomTag($metavideotw);
 				}
