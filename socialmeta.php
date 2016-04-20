@@ -68,13 +68,14 @@ class PlgSystemSocialmeta extends JPlugin
 	 */
 	public function onBeforeCompileHead()
 	{
-		$document 	= JFactory::getDocument();
+		$document = JFactory::getDocument();
 		$config 	= JFactory::getConfig();
 		$jinput 	= JFactory::getApplication()->input;
 		$option		= $jinput->get('option', '', 'CMD');
 		$view 		= $jinput->get('view', '', 'CMD');
 		$context	= $option . '.' . $view;
 		$id 			= (int)$jinput->get('id', '', 'CMD');
+		$allowed	= array( 'com_content.article','com_flexicontent.item' );
 
 		$objectype	= "article"; // set a default object type
 
@@ -112,11 +113,16 @@ class PlgSystemSocialmeta extends JPlugin
 		}
 
 		// Don't process meta on RSS feeds to avoid crashes
-        if ($jinput->get('format', '', 'CMD') == 'feed')
-        {
-            return true;
-        }
+    if ($jinput->get('format', '', 'CMD') == 'feed')
+    {
+        return true;
+    }
 
+		// We check if the view is allowed
+		if ( !in_array($context, $allowed) )
+		{
+				return true;
+		}
 
 		// Find the language code of your page
 		$lang 	= JFactory::getLanguage();
@@ -149,13 +155,11 @@ class PlgSystemSocialmeta extends JPlugin
 			$metafbadmins		= '';
 		}
 
-/*
-echo '<pre>';
-print_r($context);
-echo '</pre>';
-*/
+// echo '<pre>';
+// print_r($context);
+// echo '</pre>';
 
-		// Restrict the context
+		// Handle values of the content table
 		if ( ( $option == 'com_content' && $view == 'article') || ( $option == 'com_flexicontent' && $view == 'item') ) {
 			$article 		= $this->getObjectContent($id);
 			$article->tags 	= new JHelperTags;
