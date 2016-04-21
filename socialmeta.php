@@ -161,9 +161,9 @@ class PlgSystemSocialmeta extends JPlugin
 
 		// Handle values of the content table
 		if ( ( $option == 'com_content' && $view == 'article') || ( $option == 'com_flexicontent' && $view == 'item') ) {
-			$article 		= $this->getObjectContent($id);
+			$article 				= $this->getObjectContent($id);
 			$article->tags 	= new JHelperTags;
-			$category		= $this->getObjectContent($article->catid, 'category');
+			$category				= $this->getObjectContent($article->catid, 'category');
 
 			// Add the tags to the article object
 			if (!empty($article->id))
@@ -241,7 +241,7 @@ class PlgSystemSocialmeta extends JPlugin
 			if ($facebookmeta_video) {
 				$url_scheme 		= parse_url($facebookmeta_video, PHP_URL_SCHEME); // hhtp || https
 				$metavideo 			= $facebookmeta_video ? '<meta property="og:video" content="'.$facebookmeta_video.'" />' : "";
-				$metavideotw 		= $facebookmeta_video ? '<meta name="twitter:video" content="'.$facebookmeta_video.'" />' : "";
+				$metavideotw 		= $facebookmeta_video ? '<meta name="twitter:player" content="'.$facebookmeta_video.'" />' : "";
 				$metavideotype 		= ($facebookmeta_video_type == ("application/x-shockwave-flash" || "video/mp4")) ? '<meta property="og:video:type" content="'.$facebookmeta_video_type.'" />' : "";
 				$metavideoheight 	= ((int)$facebookmeta_video_height != 0) ? '<meta property="og:video:height" content="'.$facebookmeta_video_height.'" />' : "";
 				$metavideoheighttw 	= ((int)$facebookmeta_video_height != 0) ? '<meta name="twitter:player:height" content="'.$facebookmeta_video_height.'" />' : "";
