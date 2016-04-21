@@ -424,24 +424,33 @@ class PlgSystemSocialmeta extends JPlugin
 	 *
 	 * @since   1.0
 	 */
-	function onContentPrepareForm($form, $data) {
-		$app = JFactory::getApplication();
-		$option = $app->input->get('option');
-
-		switch($option) {
-			case 'com_content':
+	function onContentPrepareForm($form, $data)
+	{
+		if (!($form instanceof JForm))
+		{
+			$this->_subject->setError('JERROR_NOT_A_FORM');
+			return false;
+		}
+		
+		$app  = JFactory::getApplication();
+		$name = $form->getName();
+		
+		// Check we are manipulating a -supported- form.
+		switch($name)
+		{
+			case 'com_content.article':
 				if ($app->isAdmin()) {
 					JForm::addFormPath(__DIR__ . '/forms');
 					$form->loadFile('com_content', false);
 				}
 				return true;
-			case 'com_contact':
+			case 'com_contact.contact':
 				if ($app->isAdmin()) {
 					JForm::addFormPath(__DIR__ . '/forms');
 					$form->loadFile('com_contact', false);
 				}
 				return true;
-			case 'com_flexicontent':
+			case 'com_flexicontent.item':
 				if ($app->isAdmin()) {
 					JForm::addFormPath(__DIR__ . '/forms');
 					$form->loadFile('com_flexicontent', false);
