@@ -124,9 +124,27 @@ This is how it looks in the Joomla! article view.
 ![screenshot of the article view](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-article-form.jpg)
 Figure 3
 
-(explanations coming soon)
+1. **Image**  
+The image used when sharing the article on Facebook, Google+ and Twitter.
+1. **Title**  
+If empty the article title will be used instead
+1. **Description**  
+If empty the beginning of the article will be used instead
+1. **Related article**  
+Add some related resources to try to gain related items from your site under your post in the stream.
+1. **Video HTTPS Url**  
+Enter the url of the video resource associated to your content. Note that Facebook and Twitter REQUIRE HTTPS to avoid mixed content browser errors when playing the video in the stream
+1. **Video MIME**  
+This field should be automatically populated by pressing the Fetch button. If not the accepted values are: application/x-shockwave-flash or video/mp4
+1. **Video width**  
+Width of your video in pixels
+1. **Video height**  
+Height of your video in pixels  
+1. **Content's main type**  
+You shouldn't touch anything except if you wish your article to be treated as a video content. It may then become streamable in Facebook and Twitter streams. The other interest of setting an article as video content is to try to get a video preview in Google search result.
 
-## Sites with multiple authors
+
+### Sites with multiple authors
 > NOTE:  
 Before taking any decision on the values you will provide for fig.1-4, fig.1-5, fig.5-1 and fig.5-2, I strongly recommend you the reading of the following articles: [New Open Graph tags for media publishers](https://developers.facebook.com/blog/post/2013/06/19/platform-updates--new-open-graph-tags-for-media-publishers-and-more/) & [Using Author Tags with Facebook Story Previews](http://www.trueanthem.com/blog/using-author-tags-with-facebook-story-previews/)    
 These articles will help you do decide about your author/publisher strategy.
