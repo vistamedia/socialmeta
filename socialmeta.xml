@@ -20,6 +20,8 @@
 	<languages>
 		<language tag="en-GB">language/en-GB/en-GB.plg_system_socialmeta.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.plg_system_socialmeta.sys.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.plg_system_socialmeta.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.plg_system_socialmeta.sys.ini</language>
 	</languages>
 	<config>
 		<fields name="params">
