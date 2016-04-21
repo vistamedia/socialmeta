@@ -105,7 +105,7 @@ If, for whatever reason, the automatical mode does not produce the result you ex
 | article:expiration_time | automatical from object table **publish_down** in ISO8601                          |             |
 | article:modified_time   | automatical from object table **modified** in ISO8601                              |             |
 | article:published_time  | automatical from object table **publish_down** in ISO8601                          |             |
-| article:publisher       | socialmeta configuration (fig.2-5)                                                 |     yes     |
+| article:publisher       | socialmeta configuration (fig.2-5)                                                 |             |
 | article:section         | automatical from object table **catid**                                            |             |
 | article:tag             | automatical from object table `getItemTags(**id**)`                                |             |
 | fb:app_id               | socialmeta configuration (fig.2-2)                                                 |             |
