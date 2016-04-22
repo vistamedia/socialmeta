@@ -240,8 +240,8 @@ class PlgSystemSocialmeta extends JPlugin
 			// We create the video object if video link has been provided
 			if ($facebookmeta_video) {
 				$url_scheme 		= parse_url($facebookmeta_video, PHP_URL_SCHEME); // hhtp || https
-				$metavideo 			= $facebookmeta_video ? '<meta property="og:video" content="'.$facebookmeta_video.'" />' : "";
-				$metavideotw 		= $facebookmeta_video ? '<meta name="twitter:player" content="'.$facebookmeta_video.'" />' : "";
+				$metavideo 			= $facebookmeta_video ? '<meta property="og:video" content="'.htmlentities($facebookmeta_video).'" />' : "";
+				$metavideotw 		= $facebookmeta_video ? '<meta name="twitter:player" content="'.htmlentities($facebookmeta_video).'" />' : "";
 				$metavideotype 		= ($facebookmeta_video_type == ("application/x-shockwave-flash" || "video/mp4")) ? '<meta property="og:video:type" content="'.$facebookmeta_video_type.'" />' : "";
 				$metavideoheight 	= ((int)$facebookmeta_video_height != 0) ? '<meta property="og:video:height" content="'.$facebookmeta_video_height.'" />' : "";
 				$metavideoheighttw 	= ((int)$facebookmeta_video_height != 0) ? '<meta name="twitter:player:height" content="'.$facebookmeta_video_height.'" />' : "";
@@ -250,7 +250,7 @@ class PlgSystemSocialmeta extends JPlugin
 				if ($metavideotype && $metavideoheight && $metavideowidth) {
 
 					if ( $url_scheme == "https" ) { // && type == should be treated as a video object
-						$metavideosecureourl	= '<meta property="og:video:secure_url" content="'.$facebookmeta_video.'" />';
+						$metavideosecureourl	= '<meta property="og:video:secure_url" content="'.htmlentities($facebookmeta_video).'" />';
 						if ($facebookmeta_ogtype == "video") {
 							// && type == should be treated as a video object
 							$metatype 				= '<meta property="og:type" content="video" />';
@@ -278,7 +278,7 @@ class PlgSystemSocialmeta extends JPlugin
 			}
 		}
 
-		$document->addCustomTag('<!-- BOF Facebookmeta plugin for Joomla! https://github.com/vistamedia/socialmeta -->');
+		$document->addCustomTag('<!-- BOF Socialmeta plugin for Joomla! https://github.com/vistamedia/socialmeta -->');
 		// og:site_name
 		if ($this->params->get('og_site_name',1)) {
 			$document->addCustomTag('<!-- og common meta -->');
