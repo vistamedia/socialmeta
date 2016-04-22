@@ -63,6 +63,12 @@
 			description="PLG_SYSTEM_SOCIALMETA_VIDEOURL_DESC"
             />
 			<field
+            name="facebookmeta_video_secure_url"
+            type="text"
+            label="PLG_SYSTEM_SOCIALMETA_VIDEOSECUREURL"
+			description="PLG_SYSTEM_SOCIALMETA_VIDEOSECUREURL_DESC"
+            />
+			<field
             name="facebookmeta_video_type"
             type="text"
             label="PLG_SYSTEM_SOCIALMETA_VIDEOTYPE"

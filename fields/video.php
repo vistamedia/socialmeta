@@ -65,7 +65,7 @@ class JFormFieldVideo extends JFormFieldText
 		JHtml::_('jquery.framework');
 		JHtml::_('script', 'system/html5fallback.js', false, true);
 		
-		
+//		facebookmeta_video_secure_url
 		
 		$script = '
 		jQuery(document).ready(function($){
@@ -77,6 +77,7 @@ class JFormFieldVideo extends JFormFieldText
 			}
 			$( "#'.$this->id.'_fetch" ).click(function() {
 				var url = $("#'.$this->id.'").val();
+				getPropertyAndAppend ( url, "og:video:secure_url", "jform_attribs_facebookmeta_video_secure_url");
 				getPropertyAndAppend ( url, "og:video:type", "jform_attribs_facebookmeta_video_type");
 				getPropertyAndAppend ( url, "og:video:height", "jform_attribs_facebookmeta_video_height");
 				getPropertyAndAppend ( url, "og:video:width", "jform_attribs_facebookmeta_video_width");
@@ -88,6 +89,7 @@ class JFormFieldVideo extends JFormFieldText
 		        return false;
 			});
 			$( "#'.$this->id.'_clear" ).click(function(){
+		        $("#jform_attribs_facebookmeta_video_secure_url").val("");
 		        $("#jform_attribs_facebookmeta_video_height").val("");
 		        $("#jform_attribs_facebookmeta_video_width").val("");
 		        $("#jform_attribs_facebookmeta_video_type").val("");

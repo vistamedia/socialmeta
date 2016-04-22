@@ -173,19 +173,20 @@ class PlgSystemSocialmeta extends JPlugin
 			$attribs = json_decode($article->attribs);
 
 			// we set the article type as default type if no data is provided
-			$facebookmeta_ogtype				= @$attribs->facebookmeta_og_type ? $attribs->facebookmeta_og_type : "article";
-			$facebookmeta_image					= @$attribs->facebookmeta_image;
-			$facebookmeta_title					= @$attribs->facebookmeta_title;
-			$facebookmeta_desc					= @$attribs->facebookmeta_desc;
-			$facebookmeta_author				= $this->getUserFacebookProfile ( $article->created_by );
+			$facebookmeta_ogtype			= @$attribs->facebookmeta_og_type ? $attribs->facebookmeta_og_type : "article";
+			$facebookmeta_image				= @$attribs->facebookmeta_image;
+			$facebookmeta_title				= @$attribs->facebookmeta_title;
+			$facebookmeta_desc				= @$attribs->facebookmeta_desc;
+			$facebookmeta_author			= $this->getUserFacebookProfile ( $article->created_by );
 			$facebookmeta_authortw			= $this->getUserTwitterProfile ( $article->created_by );
 			$facebookmeta_seealso1			= @$attribs->facebookmeta_seealso1;
 			$facebookmeta_seealso2			= @$attribs->facebookmeta_seealso2;
 			$facebookmeta_seealso3			= @$attribs->facebookmeta_seealso3;
-			$facebookmeta_video					= @$attribs->facebookmeta_video;
+			$facebookmeta_video				= @$attribs->facebookmeta_video;
+			$facebookmeta_video_secure_url	= @$attribs->facebookmeta_video_secure_url;
 			$facebookmeta_video_type		= @$attribs->facebookmeta_video_type;
 			$facebookmeta_video_width		= @$attribs->facebookmeta_video_width;
-			$facebookmeta_video_height	= @$attribs->facebookmeta_video_height;
+			$facebookmeta_video_height		= @$attribs->facebookmeta_video_height;
 
 
 			// We have to set the article sharing image https://developers.facebook.com/docs/sharing/best-practices#images
@@ -250,7 +251,7 @@ class PlgSystemSocialmeta extends JPlugin
 				if ($metavideotype && $metavideoheight && $metavideowidth) {
 
 					if ( $url_scheme == "https" ) { // && type == should be treated as a video object
-						$metavideosecureourl	= '<meta property="og:video:secure_url" content="'.htmlentities($facebookmeta_video).'" />';
+						$metavideosecureourl	= '<meta property="og:video:secure_url" content="'.htmlentities($facebookmeta_video_secure_url ? $facebookmeta_video_secure_url : $facebookmeta_video).'" />';
 						if ($facebookmeta_ogtype == "video") {
 							// && type == should be treated as a video object
 							$metatype 				= '<meta property="og:type" content="video" />';
