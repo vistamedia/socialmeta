@@ -101,8 +101,9 @@ class JFormFieldVideo extends JFormFieldText
 			});
 		});
 
-		function getPropertyAndAppend ( url, property, destination, mode = "val") {
-		
+		function getPropertyAndAppend ( url, property, destination, mode )
+		{
+			mode = typeof mode !== "undefined" ? mode : "val";
 			jQuery.getJSON("//query.yahooapis.com/v1/public/yql?" +
 		    "q=SELECT%20*%20FROM%20html%20WHERE%20url=%27" + 
 		    encodeURIComponent( url ) +
@@ -138,7 +139,7 @@ class JFormFieldVideo extends JFormFieldText
 				        jQuery("#" + destination + "-lbl").addClass("invalid");
 				    }
 			    }
-			})
+			});
 		}
 		';
 
