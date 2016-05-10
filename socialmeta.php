@@ -7,6 +7,7 @@
  * @copyright   Copyright (C) 2016 Emmanuel Danan. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @TODO		Rewrite most of this creating an overridable meta object containing all the names/properties
+ * @TODO		Allow the form to be triggered from com_categories & com_menus
  */
 
 defined('_JEXEC') or die;
@@ -44,14 +45,15 @@ class PlgSystemSocialmeta extends JPlugin
 		parent::__construct($subject, $config);
 
 		// Set some vars...
-		$this->defaultimage 						= $this->params->get('facebookmeta_defaultimage','');
-		$this->fbappid 									= $this->params->get('facebookmeta_appid','');
-		$this->facebookmeta_auth				= $this->params->get('facebookmeta_default_userid','');
-		$this->facebookmeta_pub					= $this->params->get('facebookmeta_pageid','');
-		$this->facebookmeta_twittersite	= $this->params->get('facebookmeta_twittersite','');
-		$this->facebookmeta_admin				= $this->params->get('facebookmeta_appadmin','');
-		$this->facebookmeta_titlelimit	= $this->params->get('facebookmeta_titlelimit', 68);
+		$this->defaultimage 				= $this->params->get('facebookmeta_defaultimage','');
+		$this->fbappid 						= $this->params->get('facebookmeta_appid','');
+		$this->facebookmeta_auth			= $this->params->get('facebookmeta_default_userid','');
+		$this->facebookmeta_pub				= $this->params->get('facebookmeta_pageid','');
+		$this->facebookmeta_twittersite		= $this->params->get('facebookmeta_twittersite','');
+		$this->facebookmeta_admin			= $this->params->get('facebookmeta_appadmin','');
+		$this->facebookmeta_titlelimit		= $this->params->get('facebookmeta_titlelimit', 68);
 		$this->facebookmeta_desclimit		= $this->params->get('facebookmeta_desclimit', 200);
+		$this->facebookmeta_article_image	= $this->params->get('facebookmeta_article_image', 0);
 
 		// Get the application if not done by JPlugin. This may happen during upgrades from Joomla 2.5.
 		if (empty($this->app))
@@ -60,6 +62,44 @@ class PlgSystemSocialmeta extends JPlugin
 		}
 
 	}
+
+	/**
+	 * Add the facebook/linkedin fix.
+	 * It disable the gzip compression for both user agents
+	 *
+	 * @return  void
+	 *
+	 * @since   1.1
+	 */
+    function onAfterRoute()
+    {
+		if ($this->app->isAdmin())
+		{
+			return true;
+		}
+
+		$unsupported = false;
+
+		if (isset($_SERVER['HTTP_USER_AGENT']))
+		{
+	        /* Facebook User Agent
+	        * facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)
+	        * LinkedIn User Agent
+	        * LinkedInBot/1.0 (compatible; Mozilla/5.0; Jakarta Commons-HttpClient/3.1 +http://www.linkedin.com)
+	        */
+        	$pattern = strtolower('/facebookexternalhit|LinkedInBot/x');
+
+			if (preg_match($pattern, strtolower($_SERVER['HTTP_USER_AGENT'])))
+	        {
+				$unsupported = true;
+			}
+		}
+
+		if (($this->app->get('gzip') == 1) && $unsupported)
+		{
+			$this->app->set('gzip', 0);
+		}
+    }
 
 	/**
 	 * Add the metatags.
@@ -158,14 +198,64 @@ class PlgSystemSocialmeta extends JPlugin
 		}
 
 // echo '<pre>';
-// print_r($context);
+// print_r($facebookmeta_image);
 // echo '</pre>';
 
 		// Handle values of the content table
 		if ( ( $option == 'com_content' && $view == 'article') || ( $option == 'com_flexicontent' && $view == 'item') ) {
-			$article 				= $this->getObjectContent($id);
+			$article 		= $this->getObjectContent($id);
 			$article->tags 	= new JHelperTags;
-			$category				= $this->getObjectContent($article->catid, 'category');
+			$category		= $this->getObjectContent($article->catid, 'category');
+			$images			= json_decode($article->images);
+			$facebookmeta_image = '';
+
+			if ($this->facebookmeta_article_image != 0) {
+				// Sets default images
+	            if (strpos($article->fulltext, '<img') !== false)
+	            {
+					// Get img tag from article
+					preg_match('/(?<!_)src=([\'"])?(.*?)\\1/', $article->fulltext, $articleimages);
+					$facebookmeta_image = $articleimages[2];
+/*
+echo '<pre>';
+print_r('1: '.$facebookmeta_image.'<br>');
+echo '</pre>';
+*/
+	            }
+				if (strpos($article->introtext, '<img') !== false)
+	            {
+					// Get img tag from article
+					preg_match('/(?<!_)src=([\'"])?(.*?)\\1/', $article->introtext, $articleimages);
+					$facebookmeta_image = $articleimages[2];
+/*
+echo '<pre>';
+print_r('2: '.$facebookmeta_image.'<br>');
+echo '</pre>';
+*/
+	            }
+				if ($this->facebookmeta_article_image == 2) {
+					if (!empty($images->image_fulltext))
+		            {
+						$facebookmeta_image = $images->image_fulltext;
+/*
+echo '<pre>';
+print_r('3: '.$facebookmeta_image.'<br>');
+echo '</pre>';
+*/
+		            }
+		        }
+				if ($this->facebookmeta_article_image == 1) {
+		            if (!empty($images->image_intro))
+		            {
+						$facebookmeta_image = $images->image_intro;
+/*
+echo '<pre>';
+print_r('4: '.$facebookmeta_image.'<br>');
+echo '</pre>';
+*/
+		            }
+	            }
+			}
 
 			// Add the tags to the article object
 			if (!empty($article->id))
@@ -176,7 +266,7 @@ class PlgSystemSocialmeta extends JPlugin
 
 			// we set the article type as default type if no data is provided
 			$facebookmeta_ogtype			= @$attribs->facebookmeta_og_type ? $attribs->facebookmeta_og_type : "article";
-			$facebookmeta_image				= @$attribs->facebookmeta_image;
+			$facebookmeta_image				= !empty($attribs->facebookmeta_image) ? $attribs->facebookmeta_image : $facebookmeta_image;
 			$facebookmeta_title				= @$attribs->facebookmeta_title;
 			$facebookmeta_desc				= @$attribs->facebookmeta_desc;
 			$facebookmeta_author			= $this->getUserFacebookProfile ( $article->created_by );
@@ -190,11 +280,16 @@ class PlgSystemSocialmeta extends JPlugin
 			$facebookmeta_video_width		= @$attribs->facebookmeta_video_width;
 			$facebookmeta_video_height		= @$attribs->facebookmeta_video_height;
 
+/*
+echo '<pre>';
+print_r('5: '.$facebookmeta_image.'<br>');
+echo '</pre>';
+*/
 
 			// We have to set the article sharing image https://developers.facebook.com/docs/sharing/best-practices#images
 			if ($facebookmeta_image) {
-				$size 						= getimagesize(JURI::base() . $facebookmeta_image);
-				$metaimage 				= '<meta property="og:image" content="' . JURI::base() . $facebookmeta_image .'" />';
+				$size 				= getimagesize(JURI::base() . $facebookmeta_image);
+				$metaimage 			= '<meta property="og:image" content="' . JURI::base() . $facebookmeta_image .'" />';
 				$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 				$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 				$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
@@ -434,10 +529,10 @@ class PlgSystemSocialmeta extends JPlugin
 			$this->_subject->setError('JERROR_NOT_A_FORM');
 			return false;
 		}
-		
+
 		$app  = JFactory::getApplication();
 		$name = $form->getName();
-		
+
 		// Check we are manipulating a -supported- form.
 		switch($name)
 		{
