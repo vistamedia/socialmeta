@@ -39,7 +39,7 @@ class JFormFieldVideo extends JFormFieldText
 	protected function getInput()
 	{
 		$fc_installed = JPluginHelper::isEnabled('system', 'flexisystem');
-		if (!$fc_installed) return '<span class="alert alert-info">'.JText::_('PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_NOT_INSTALLED')FLEXIcontent not installed.'</span>';
+		if (!$fc_installed) return '<span class="alert alert-info">'.JText::_('PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_NOT_INSTALLED').'</span>';
 	
 		// Translate placeholder text
 		$hint = $this->translateHint ? JText::_($this->hint) : $this->hint;
