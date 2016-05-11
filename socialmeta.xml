@@ -106,37 +106,21 @@
 				<option value="2">PLG_SYSTEM_SOCIALMETA_ARTICLE_IMAGE_FULL</option>
 				<option value="3">PLG_SYSTEM_SOCIALMETA_ARTICLE_IMAGE_MAGIC</option>
 				</field>
-<!--
 				<field
 				name="com_flexicontent"
 				type="spacer"
 				class="text"
 				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_SPACER"
 				/>
-				<field
-				name="flexicontent_image"
-				type="radio"
-				class="btn-group btn-group-yesno"
-				default="0"
-				description="PLG_SYSTEM_SOCIALMETA_ARTICLE_IMAGE_DESC"
-				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_DESC"
-				>
-				<option value="0">PLG_SYSTEM_SOCIALMETA_ARTICLE_IMAGE_MANUAL</option>
-				<option value="1">PLG_SYSTEM_SOCIALMETA_ARTICLE_IMAGE_INTRO</option>
-				<option value="2">PLG_SYSTEM_SOCIALMETA_ARTICLE_IMAGE_FULL</option>
-				<option value="3">PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD</option>
-				</field>
 				<field 
 				name="flexicontent_image_field" 
 				type="fields" 
 				default="0" 
 				field_type="image" 
 				display_useglobal="0"
-				label="PLG_SYSTEM_SOCIALMETA_ARTICLE_IMAGE" 
-				description="PLG_SYSTEM_SOCIALMETA_ARTICLE_IMAGE_DESC" 
+				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD" 
+				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD_DESC" 
 				/>
--->
-
 			</fieldset>
 			<fieldset name="advanced" addfieldpath="/plugins/system/socialmeta/fields">
 				<field
