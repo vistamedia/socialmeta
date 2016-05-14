@@ -1,8 +1,8 @@
-<img src="https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-logo-fond-bleu.png" width="400">
+<img src="https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-logo-whitebg-nomargin.png" width="400">
 
 # Socialmeta plugin for Joomla!
 
-Social-meta is a system plugin for Joomla! which creates Facebook [open graph](http://og.me) and Twitter [meta tags](https://dev.twitter.com/cards/overview) in the head of the document. The idea is to allow the writer to configure properly the way his article will appear on the streams of the social networks.
+Social-meta is a system plugin for Joomla! which creates Facebook [open graph](http://og.me) and Twitter [metadata](https://dev.twitter.com/cards/overview) in the head of the document. The idea is to allow the writer to configure properly the way his article will appear on the streams of the social networks.
 
 > PLEASE NOTE...  
 ... that this document as well as the extension are in progress ;-)
@@ -183,7 +183,7 @@ This plugin was created for a friend of mine running a Joomla! website. It was s
   - no description...  
   - no video data...
 - **Creation settings** for visible elements
-  - Images: use image field or parse html
+  - ~~Images: use image field or parse html~~
   - og:author (contact view) add or override
   - Add twitter:creator or override twitter:site
 - Implement **category view** (soon - everything is ready, I just want to cleanup the `onBeforeCompileHead{...}` method)
