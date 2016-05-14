@@ -1,4 +1,4 @@
-![socialmeta logo](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-logo-fond-bleu.png)
+<img src="https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-logo-fond-bleu.png" width="400">
 
 # Socialmeta plugin for Joomla!
 
