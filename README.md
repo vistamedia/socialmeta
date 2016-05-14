@@ -1,5 +1,7 @@
 # Socialmeta plugin for Joomla!
 
+![socialmeta logo](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-logo-fond-bleu.png)
+
 Social-meta is a system plugin for Joomla! which creates Facebook [open graph](http://og.me) and Twitter [meta tags](https://dev.twitter.com/cards/overview) in the head of the document. The idea is to allow the writer to configure properly the way his article will appear on the streams of the social networks.
 
 > PLEASE NOTE...  
