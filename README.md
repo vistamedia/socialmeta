@@ -68,6 +68,12 @@ You can modify here the size of the title in the character counter. The accurate
 8. **Description limit**  
 You can modify here the size of the description in the character counter. The accurate setting is 200 today, but this value may change in the future depending on Facebook recommendations.
 
+### Components
+Here come the explanations about the components tab
+
+![screenshot of the advanced options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-components-conf.jpg)
+Figure 1bis
+
 ### Advanced
 Don't be scared, there's nothing to do here except if you get some specific compatibility issues. In this particular case this settings will allow you to **disable globally** the creation of **some specific meta**. It may be the case for example if you have some kind of sharing button extension which already creates the fb:app_id meta.  
 
@@ -76,10 +82,10 @@ Figure 2
 
 ## Usage
 
-### Automatical mode
+### Automatic mode
 The plugin functions automatically pretty good but if you come to this extension, it's probably because you wish to make your post more beautiful and get more impact, right?  
-That was my purpose too. Thus the automatical mode only serves one purpose: to work the best at it can with the existing articles.  
-If, for whatever reason, the automatical mode does not produce the result you expect, you can just edit the article and use the manual override.
+That was my purpose too. Thus the automatic mode only serves one purpose: to work the best at it can with the existing articles.  
+If, for whatever reason, the automatic mode does not produce the result you expect, you can just edit the article and use the manual override.
 
 #### Meta tags creation: rules and default values
 
@@ -92,24 +98,24 @@ If, for whatever reason, the automatical mode does not produce the result you ex
 | og:title                | will use the 68 first characters of the article title                              |     yes     |
 | og:description          | will use the 200 first characters of the article text                              |     yes     |
 | og:image                | will use the article images. full + html, intro + html, or html (plugin conf.)     |     yes     |
-| og:image:width          | automatical from og:image                                                          |      -      |
-| og:image:height         | automatical from og:image                                                          |      -      |
-| og:image:type           | automatical from og:image                                                          |      -      |
+| og:image:width          | automatic from og:image                                                          |      -      |
+| og:image:height         | automatic from og:image                                                          |      -      |
+| og:image:type           | automatic from og:image                                                          |      -      |
 | og:video                | only available manually                                                            |     yes     |
-| og:video:url            | automatical from og:video                                                          |      -      |
-| og:video:secure_url     | automatical from og:video                                                          |      -      |
-| og:video:type           | semi-automatical from og:video with fetch button                                   |     yes     |
-| og:video:width          | semi-automatical from og:video with fetch button                                   |     yes     |
-| og:video:height         | semi-automatical from og:video with fetch button                                   |     yes     |
+| og:video:url            | automatic from og:video                                                          |      -      |
+| og:video:secure_url     | automatic from og:video                                                          |      -      |
+| og:video:type           | semi-automatic from og:video with fetch button                                   |     yes     |
+| og:video:width          | semi-automatic from og:video with fetch button                                   |     yes     |
+| og:video:height         | semi-automatic from og:video with fetch button                                   |     yes     |
 | og:see_also             | only available manually (article selector to link related items)                   |     yes     |
-| og:updated_time         | automatical from object table **modified** in ISO8601                              |             |
+| og:updated_time         | automatic from object table **modified** in ISO8601                              |             |
 | article:author          | socialmeta configuration (fig.2-4) overridable in contact view                     |             |
-| article:expiration_time | automatical from object table **publish_down** in ISO8601                          |             |
-| article:modified_time   | automatical from object table **modified** in ISO8601                              |             |
-| article:published_time  | automatical from object table **publish_down** in ISO8601                          |             |
+| article:expiration_time | automatic from object table **publish_down** in ISO8601                          |             |
+| article:modified_time   | automatic from object table **modified** in ISO8601                              |             |
+| article:published_time  | automatic from object table **publish_down** in ISO8601                          |             |
 | article:publisher       | socialmeta configuration (fig.2-5)                                                 |             |
-| article:section         | automatical from object table **catid**                                            |             |
-| article:tag             | automatical from object table `getItemTags(**id**)`                                |             |
+| article:section         | automatic from object table **catid**                                            |             |
+| article:tag             | automatic from object table `getItemTags(**id**)`                                |             |
 | fb:app_id               | socialmeta configuration (fig.2-2)                                                 |             |
 | fb:admins               | socialmeta configuration (fig.2-3)                                                 |             |
 | twitter:card            | idem og:type (article == summary_large_image) (video == player)                    |             |
@@ -127,7 +133,7 @@ This is how it looks in the Joomla! article view.
 Figure 3
 
 1. **Image**  
-The image used when sharing the article on Facebook, Google+ and Twitter. If none is provided the automatical override order is Default image -> HTML of the article (first one) -> intro or full (depending on your configuration)
+The image used when sharing the article on Facebook, Google+ and Twitter. If none is provided the automatic override order is Default image -> HTML of the article (first one) -> intro or full (depending on your configuration)
 1. **Title**  
 If empty the article title will be used instead
 1. **Description**  
@@ -176,7 +182,7 @@ It may change in the future but that's the most reliable solution I found up to 
 This plugin was created for a friend of mine running a Joomla! website. It was supposed to serve a particular purpose, because IMHO there was a lack on that particular matter. As it could be useful for anyone using Joomla!, we now **try to improve** it and to make it really **generic**. So, be confident, send me suggestions, and we will build together **THE** solution to fix that **once for all** ;)  
 
 ## Known issues and ... todo ;)
-- ~~Create parameters to choose the automatical **image creation mode**~~
+- ~~Create parameters to choose the automatic **image creation mode**~~
 - ~~Use **meta description** from the object before using the text field (up to now it is how the description is fetched from the facebook url scrapper)~~
 - Manage **JS errors** of the video properties fetching engine (see fig.3-5)  
   - no image...   
