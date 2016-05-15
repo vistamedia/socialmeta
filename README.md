@@ -176,8 +176,8 @@ It may change in the future but that's the most reliable solution I found up to 
 This plugin was created for a friend of mine running a Joomla! website. It was supposed to serve a particular purpose, because IMHO there was a lack on that particular matter. As it could be useful for anyone using Joomla!, we now **try to improve** it and to make it really **generic**. So, be confident, send me suggestions, and we will build together **THE** solution to fix that **once for all** ;)  
 
 ## Known issues and ... todo ;)
-- Create parameters to choose the automatical **image creation mode**
-- Use **meta description** from the object before using the text field (up to now it is how the description is fetched from the facebook url scrapper)
+- ~~Create parameters to choose the automatical **image creation mode**~~
+- ~~Use **meta description** from the object before using the text field (up to now it is how the description is fetched from the facebook url scrapper)~~
 - Manage **JS errors** of the video properties fetching engine (see fig.3-5)  
   - no image...   
   - no description...  
