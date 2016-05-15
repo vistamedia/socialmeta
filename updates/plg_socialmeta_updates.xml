@@ -1,11 +1,11 @@
 ﻿<updates>
   <update>
       <name>Socialmeta plugin</name>
-      <description>Socialmeta plugin for Joomla! 3+ version 1.0.1</description>
+      <description>Socialmeta plugin for Joomla! 3+ version 1.1</description>
       <element>plg_socialmeta</element>
       <type>plugin</type>
       <folder>system</folder>
-      <version>1.0.1</version>
+      <version>1.1</version>
       <infourl title="Socialmeta for Joomla! 3+">https://github.com/vistamedia/socialmeta/</infourl>
       <downloads>
           <downloadurl type="full" format="zip">https://github.com/vistamedia/socialmeta/archive/master.zip</downloadurl>
@@ -16,6 +16,6 @@
       <maintainer>Emmanuel Danan</maintainer>
       <maintainerurl>https://github.com/vistamedia/socialmeta/</maintainerurl>
       <section>Metadata</section>
-      <targetplatform name="joomla" version="3.[012345]"/>
+      <targetplatform name="joomla" version="3.[23456789]"/>
    </update>
  </updates>
