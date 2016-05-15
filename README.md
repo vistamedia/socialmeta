@@ -1,4 +1,4 @@
-<img src="https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-logo-whitebg-nomargin.png" width="400">
+<img src="https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-logo-bluebg.png" width="300">
 
 # Socialmeta plugin for Joomla!
 
@@ -91,7 +91,7 @@ If, for whatever reason, the automatical mode does not produce the result you ex
 | og:type                 | article overridable by video (website wil be soon available for multi-items views) |     yes     |
 | og:title                | will use the 68 first characters of the article title                              |     yes     |
 | og:description          | will use the 200 first characters of the article text                              |     yes     |
-| og:image                | will use the article images (the biggest one)                                      |     yes     |
+| og:image                | will use the article images. full + html, intro + html, or html (plugin conf.)     |     yes     |
 | og:image:width          | automatical from og:image                                                          |      -      |
 | og:image:height         | automatical from og:image                                                          |      -      |
 | og:image:type           | automatical from og:image                                                          |      -      |
@@ -127,11 +127,11 @@ This is how it looks in the Joomla! article view.
 Figure 3
 
 1. **Image**  
-The image used when sharing the article on Facebook, Google+ and Twitter.
+The image used when sharing the article on Facebook, Google+ and Twitter. If none is provided the automatical override order is Default image -> HTML of the article (first one) -> intro or full (depending on your configuration)
 1. **Title**  
 If empty the article title will be used instead
 1. **Description**  
-If empty the beginning of the article will be used instead
+If empty the beginning of the article will be used instead (all html tags will be automatically striped)
 1. **Related article**  
 Add some related resources to try to gain related items from your site under your post in the stream.
 1. **Video HTTPS Url**  
