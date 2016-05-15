@@ -16,6 +16,7 @@
 		<folder>fields</folder>
 		<folder>forms</folder>
 		<folder>language</folder>
+		<folder>updates</folder>
 	</files>
 	<languages>
 		<language tag="en-GB">language/en-GB/en-GB.plg_system_socialmeta.ini</language>
