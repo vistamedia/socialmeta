@@ -393,7 +393,7 @@
 		</fields>
 	</config>
 	<!-- Updateserver definition -->
-	<!-- <updateservers>
-		<server type="extension" priority="1" name="Socialmeta update stream">https://github.com/vistamedia/socialmeta/plg_socialmeta_updates.xml</server>
-	</updateservers> -->
+	<updateservers>
+		<server type="extension" priority="1" name="Socialmeta update stream">https://raw.githubusercontent.com/vistamedia/socialmeta/master/updates/plg_socialmeta_updates.xml</server>
+	</updateservers>
 </extension>
