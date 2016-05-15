@@ -67,6 +67,9 @@ class PlgSystemSocialmeta extends JPlugin
 	 * Add the facebook/linkedin fix.
 	 * It disable the gzip compression for both user agents
 	 *
+	 * Found in SocialMetaTags plugin https://github.com/hans2103/pkg_SocialMetaTags
+	 * Borrowed from https://github.com/dgt41/facebookfix
+	 *
 	 * @return  void
 	 *
 	 * @since   1.1
@@ -209,6 +212,7 @@ class PlgSystemSocialmeta extends JPlugin
 			$images			= json_decode($article->images);
 			$facebookmeta_image = '';
 
+			// Logic and pattern partially borrowed from SocialMetaTags plugin https://github.com/hans2103/pkg_SocialMetaTags
 			if ($this->facebookmeta_article_image != 0) {
 				// Sets default images
 	            if (strpos($article->fulltext, '<img') !== false)
@@ -216,43 +220,23 @@ class PlgSystemSocialmeta extends JPlugin
 					// Get img tag from article
 					preg_match('/(?<!_)src=([\'"])?(.*?)\\1/', $article->fulltext, $articleimages);
 					$facebookmeta_image = $articleimages[2];
-/*
-echo '<pre>';
-print_r('1: '.$facebookmeta_image.'<br>');
-echo '</pre>';
-*/
 	            }
 				if (strpos($article->introtext, '<img') !== false)
 	            {
 					// Get img tag from article
 					preg_match('/(?<!_)src=([\'"])?(.*?)\\1/', $article->introtext, $articleimages);
 					$facebookmeta_image = $articleimages[2];
-/*
-echo '<pre>';
-print_r('2: '.$facebookmeta_image.'<br>');
-echo '</pre>';
-*/
 	            }
 				if ($this->facebookmeta_article_image == 2) {
 					if (!empty($images->image_fulltext))
 		            {
 						$facebookmeta_image = $images->image_fulltext;
-/*
-echo '<pre>';
-print_r('3: '.$facebookmeta_image.'<br>');
-echo '</pre>';
-*/
 		            }
 		        }
 				if ($this->facebookmeta_article_image == 1) {
 		            if (!empty($images->image_intro))
 		            {
 						$facebookmeta_image = $images->image_intro;
-/*
-echo '<pre>';
-print_r('4: '.$facebookmeta_image.'<br>');
-echo '</pre>';
-*/
 		            }
 	            }
 			}
