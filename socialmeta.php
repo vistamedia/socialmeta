@@ -371,6 +371,9 @@ echo '</pre>';
 			// We use the introtext field if none is provided
 			if ($facebookmeta_desc) {
 				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $facebookmeta_desc ) .'" />';
+			}
+			elseif (!empty($article->metadesc)) {
+				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $article->metadesc ) .'" />';
 			} else {
 				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $article->introtext, $this->facebookmeta_desclimit ) .'" />';
 			}
