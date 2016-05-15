@@ -17,6 +17,6 @@
       <maintainer>Emmanuel Danan</maintainer>
       <maintainerurl>https://github.com/vistamedia/socialmeta/</maintainerurl>
       <section>Metadata</section>
-      <targetplatform name="joomla" version="3.[23456789]"/>
+      <targetplatform name="joomla" version="3.[0123456789]"/>
    </update>
  </updates>
