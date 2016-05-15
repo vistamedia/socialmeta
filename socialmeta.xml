@@ -22,6 +22,8 @@
 		<language tag="en-GB">language/en-GB/en-GB.plg_system_socialmeta.sys.ini</language>
 		<language tag="fr-FR">language/fr-FR/fr-FR.plg_system_socialmeta.ini</language>
 		<language tag="fr-FR">language/fr-FR/fr-FR.plg_system_socialmeta.sys.ini</language>
+		<language tag="th-TH">language/th-TH/th-TH.plg_system_socialmeta.ini</language>
+		<language tag="th-TH">language/th-TH/th-TH.plg_system_socialmeta.sys.ini</language>
 	</languages>
 	<config>
 		<fields name="params">
@@ -113,14 +115,14 @@
 				class="text"
 				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_SPACER"
 				/>
-				<field 
-				name="flexicontent_image_field" 
-				type="fields" 
-				default="0" 
-				field_type="image" 
+				<field
+				name="flexicontent_image_field"
+				type="fields"
+				default="0"
+				field_type="image"
 				display_useglobal="0"
-				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD" 
-				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD_DESC" 
+				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD"
+				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD_DESC"
 				/>
 -->
 			</fieldset>
@@ -390,4 +392,8 @@
 			</fieldset>
 		</fields>
 	</config>
+	<!-- Updateserver definition -->
+	<!-- <updateservers>
+		<server type="extension" priority="1" name="Socialmeta update stream">https://github.com/vistamedia/socialmeta/plg_socialmeta_updates.xml</server>
+	</updateservers> -->
 </extension>
