@@ -38,9 +38,6 @@ class JFormFieldVideo extends JFormFieldText
 	 */
 	protected function getInput()
 	{
-		$fc_installed = JPluginHelper::isEnabled('system', 'flexisystem');
-		if (!$fc_installed) return '<span class="alert alert-info">'.JText::_('PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_NOT_INSTALLED').'</span>';
-	
 		// Translate placeholder text
 		$hint = $this->translateHint ? JText::_($this->hint) : $this->hint;
 
@@ -67,8 +64,6 @@ class JFormFieldVideo extends JFormFieldText
 		// Including fallback code for HTML5 non supported browsers.
 		JHtml::_('jquery.framework');
 		JHtml::_('script', 'system/html5fallback.js', false, true);
-		
-//		facebookmeta_video_secure_url
 		
 		$script = '
 		jQuery(document).ready(function($){

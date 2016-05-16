@@ -44,6 +44,9 @@ class JFormFieldFields extends JFormField
 
 	function getInput()
 	{
+		$fc_installed = JPluginHelper::isEnabled('system', 'flexisystem');
+		if (!$fc_installed) return '<span class="alert alert-info">'.JText::_('PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_NOT_INSTALLED').'</span>';
+
 		$doc	= JFactory::getDocument();
 		$db		= JFactory::getDBO();
 		$cparams = JComponentHelper::getParams('com_flexicontent');
