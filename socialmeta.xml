@@ -123,6 +123,22 @@
 				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD_DESC"
 				/>
 				<field
+				name="facebookmeta_flexicontent_image_field2"
+				type="fields"
+				default=""
+				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD"
+				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD_DESC"
+				/>
+				<field
+				name="facebookmeta_flexicontent_image_field2"
+				type="fields"
+				default=""
+				field_type="image"
+				display_useglobal="0"
+				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD"
+				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD_DESC"
+				/>
+				<field
 				name="facebookmeta_flexicontent_imagesize_field"
 				type="radio"
 				class="btn-group btn-group-yesno"
