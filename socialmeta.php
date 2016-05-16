@@ -29,6 +29,9 @@ class PlgSystemSocialmeta extends JPlugin
 	protected $facebookmeta_admin = '';
 	protected $facebookmeta_titlelimit = '';
 	protected $facebookmeta_desclimit = '';
+	protected $facebookmeta_article_image = '';
+	protected $flexicontent_image_field = '';
+	protected $flexicontent_imagesize_field = '';
 	protected $db;
 	protected $autoloadLanguage = true;
 
@@ -53,7 +56,9 @@ class PlgSystemSocialmeta extends JPlugin
 		$this->facebookmeta_admin			= $this->params->get('facebookmeta_appadmin','');
 		$this->facebookmeta_titlelimit		= $this->params->get('facebookmeta_titlelimit', 68);
 		$this->facebookmeta_desclimit		= $this->params->get('facebookmeta_desclimit', 200);
-		$this->facebookmeta_article_image	= $this->params->get('facebookmeta_article_image', 0);
+		$this->facebookmeta_article_image	= $this->params->get('facebookmeta_article_image', 2);
+		$this->flexicontent_image_field		= $this->params->get('facebookmeta_flexicontent_image_field', '');
+		$this->flexicontent_imagesize_field	= $this->params->get('facebookmeta_flexicontent_imagesize_field', 'medium');
 
 		// Get the application if not done by JPlugin. This may happen during upgrades from Joomla 2.5.
 		if (empty($this->app))
@@ -113,7 +118,7 @@ class PlgSystemSocialmeta extends JPlugin
 	 */
 	public function onBeforeCompileHead()
 	{
-		$document = JFactory::getDocument();
+		$document 	= JFactory::getDocument();
 		$config 	= JFactory::getConfig();
 		$jinput 	= JFactory::getApplication()->input;
 		$option		= $jinput->get('option', '', 'CMD');
@@ -264,11 +269,6 @@ class PlgSystemSocialmeta extends JPlugin
 			$facebookmeta_video_width		= @$attribs->facebookmeta_video_width;
 			$facebookmeta_video_height		= @$attribs->facebookmeta_video_height;
 
-/*
-echo '<pre>';
-print_r('5: '.$facebookmeta_image.'<br>');
-echo '</pre>';
-*/
 
 			// We have to set the article sharing image https://developers.facebook.com/docs/sharing/best-practices#images
 			if ($facebookmeta_image) {
@@ -360,6 +360,44 @@ echo '</pre>';
 				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $article->metadesc ) .'" />';
 			} else {
 				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $article->introtext, $this->facebookmeta_desclimit ) .'" />';
+			}
+			
+			// com_flexicontent specific routine to overrride image
+			if ( ( $option == 'com_flexicontent' && $view == 'item') ) {
+				
+				// First check if image field has been provided, it's a valid image field and it's published
+				if ( $this->isValidImageField( $this->flexicontent_image_field ) ) {
+					
+					require_once (JPATH_SITE.DS.'components'.DS.'com_flexicontent'.DS.'classes'.DS.'flexicontent.fields.php');
+					    
+					$thumb_size = $this->flexicontent_imagesize_field;
+					
+					$thumbs_arr =
+					  FlexicontentFields::renderFields(
+					    $item_per_field=true,
+					    $itemids = array($article->id),
+					    $field_names = array($this->flexicontent_image_field),
+					    $view ='item',
+					    $field_methods = array('display_'.$thumb_size.'_src'),
+					    $cfparams = array()
+					  );
+					
+					$thumb = $thumbs_arr[$article->id][$this->flexicontent_image_field]['display_'.$thumb_size.'_src'];
+
+					// Override the og:image properties
+					$size 				= getimagesize(JURI::base().substr($thumb, strlen(JURI::base(true)) + 1));
+					$metaimage 			= '<meta property="og:image" content="' . JURI::base().substr($thumb, strlen(JURI::base(true)) + 1) .'" />';
+					$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
+					$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
+					$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
+
+/*
+echo '<pre>';
+print_r( $thumb );
+echo '</pre>';
+*/
+
+				}
 			}
 		}
 
@@ -688,5 +726,103 @@ echo '</pre>';
 		}
 
 		return $twprofile ? $twprofile : '';
+	}
+
+	/**
+	 * Returns the optimal size thumbnail or raise an error if the field is not an image
+	 * NOTE: experimental, not used yet
+	 *
+	 * @param 	string 		$fieldname
+	 * @return 	void		true on success
+	 *
+	 * @since 1.0
+	 */
+	private function decideFCimageFieldThumb( $fieldname )
+	{
+		$img_fieldname = '';
+		
+		$user 	= JFactory::getUser();
+		$db 	= JFactory::getDBO();
+		$query 	= 'SELECT attribs #__flexicontent_fields WHERE `name`='. $db->Quote($img_fieldname);
+		$db->setQuery($query);
+		$data = $db->loadAssocList();
+		if ( !$data )
+		{
+			$isSuperAdmin = $user->authorise('core.admin', 'root.1');
+			if (JDEBUG || $isSuperAdmin) {
+				JFactory::getApplication()->enqueueMessage('FLEXIcontent image field name : '.$img_fieldname.' was not found', 'notice');
+			}
+			return false;
+		}
+		$fparams = new JRegistry($data->attribs);
+		
+		$w_l = $fparams->get('w_l');
+		$h_l = $fparams->get('h_l');
+		
+		$sizes = array('s', 'm', 'l');
+		$size_found = false;
+		foreach($sizes as $size)
+		{
+			$width  = $fparams->get('w_'.$size);
+			$height = $fparams->get('h_'.$size);
+			if ($width  < 400 || $width  > 1000) continue;
+			if ($height < 300 || $height > 800) continue;
+			$size_found = $size;
+			break;
+		}
+		return $size_found;
+	}
+
+	/**
+	 * Check if the image field is an image and is published
+	 *
+	 * @param 	string 		$fieldname
+	 * @return 	void		true on success
+	 *
+	 * @since 1.0
+	 */
+	private function isValidImageField ( $fieldname )
+	{
+		$user 	= JFactory::getUser();
+		$db 	= JFactory::getDBO();
+		$query 	= $db->getQuery(true);
+		$query->select('*');
+		$query->from($db->quoteName('#__flexicontent_fields'));
+		$query->where($db->quoteName('name')." = ".$db->quote($fieldname));
+		$db->setQuery($query);
+		$data = $db->loadObject();
+
+		if ( !$data ) // does the field exist
+		{
+			$isSuperAdmin = $user->authorise('core.admin', 'root.1');
+			if (JDEBUG || $isSuperAdmin) {
+				JFactory::getApplication()->enqueueMessage('FLEXIcontent field : '.$fieldname.' was not found', 'notice');
+			}
+			return false;
+		}
+		elseif ( $data->field_type !== 'image' ) // is the field an image field
+		{
+			$isSuperAdmin = $user->authorise('core.admin', 'root.1');
+			if (JDEBUG || $isSuperAdmin) {
+				JFactory::getApplication()->enqueueMessage('FLEXIcontent field : '.$fieldname.' is not an image', 'notice');
+			}
+			return false;
+
+		} 
+		elseif ( $data->published != 1 ) // is the field published
+		{
+			$isSuperAdmin = $user->authorise('core.admin', 'root.1');
+			if (JDEBUG || $isSuperAdmin) {
+				JFactory::getApplication()->enqueueMessage('FLEXIcontent image field name : '.$fieldname.' is unpublised', 'notice');
+			}
+			return false;
+
+		}
+		else
+		{
+			return true;
+		}
+		
+		
 	}
 }

@@ -109,7 +109,6 @@
 				<option value="2">PLG_SYSTEM_SOCIALMETA_ARTICLE_IMAGE_FULL</option>
 				<option value="3">PLG_SYSTEM_SOCIALMETA_ARTICLE_IMAGE_MAGIC</option>
 				</field>
-<!--
 				<field
 				name="com_flexicontent"
 				type="spacer"
@@ -117,15 +116,25 @@
 				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_SPACER"
 				/>
 				<field
-				name="flexicontent_image_field"
-				type="fields"
-				default="0"
-				field_type="image"
-				display_useglobal="0"
+				name="facebookmeta_flexicontent_image_field"
+				type="text"
+				default=""
 				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD"
 				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD_DESC"
 				/>
--->
+				<field
+				name="facebookmeta_flexicontent_imagesize_field"
+				type="radio"
+				class="btn-group btn-group-yesno"
+				default="medium"
+				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGESIZE_DESC"
+				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGESIZE"
+				>
+				<!-- <option value="auto">PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_AUTO</option> -->
+				<option value="small">PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_SMALL</option>
+				<option value="medium">PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_MEDIUM</option>
+				<option value="large">PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_LARGE</option>
+				</field>
 			</fieldset>
 			<fieldset name="advanced" addfieldpath="/plugins/system/socialmeta/fields">
 				<field
@@ -395,6 +404,6 @@
 	</config>
 	<!-- Updateserver definition -->
 	<updateservers>
-		<server type="extension" priority="1" name="Socialmeta update stream">https://raw.githubusercontent.com/vistamedia/socialmeta/master/updates/plg_socialmeta_updates.xml</server>
+		<server type="extension" priority="1" name="Socialmeta GIT update stream">https://raw.githubusercontent.com/vistamedia/socialmeta/master/updates/plg_socialmeta_updates.xml</server>
 	</updateservers>
 </extension>

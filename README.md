@@ -98,24 +98,24 @@ If, for whatever reason, the automatic mode does not produce the result you expe
 | og:title                | will use the 68 first characters of the article title                              |     yes     |
 | og:description          | will use the 200 first characters of the article text                              |     yes     |
 | og:image                | will use the article images. full + html, intro + html, or html (plugin conf.)     |     yes     |
-| og:image:width          | automatic from og:image                                                          |      -      |
-| og:image:height         | automatic from og:image                                                          |      -      |
-| og:image:type           | automatic from og:image                                                          |      -      |
+| og:image:width          | automatic from og:image                                                            |      -      |
+| og:image:height         | automatic from og:image                                                            |      -      |
+| og:image:type           | automatic from og:image                                                            |      -      |
 | og:video                | only available manually                                                            |     yes     |
-| og:video:url            | automatic from og:video                                                          |      -      |
-| og:video:secure_url     | automatic from og:video                                                          |      -      |
-| og:video:type           | semi-automatic from og:video with fetch button                                   |     yes     |
-| og:video:width          | semi-automatic from og:video with fetch button                                   |     yes     |
-| og:video:height         | semi-automatic from og:video with fetch button                                   |     yes     |
+| og:video:url            | automatic from og:video                                                            |      -      |
+| og:video:secure_url     | automatic from og:video                                                            |      -      |
+| og:video:type           | semi-automatic from og:video with fetch button                                     |     yes     |
+| og:video:width          | semi-automatic from og:video with fetch button                                     |     yes     |
+| og:video:height         | semi-automatic from og:video with fetch button                                     |     yes     |
 | og:see_also             | only available manually (article selector to link related items)                   |     yes     |
-| og:updated_time         | automatic from object table **modified** in ISO8601                              |             |
+| og:updated_time         | automatic from object table **modified** in ISO8601                                |             |
 | article:author          | socialmeta configuration (fig.2-4) overridable in contact view                     |             |
-| article:expiration_time | automatic from object table **publish_down** in ISO8601                          |             |
-| article:modified_time   | automatic from object table **modified** in ISO8601                              |             |
-| article:published_time  | automatic from object table **publish_down** in ISO8601                          |             |
+| article:expiration_time | automatic from object table **publish_down** in ISO8601                            |             |
+| article:modified_time   | automatic from object table **modified** in ISO8601                                |             |
+| article:published_time  | automatic from object table **publish_up** in ISO8601                              |             |
 | article:publisher       | socialmeta configuration (fig.2-5)                                                 |             |
-| article:section         | automatic from object table **catid**                                            |             |
-| article:tag             | automatic from object table `getItemTags(**id**)`                                |             |
+| article:section         | automatic from object table **catid**                                              |             |
+| article:tag             | automatic from object table `getItemTags(**id**)`                                  |             |
 | fb:app_id               | socialmeta configuration (fig.2-2)                                                 |             |
 | fb:admins               | socialmeta configuration (fig.2-3)                                                 |             |
 | twitter:card            | idem og:type (article == summary_large_image) (video == player)                    |             |
