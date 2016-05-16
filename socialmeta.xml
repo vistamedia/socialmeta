@@ -13,6 +13,7 @@
 		<filename plugin="socialmeta">socialmeta.php</filename>
 		<filename>index.html</filename>
 		<folder>js</folder>
+		<folder>img</folder>
 		<folder>fields</folder>
 		<folder>forms</folder>
 		<folder>language</folder>
@@ -122,13 +123,7 @@
 				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD"
 				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD_DESC"
 				/>
-				<field
-				name="facebookmeta_flexicontent_image_field2"
-				type="fields"
-				default=""
-				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD"
-				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD_DESC"
-				/>
+<!--
 				<field
 				name="facebookmeta_flexicontent_image_field2"
 				type="fields"
@@ -138,6 +133,7 @@
 				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD"
 				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD_DESC"
 				/>
+-->
 				<field
 				name="facebookmeta_flexicontent_imagesize_field"
 				type="radio"
