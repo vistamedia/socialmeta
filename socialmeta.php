@@ -124,7 +124,7 @@ class PlgSystemSocialmeta extends JPlugin
 		$option		= $jinput->get('option', '', 'CMD');
 		$view 		= $jinput->get('view', '', 'CMD');
 		$context	= $option . '.' . $view;
-		$id 			= (int)$jinput->get('id', '', 'CMD');
+		$id 		= (int)$jinput->get('id', '', 'CMD');
 		$allowed	= array( 'com_content.article','com_flexicontent.item' );
 
 		$objectype	= "article"; // set a default object type
@@ -156,7 +156,14 @@ class PlgSystemSocialmeta extends JPlugin
 			$document->addScriptDeclaration($script);
 
 			// css to style the counter
-			$css = "span.exceeded { color: #E00B0B; } .help-block { font-size: 11px; }";
+			$css = 
+				"
+				span.exceeded { color: #E00B0B; } 
+				.counter { padding-left: 15px; font-size: 11px; }
+				.media-body { padding-left: 15px; }
+				.videoscreen { background-image: url(../plugins/system/socialmeta/img/screen-mini.png); width:300px; height:246px; float: left; }
+				.videoscreen img { padding: 11px 0 0 11px; width: 278px; height: 157px; }
+				";
 			$document->addStyleDeclaration($css);
 
 			return true;

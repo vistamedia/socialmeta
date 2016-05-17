@@ -73,7 +73,7 @@ class JFormFieldVideo extends JFormFieldText
 				getPropertyAndAppend ( url, "og:title", "thumb_title", "html");
 				getPropertyAndAppend ( url, "og:description", "thumb_description", "html");
 			} else {
-				jQuery("#thumb_image").attr("src", "../plugins/system/socialmeta/img/socialmeta-symbol-mini.png");
+				jQuery("#thumb_image").attr("src", "../plugins/system/socialmeta/img/socialmeta-default-image.png");
 			}
 			$( "#'.$this->id.'_fetch" ).click(function() {
 				var url = $("#'.$this->id.'").val();
@@ -94,7 +94,7 @@ class JFormFieldVideo extends JFormFieldText
 		        $("#jform_attribs_facebookmeta_video_width").val("");
 		        $("#jform_attribs_facebookmeta_video_type").val("");
 		        $("#'.$this->id.'").val("");
-				$("#thumb_image").attr("src", "../plugins/system/socialmeta/img/socialmeta-symbol-mini.png");
+				$("#thumb_image").fadeOut().attr("src", "../plugins/system/socialmeta/img/socialmeta-default-image.png").fadeIn();
 		        $("#thumb_title").html("");
 		        $("#thumb_description").html("");
 		        return false;
@@ -116,7 +116,7 @@ class JFormFieldVideo extends JFormFieldText
 				
 				if (mode == "img") {
 					if (res.length > 0) {
-						jQuery("#" + destination).attr("src", res[0].content);
+						jQuery("#" + destination).fadeOut().attr("src", res[0].content).fadeIn();
 					} else {
 				        console.log(property + " not found");
 					}
@@ -152,7 +152,7 @@ class JFormFieldVideo extends JFormFieldText
 			. $hint . $autocomplete . $autofocus 
 			. $spellcheck . $onchange . $maxLength 
 			. $required . ' /><a href="#" class="btn" id="'.$this->id.'_fetch">'.JText::_('PLG_SYSTEM_SOCIALMETA_FETCH_PROPERTIES').'</a><a href="#" class="btn" id="'.$this->id.'_clear">'.JText::_('PLG_SYSTEM_SOCIALMETA_CLEAR').'</a></div><span class="clearfix"></span>'
-			. '<div class="media"><a class="pull-left" href="#"><img class="media-object" src="" id="thumb_image" width="200" height="100"></a>'
+			. '<div class="media"><div class="videoscreen"><a class="pull-left" href="#"><img class="media-object" src="" id="thumb_image" width="200" height="100"></a></div>'
 			. '<div class="media-body"><h4 class="media-heading" id="thumb_title"></h4><span id="thumb_description"></span></div></div>';
 	}
 }
