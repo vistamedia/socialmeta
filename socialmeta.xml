@@ -116,6 +116,7 @@
 				class="text"
 				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_SPACER"
 				/>
+<!--
 				<field
 				name="facebookmeta_flexicontent_image_field"
 				type="text"
@@ -123,9 +124,9 @@
 				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD"
 				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD_DESC"
 				/>
-<!--
+-->
 				<field
-				name="facebookmeta_flexicontent_image_field2"
+				name="facebookmeta_flexicontent_image_field"
 				type="fields"
 				default=""
 				field_type="image"
@@ -133,7 +134,6 @@
 				label="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD"
 				description="PLG_SYSTEM_SOCIALMETA_FLEXICONTENT_IMAGE_FIELD_DESC"
 				/>
--->
 				<field
 				name="facebookmeta_flexicontent_imagesize_field"
 				type="radio"

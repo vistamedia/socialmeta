@@ -161,8 +161,8 @@ class PlgSystemSocialmeta extends JPlugin
 				span.exceeded { color: #E00B0B; } 
 				.counter { padding-left: 15px; font-size: 11px; }
 				.media-body { padding-left: 15px; }
-				.videoscreen { background-image: url(../plugins/system/socialmeta/img/screen-mini.png); width:300px; height:246px; float: left; }
-				.videoscreen img { padding: 11px 0 0 11px; width: 278px; height: 157px; }
+				#videoscreen { background-image: url(../plugins/system/socialmeta/img/screen-mini.png); width:300px; height:246px; float: left; }
+				#videoscreen img { padding: 11px 0 0 11px !important; width: 278px !important; height: 157px !important; }
 				";
 			$document->addStyleDeclaration($css);
 
@@ -372,8 +372,9 @@ class PlgSystemSocialmeta extends JPlugin
 			// com_flexicontent specific routine to overrride image
 			if ( ( $option == 'com_flexicontent' && $view == 'item') ) {
 				
-				// First check if image field has been provided, it's a valid image field and it's published
-				if ( $this->isValidImageField( $this->flexicontent_image_field ) ) {
+				if ($this->flexicontent_image_field) {
+				
+					$image_field = $this->getFCfieldname($this->flexicontent_image_field);
 					
 					require_once (JPATH_SITE.DS.'components'.DS.'com_flexicontent'.DS.'classes'.DS.'flexicontent.fields.php');
 					    
@@ -383,28 +384,29 @@ class PlgSystemSocialmeta extends JPlugin
 					  FlexicontentFields::renderFields(
 					    $item_per_field=true,
 					    $itemids = array($article->id),
-					    $field_names = array($this->flexicontent_image_field),
+					    $field_names = array($image_field),
 					    $view ='item',
 					    $field_methods = array('display_'.$thumb_size.'_src'),
 					    $cfparams = array()
 					  );
 					
-					$thumb = $thumbs_arr[$article->id][$this->flexicontent_image_field]['display_'.$thumb_size.'_src'];
-
-					// Override the og:image properties
-					$size 				= getimagesize(JURI::base().substr($thumb, strlen(JURI::base(true)) + 1));
-					$metaimage 			= '<meta property="og:image" content="' . JURI::base().substr($thumb, strlen(JURI::base(true)) + 1) .'" />';
-					$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
-					$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
-					$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
-
+					$thumb = $thumbs_arr[$article->id][$image_field]['display_'.$thumb_size.'_src'];
+					
+					if (!empty($thumb)) {
+						// Override the og:image properties
+						$size 				= getimagesize(JURI::base().substr($thumb, strlen(JURI::base(true)) + 1));
+						$metaimage 			= '<meta property="og:image" content="' . JURI::base().substr($thumb, strlen(JURI::base(true)) + 1) .'" />';
+						$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
+						$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
+						$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
+					}
 /*
 echo '<pre>';
-print_r( $thumb );
+print_r( 'manu' );
 echo '</pre>';
 */
-
 				}
+
 			}
 		}
 
@@ -829,7 +831,26 @@ echo '</pre>';
 		{
 			return true;
 		}
-		
-		
+	}
+
+	/**
+	 * Check if the image field is an image and is published
+	 *
+	 * @param 	string 		$fieldname
+	 * @return 	void		true on success
+	 *
+	 * @since 1.0
+	 */
+	private function getFCfieldname ( $id )
+	{
+		$db 	= JFactory::getDBO();
+		$query 	= $db->getQuery(true);
+		$query->select('name');
+		$query->from($db->quoteName('#__flexicontent_fields'));
+		$query->where($db->quoteName('id')." = ".$db->quote($id));
+		$db->setQuery($query);
+		$fieldname = $db->loadResult();
+	
+		return $fieldname;
 	}
 }
