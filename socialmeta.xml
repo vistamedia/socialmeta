@@ -76,6 +76,13 @@
 				description="PLG_SYSTEM_SOCIALMETA_TWITTERSITE_DESC"
 				/>
 				<field
+				name="facebookmeta_googleplus"
+				type="text"
+				default=""
+				label="PLG_SYSTEM_SOCIALMETA_GOOGLEPLUS"
+				description="PLG_SYSTEM_SOCIALMETA_GOOGLEPLUS_DESC"
+				/>
+				<field
 				name="facebookmeta_titlelimit"
 				type="text"
 				default="68"

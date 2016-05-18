@@ -26,6 +26,7 @@ class PlgSystemSocialmeta extends JPlugin
 	protected $facebookmeta_auth = '';
 	protected $facebookmeta_pub = '';
 	protected $facebookmeta_twittersite = '';
+	protected $facebookmeta_googleplus = '';
 	protected $facebookmeta_admin = '';
 	protected $facebookmeta_titlelimit = '';
 	protected $facebookmeta_desclimit = '';
@@ -53,6 +54,7 @@ class PlgSystemSocialmeta extends JPlugin
 		$this->facebookmeta_auth			= $this->params->get('facebookmeta_default_userid','');
 		$this->facebookmeta_pub				= $this->params->get('facebookmeta_pageid','');
 		$this->facebookmeta_twittersite		= $this->params->get('facebookmeta_twittersite','');
+		$this->facebookmeta_googleplus		= $this->params->get('facebookmeta_googleplus','');
 		$this->facebookmeta_admin			= $this->params->get('facebookmeta_appadmin','');
 		$this->facebookmeta_titlelimit		= $this->params->get('facebookmeta_titlelimit', 68);
 		$this->facebookmeta_desclimit		= $this->params->get('facebookmeta_desclimit', 200);
@@ -126,6 +128,13 @@ class PlgSystemSocialmeta extends JPlugin
 		$context	= $option . '.' . $view;
 		$id 		= (int)$jinput->get('id', '', 'CMD');
 		$allowed	= array( 'com_content.article','com_flexicontent.item' );
+		$googledata = new StdClass();
+		$googledata->{'@context'} = 'http://schema.org/';
+		$googledata->{'@type'} = 'Article';
+		if (!empty($this->facebookmeta_googleplus)) {
+			$googledata->publisher = $this->facebookmeta_googleplus;
+		}
+		
 
 		$objectype	= "article"; // set a default object type
 
@@ -184,6 +193,10 @@ class PlgSystemSocialmeta extends JPlugin
 		// Find the language code of your page
 		$lang 	= JFactory::getLanguage();
 		$locale = $lang->getTag();
+		$languagecode_installed = JPluginHelper::isEnabled('system', 'languagecode');
+		if ($languagecode_installed) {
+			$locale = $this->getNewLanguageCode($locale);
+		}
 		$locale = str_replace('-', '_', $locale);
 
 		// We intialize the meta image property with the default image if set
@@ -194,13 +207,21 @@ class PlgSystemSocialmeta extends JPlugin
 			$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 			$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 			$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
+			$googledata->image 				= new StdClass();
+			$googledata->image->{'@type'} 	= 'ImageObject';
+			$googledata->image->url 		= JURI::base() . $this->defaultimage;
+			$googledata->image->width 		= $size[0];
+			$googledata->image->height 		= $size[1];
+			$googledata->image->fileFormat	= $size['mime'];
 		}
 
 		$metaurl 		= '<meta property="og:url" content="' . JURI::current() .'" />';
+		$googledata->mainEntityOfPage = JURI::current();
 		$metatype 		= '<meta property="og:type" content="article" />';
 		$metatypetw 	= '<meta name="twitter:card" content="summary_large_image" />';
 		$metasitename	= '<meta property="og:site_name" content="' . $config->get( 'sitename' ) .'" />';
 		$metalocale		= '<meta property="og:locale" content="' . $locale .'" />';
+		$googledata->inLanguage = $lang->getTag();
 		if ($this->fbappid) {
 			$metafbappid 	= '<meta property="fb:app_id" content="'.$this->fbappid.'" />';
 		} else {
@@ -211,10 +232,6 @@ class PlgSystemSocialmeta extends JPlugin
 		} else {
 			$metafbadmins		= '';
 		}
-
-// echo '<pre>';
-// print_r($facebookmeta_image);
-// echo '</pre>';
 
 		// Handle values of the content table
 		if ( ( $option == 'com_content' && $view == 'article') || ( $option == 'com_flexicontent' && $view == 'item') ) {
@@ -284,6 +301,10 @@ class PlgSystemSocialmeta extends JPlugin
 				$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 				$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 				$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
+				$googledata->image->url 		= JURI::base() . $facebookmeta_image;
+				$googledata->image->width 		= $size[0];
+				$googledata->image->height 		= $size[1];
+				$googledata->image->fileFormat	= $size['mime'];
 			}
 			if ($article->modified) {
 				$metaupdated  = '<meta property="og:updated_time" content="'. $this->to8601($article->modified) . '" />';
@@ -295,6 +316,7 @@ class PlgSystemSocialmeta extends JPlugin
 			} else {
 				$metaauth		= '';
 			}
+			$googledata->author = $article->created_by_alias ? $article->created_by_alias : $this->getUserName($article->created_by);
 			if ($this->facebookmeta_twittersite) {
 				$metaauthtw 	= '<meta name="twitter:site" content="'. ( $facebookmeta_authortw ? $facebookmeta_authortw : $this->facebookmeta_twittersite ) . '" />';
 			} else {
@@ -304,17 +326,23 @@ class PlgSystemSocialmeta extends JPlugin
 				$metapublisher  	= '<meta property="article:publisher" content="'. $this->facebookmeta_pub . '" />';
 			}
 			$metasection  			= '<meta property="article:section" content="'. $category->title . '" />';
+			$googledata->articleSection = $category->title;
 			$metapub					= array();
 			$metapub['modified']  		= '<meta property="article:modified_time" content="'. $this->to8601($article->modified) . '" />';
+			$googledata->dateModified 	= $this->to8601($article->modified);
 			$metapub['publish_ub']		= '<meta property="article:published_time" content="'. $this->to8601($article->publish_up) . '" />';
+			$googledata->datePublished 	= $this->to8601($article->publish_up);
 			if ($article->publish_down != '0000-00-00 00:00:00') {
 				$metapub['publish_down']	= '<meta property="article:expiration_time" content="'. $this->to8601($article->publish_down) . '" />';
 			}
 			if (count($article->tags->itemTags)) {
-				$metatags = array();
+				$metatags 		= array();
+				$articletags 	= array();
 				foreach ($article->tags->itemTags as $tag) {
 					$metatags[] = '<meta property="article:tag" content="' . $tag->title .'" />';
+					$articletags[] = $tag->title;
 				}
+				$googledata->keywords = implode(',', $articletags);
 			}
 			if ($facebookmeta_seealso1) {
 				$metaseealso1  	= '<meta property="og:see_also" content="'. JURI::base().substr(JRoute::_(ContentHelperRoute::getArticleRoute($facebookmeta_seealso1,$article->catid)), strlen(JURI::base(true)) + 1) . '" />';
@@ -356,17 +384,24 @@ class PlgSystemSocialmeta extends JPlugin
 			// We use the title of the article if none is provided
 			if ($facebookmeta_title) {
 				$metatitle = '<meta property="og:title" content="' . $this->striptagsandcut ( $facebookmeta_title ) .'" />';
+				$googledata->headline = $this->striptagsandcut ( $facebookmeta_title );
+				$googledata->name = $this->striptagsandcut ( $facebookmeta_title );
 			} else {
 				$metatitle = '<meta property="og:title" content="' . $this->striptagsandcut ( $article->title, $this->facebookmeta_titlelimit ) .'" />';
+				$googledata->headline = $this->striptagsandcut ( $this->striptagsandcut ( $article->title, $this->facebookmeta_titlelimit ) );
+				$googledata->name = $this->striptagsandcut ( $this->striptagsandcut ( $article->title, $this->facebookmeta_titlelimit ) );
 			}
 			// We use the introtext field if none is provided
 			if ($facebookmeta_desc) {
 				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $facebookmeta_desc ) .'" />';
+				$googledata->description = $this->striptagsandcut ( $facebookmeta_desc );
 			}
 			elseif (!empty($article->metadesc)) {
 				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $article->metadesc ) .'" />';
+				$googledata->description = $this->striptagsandcut ( $article->metadesc );
 			} else {
 				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $article->introtext, $this->facebookmeta_desclimit ) .'" />';
+				$googledata->description = $this->striptagsandcut ( $article->introtext, $this->facebookmeta_desclimit );
 			}
 			
 			// com_flexicontent specific routine to overrride image
@@ -399,18 +434,27 @@ class PlgSystemSocialmeta extends JPlugin
 						$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 						$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 						$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
+						$googledata->image->url 		= JURI::base().substr($thumb, strlen(JURI::base(true)) + 1);
+						$googledata->image->width 		= $size[0];
+						$googledata->image->height 		= $size[1];
+						$googledata->image->fileFormat	= $size['mime'];
 					}
-/*
-echo '<pre>';
-print_r( 'manu' );
-echo '</pre>';
-*/
 				}
-
 			}
 		}
 
+/*
+echo '<pre>';
+print_r( $googledata );
+print_r( json_encode( $googledata ) );
+echo '</pre>';
+*/
+		
 		$document->addCustomTag('<!-- BOF Socialmeta plugin for Joomla! https://github.com/vistamedia/socialmeta -->');
+
+		$document->addCustomTag('<!-- Google structured data -->');
+		$document->addCustomTag( '<script type="application/ld+json">'.json_encode( $googledata ).'</script>' );
+
 		// og:site_name
 		if ($this->params->get('og_site_name',1)) {
 			$document->addCustomTag('<!-- og common meta -->');
@@ -708,7 +752,7 @@ echo '</pre>';
 	}
 
 	/**
-	 * Returns a the facebookprofile store in the contact
+	 * Returns a the twitterprofile store in the contact
 	 *
 	 * @TODO: getExternalProperties(userid,property)
 	 * @param 	int 		$userid
@@ -722,19 +766,37 @@ echo '</pre>';
 		$query->select('params');
 		$query->from($db->quoteName('#__contact_details'));
 		$query->where($db->quoteName('user_id')." = ".$db->quote($userid));
-
 		// Reset the query using our newly populated query object.
 		$db->setQuery($query);
 		$userparams = $db->loadResult();
-
 		if ($userparams) {
 			$userparams = json_decode($userparams);
 			$twprofile = $userparams->facebookmeta_twitteruser ? $userparams->facebookmeta_twitteruser : '';
 		} else {
 			$twprofile = '';
 		}
-
 		return $twprofile ? $twprofile : '';
+	}
+
+	/**
+	 * Returns a the the name of a user
+	 *
+	 * @TODO: getExternalProperties(userid,property)
+	 * @param 	int 		$userid
+	 * @return 	string		Facebook profile URL of the user
+	 * @since 1.0
+	 */
+	private function getUserName ( $userid )
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('name');
+		$query->from($db->quoteName('#__users'));
+		$query->where($db->quoteName('id')." = ".$db->quote($userid));
+		$db->setQuery($query);
+		$username = $db->loadResult();
+
+		return $username;
 	}
 
 	/**
@@ -832,7 +894,7 @@ echo '</pre>';
 			return true;
 		}
 	}
-
+	
 	/**
 	 * Check if the image field is an image and is published
 	 *
@@ -853,4 +915,36 @@ echo '</pre>';
 	
 		return $fieldname;
 	}
+
+	/**
+	 * Get the modified language code if the plugin is enabled
+	 *
+	 * @param 	string 		$tag		the language tag
+	 * @return 	string		$newtag		the modified language tag
+	 *
+	 * @since 1.1
+	 */
+	private function getNewLanguageCode ( $tag = 'en-GB' )
+	{
+		$db 	= JFactory::getDBO();
+		$query 	= $db->getQuery(true);
+		$query->select('params');
+		$query->from($db->quoteName('#__extensions'));
+		$query->where($db->quoteName('name')." = ".$db->quote('plg_system_languagecode'));
+		$db->setQuery($query);
+		$params = $db->loadResult();
+		
+		$lcparams = new JRegistry($params);
+		
+		$newtag = $lcparams->get(strtolower($tag));
+		
+/*
+echo '<pre>';
+print_r( $lcparams->get(strtolower($tag)) );
+echo '</pre>';
+*/
+
+		return (!empty($newtag)) ? $newtag : $tag;
+	}	
+
 }
