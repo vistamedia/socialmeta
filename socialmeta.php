@@ -457,10 +457,12 @@ class PlgSystemSocialmeta extends JPlugin
 			}
 		}
 
+/*
 echo '<pre>';
 print_r( $googledata );
 //print_r( json_encode( $googledata ) );
 echo '</pre>';
+*/
 		
 		$document->addCustomTag('<!-- BOF Socialmeta plugin for Joomla! https://github.com/vistamedia/socialmeta -->');
 
