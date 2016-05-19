@@ -83,6 +83,13 @@
 				description="PLG_SYSTEM_SOCIALMETA_GOOGLEPLUS_DESC"
 				/>
 				<field
+				name="facebookmeta_googlepluslogo"
+				type="media"
+				label="PLG_SYSTEM_SOCIALMETA_GOOGLEPLUS_LOGO"
+				description="PLG_SYSTEM_SOCIALMETA_GOOGLEPLUS_LOGO_DESC"
+				directory=""
+				/>
+				<field
 				name="facebookmeta_titlelimit"
 				type="text"
 				default="68"

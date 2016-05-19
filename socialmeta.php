@@ -27,6 +27,7 @@ class PlgSystemSocialmeta extends JPlugin
 	protected $facebookmeta_pub = '';
 	protected $facebookmeta_twittersite = '';
 	protected $facebookmeta_googleplus = '';
+	protected $facebookmeta_googlepluslogo = '';
 	protected $facebookmeta_admin = '';
 	protected $facebookmeta_titlelimit = '';
 	protected $facebookmeta_desclimit = '';
@@ -55,6 +56,7 @@ class PlgSystemSocialmeta extends JPlugin
 		$this->facebookmeta_pub				= $this->params->get('facebookmeta_pageid','');
 		$this->facebookmeta_twittersite		= $this->params->get('facebookmeta_twittersite','');
 		$this->facebookmeta_googleplus		= $this->params->get('facebookmeta_googleplus','');
+		$this->facebookmeta_googlepluslogo	= $this->params->get('facebookmeta_googlepluslogo','');
 		$this->facebookmeta_admin			= $this->params->get('facebookmeta_appadmin','');
 		$this->facebookmeta_titlelimit		= $this->params->get('facebookmeta_titlelimit', 68);
 		$this->facebookmeta_desclimit		= $this->params->get('facebookmeta_desclimit', 200);
@@ -132,9 +134,19 @@ class PlgSystemSocialmeta extends JPlugin
 		$googledata->{'@context'} = 'http://schema.org/';
 		$googledata->{'@type'} = 'Article';
 		if (!empty($this->facebookmeta_googleplus)) {
-			$googledata->publisher = $this->facebookmeta_googleplus;
+			$googledata->publisher = new StdClass();
+			$googledata->publisher->{'@type'} = 'Organization';
+			$googledata->publisher->name = $this->facebookmeta_googleplus;
 		}
-		
+		if (!empty($this->facebookmeta_googlepluslogo)) {
+			$size 	= getimagesize(JURI::base() . $this->facebookmeta_googlepluslogo);
+			$googledata->publisher->logo 				= new StdClass();
+			$googledata->publisher->logo->{'@type'} 	= 'ImageObject';
+			$googledata->publisher->logo->url 			= JURI::base() . $this->facebookmeta_googlepluslogo;
+			$googledata->publisher->logo->width 		= $size[0];
+			$googledata->publisher->logo->height 		= $size[1];
+			$googledata->publisher->logo->fileFormat	= $size['mime'];
+		}
 
 		$objectype	= "article"; // set a default object type
 
@@ -316,7 +328,9 @@ class PlgSystemSocialmeta extends JPlugin
 			} else {
 				$metaauth		= '';
 			}
-			$googledata->author = $article->created_by_alias ? $article->created_by_alias : $this->getUserName($article->created_by);
+			$googledata->author = new StdClass();
+			$googledata->author->{'@type'} = 'Person';
+			$googledata->author->name = $article->created_by_alias ? $article->created_by_alias : $this->getUserName($article->created_by);
 			if ($this->facebookmeta_twittersite) {
 				$metaauthtw 	= '<meta name="twitter:site" content="'. ( $facebookmeta_authortw ? $facebookmeta_authortw : $this->facebookmeta_twittersite ) . '" />';
 			} else {
@@ -443,12 +457,10 @@ class PlgSystemSocialmeta extends JPlugin
 			}
 		}
 
-/*
 echo '<pre>';
 print_r( $googledata );
-print_r( json_encode( $googledata ) );
+//print_r( json_encode( $googledata ) );
 echo '</pre>';
-*/
 		
 		$document->addCustomTag('<!-- BOF Socialmeta plugin for Joomla! https://github.com/vistamedia/socialmeta -->');
 
