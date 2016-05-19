@@ -133,20 +133,6 @@ class PlgSystemSocialmeta extends JPlugin
 		$googledata = new StdClass();
 		$googledata->{'@context'} = 'http://schema.org/';
 		$googledata->{'@type'} = 'Article';
-		if (!empty($this->facebookmeta_googleplus)) {
-			$googledata->publisher = new StdClass();
-			$googledata->publisher->{'@type'} = 'Organization';
-			$googledata->publisher->name = $this->facebookmeta_googleplus;
-		}
-		if (!empty($this->facebookmeta_googlepluslogo)) {
-			$size 	= getimagesize(JURI::base() . $this->facebookmeta_googlepluslogo);
-			$googledata->publisher->logo 				= new StdClass();
-			$googledata->publisher->logo->{'@type'} 	= 'ImageObject';
-			$googledata->publisher->logo->url 			= JURI::base() . $this->facebookmeta_googlepluslogo;
-			$googledata->publisher->logo->width 		= $size[0];
-			$googledata->publisher->logo->height 		= $size[1];
-			$googledata->publisher->logo->fileFormat	= $size['mime'];
-		}
 
 		$objectype	= "article"; // set a default object type
 
@@ -191,15 +177,31 @@ class PlgSystemSocialmeta extends JPlugin
 		}
 
 		// Don't process meta on RSS feeds to avoid crashes
-    if ($jinput->get('format', '', 'CMD') == 'feed')
-    {
-        return true;
-    }
+	    if ($jinput->get('format', '', 'CMD') == 'feed')
+	    {
+	        return true;
+	    }
 
 		// We check if the view is allowed
 		if ( !in_array($context, $allowed) )
 		{
 				return true;
+		}
+		
+		// Add Google structured data for publishers
+		if (!empty($this->facebookmeta_googleplus)) {
+			$googledata->publisher = new StdClass();
+			$googledata->publisher->{'@type'} = 'Organization';
+			$googledata->publisher->name = $this->facebookmeta_googleplus;
+		}
+		if (!empty($this->facebookmeta_googlepluslogo)) {
+			$size 	= getimagesize(JURI::base() . $this->facebookmeta_googlepluslogo);
+			$googledata->publisher->logo 				= new StdClass();
+			$googledata->publisher->logo->{'@type'} 	= 'ImageObject';
+			$googledata->publisher->logo->url 			= JURI::base() . $this->facebookmeta_googlepluslogo;
+			$googledata->publisher->logo->width 		= $size[0];
+			$googledata->publisher->logo->height 		= $size[1];
+			$googledata->publisher->logo->fileFormat	= $size['mime'];
 		}
 
 		// Find the language code of your page
