@@ -13,8 +13,8 @@
             <field 
             name="noteimagesize" 
             type="separator"
-            default="PLG_SYSTEM_SOCIALMETA_IMAGENOTE_DESC" 
-			level="level3"
+            default="PLG_SYSTEM_SOCIALMETA_IMAGENOTE_DESC"
+            level="level3" class="alert alert-info fcpadded"
             />
 <!--
             <field 
