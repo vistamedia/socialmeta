@@ -94,7 +94,7 @@ class JFormFieldVideo extends JFormFieldText
 		        $("#jform_attribs_facebookmeta_video_width").val("");
 		        $("#jform_attribs_facebookmeta_video_type").val("");
 		        $("#'.$this->id.'").val("");
-				$("#thumb_image").fadeOut().attr("src", "../plugins/system/socialmeta/img/socialmeta-default-image.png").fadeIn();
+		        $("#thumb_image").fadeOut().attr("src", "../plugins/system/socialmeta/img/socialmeta-default-image.png").fadeIn();
 		        $("#thumb_title").html("");
 		        $("#thumb_description").html("");
 		        return false;
@@ -146,13 +146,30 @@ class JFormFieldVideo extends JFormFieldText
 		$document 	= JFactory::getDocument();
 		$document->addScriptDeclaration($script);
 
-		return '<div class="input-append"><input ' . $inputType . ' name="' . $this->name . '"' . $class . ' id="' . $this->id . '" value="'
-			. htmlspecialchars(JStringPunycode::urlToUTF8($this->value), ENT_COMPAT, 'UTF-8') . '"' 
-			. $size . $disabled . $readonly
-			. $hint . $autocomplete . $autofocus 
-			. $spellcheck . $onchange . $maxLength 
-			. $required . ' /><a href="#" class="btn" id="'.$this->id.'_fetch">'.JText::_('PLG_SYSTEM_SOCIALMETA_FETCH_PROPERTIES').'</a><a href="#" class="btn" id="'.$this->id.'_clear">'.JText::_('PLG_SYSTEM_SOCIALMETA_CLEAR').'</a></div><span class="clearfix"></span>'
-			. '<div class="media"><div id="videoscreen"><a class="pull-left" href="#"><img class="media-object" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="'.JText::_('JLIB_FORM_MEDIA_PREVIEW_TIP_TITLE', true).'" id="thumb_image" width="200" height="100"></a></div>'
-			. '<div class="media-body hidden-phone"><h4 class="media-heading" id="thumb_title"></h4><span id="thumb_description"></span></div></div>';
+		return '
+		<div class="input-append">
+			<input ' . $inputType . ' name="' . $this->name . '"' . $class . ' id="' . $this->id . '" value="'
+				. htmlspecialchars(JStringPunycode::urlToUTF8($this->value), ENT_COMPAT, 'UTF-8') . '"' 
+				. $size . $disabled . $readonly
+				. $hint . $autocomplete . $autofocus 
+				. $spellcheck . $onchange . $maxLength 
+				. $required .
+			' />
+			<a href="#" class="btn" id="'.$this->id.'_fetch">'.JText::_('PLG_SYSTEM_SOCIALMETA_FETCH_PROPERTIES').'</a>
+			<a href="#" class="btn" id="'.$this->id.'_clear">'.JText::_('PLG_SYSTEM_SOCIALMETA_CLEAR').'</a>
+		</div>
+		<div class="clearfix"></div>
+		<div class="media">
+			<div id="videoscreen">
+				<a class="pull-left" href="#">
+					<img class="media-object" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="'.JText::_('JLIB_FORM_MEDIA_PREVIEW_TIP_TITLE', true).'" id="thumb_image" width="200" height="100">
+				</a>
+			</div>
+			<div class="media-body hidden-phone">
+				<h4 class="media-heading" id="thumb_title">&nbsp;</h4>
+				<span id="thumb_description"></span>
+			</div>
+		</div>
+		';
 	}
 }
