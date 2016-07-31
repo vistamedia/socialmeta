@@ -152,7 +152,7 @@ class JFormFieldVideo extends JFormFieldText
 			. $hint . $autocomplete . $autofocus 
 			. $spellcheck . $onchange . $maxLength 
 			. $required . ' /><a href="#" class="btn" id="'.$this->id.'_fetch">'.JText::_('PLG_SYSTEM_SOCIALMETA_FETCH_PROPERTIES').'</a><a href="#" class="btn" id="'.$this->id.'_clear">'.JText::_('PLG_SYSTEM_SOCIALMETA_CLEAR').'</a></div><span class="clearfix"></span>'
-			. '<div class="media"><div id="videoscreen"><a class="pull-left" href="#"><img class="media-object" src="" id="thumb_image" width="200" height="100"></a></div>'
+			. '<div class="media"><div id="videoscreen"><a class="pull-left" href="#"><img class="media-object" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="'.JText::_('JLIB_FORM_MEDIA_PREVIEW_TIP_TITLE', true).'" id="thumb_image" width="200" height="100"></a></div>'
 			. '<div class="media-body hidden-phone"><h4 class="media-heading" id="thumb_title"></h4><span id="thumb_description"></span></div></div>';
 	}
 }
