@@ -194,8 +194,8 @@ class PlgSystemSocialmeta extends JPlugin
 			$googledata->publisher->{'@type'} = 'Organization';
 			$googledata->publisher->name = $this->facebookmeta_googleplus;
 		}
-		if (!empty($this->facebookmeta_googlepluslogo)) {
-			$size 	= getimagesize(JURI::base() . $this->facebookmeta_googlepluslogo);
+		if (!empty($this->facebookmeta_googlepluslogo) && $size = @ getimagesize(JPath::clean(JPATH_SITE .'/'. $this->facebookmeta_googlepluslogo)))
+		{
 			$googledata->publisher->logo 				= new StdClass();
 			$googledata->publisher->logo->{'@type'} 	= 'ImageObject';
 			$googledata->publisher->logo->url 			= JURI::base() . $this->facebookmeta_googlepluslogo;
@@ -214,9 +214,8 @@ class PlgSystemSocialmeta extends JPlugin
 		$locale = str_replace('-', '_', $locale);
 
 		// We intialize the meta image property with the default image if set
-		if ($this->defaultimage)
+		if ($this->defaultimage && $size = @ getimagesize(JPath::clean(JPATH_SITE .'/'. $this->defaultimage)))
 		{
-			$size 				= getimagesize(JURI::base() . $this->defaultimage);
 			$metaimage 			= '<meta property="og:image" content="' . JURI::base() . $this->defaultimage .'" />';
 			$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 			$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
@@ -309,12 +308,13 @@ class PlgSystemSocialmeta extends JPlugin
 
 
 			// We have to set the article sharing image https://developers.facebook.com/docs/sharing/best-practices#images
-			if ($facebookmeta_image) {
-				$size 				= getimagesize(JURI::base() . $facebookmeta_image);
+			if ($facebookmeta_image && $size = @ getimagesize(JPath::clean(JPATH_SITE .'/'. $facebookmeta_image)))
+			{
 				$metaimage 			= '<meta property="og:image" content="' . JURI::base() . $facebookmeta_image .'" />';
 				$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 				$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 				$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
+				$googledata->image 				= new StdClass();
 				$googledata->image->url 		= JURI::base() . $facebookmeta_image;
 				$googledata->image->width 		= $size[0];
 				$googledata->image->height 		= $size[1];
@@ -443,13 +443,14 @@ class PlgSystemSocialmeta extends JPlugin
 					
 					$thumb = $thumbs_arr[$article->id][$image_field]['display_'.$thumb_size.'_src'];
 					
-					if (!empty($thumb)) {
+					if (!empty($thumb) && $size = @ getimagesize(JPath::clean(JPATH_SITE .'/'. substr($thumb, strlen(JURI::base(true)) + 1))))
+					{
 						// Override the og:image properties
-						$size 				= getimagesize(JURI::base().substr($thumb, strlen(JURI::base(true)) + 1));
 						$metaimage 			= '<meta property="og:image" content="' . JURI::base().substr($thumb, strlen(JURI::base(true)) + 1) .'" />';
 						$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 						$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 						$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
+						$googledata->image	= new StdClass();
 						$googledata->image->url 		= JURI::base().substr($thumb, strlen(JURI::base(true)) + 1);
 						$googledata->image->width 		= $size[0];
 						$googledata->image->height 		= $size[1];
