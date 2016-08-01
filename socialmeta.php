@@ -351,7 +351,7 @@ class PlgSystemSocialmeta extends JPlugin
 			if ($article->publish_down != '0000-00-00 00:00:00') {
 				$metapub['publish_down']	= '<meta property="article:expiration_time" content="'. $this->to8601($article->publish_down) . '" />';
 			}
-			if (count($article->tags->itemTags)) {
+			if (!empty($article->tags->itemTags)) {
 				$metatags 		= array();
 				$articletags 	= array();
 				foreach ($article->tags->itemTags as $tag) {
@@ -759,7 +759,7 @@ echo '</pre>';
 
 		if ($userparams) {
 			$userparams = json_decode($userparams);
-			$fbprofile = $userparams->facebookmeta_fbuserprofile ? $userparams->facebookmeta_fbuserprofile : '';
+			$fbprofile = !empty($userparams->facebookmeta_fbuserprofile) ? $userparams->facebookmeta_fbuserprofile : '';
 		} else {
 			$fbprofile = '';
 		}
@@ -787,7 +787,7 @@ echo '</pre>';
 		$userparams = $db->loadResult();
 		if ($userparams) {
 			$userparams = json_decode($userparams);
-			$twprofile = $userparams->facebookmeta_twitteruser ? $userparams->facebookmeta_twitteruser : '';
+			$twprofile = !empty($userparams->facebookmeta_twitteruser) ? $userparams->facebookmeta_twitteruser : '';
 		} else {
 			$twprofile = '';
 		}
