@@ -1,4 +1,4 @@
-<img src="https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-logo-bluebg.png" width="300">
+<img src="http://flexicontent.net/img/socialmeta/socialmeta-logo-bluebg.png" width="300">
 
 # Socialmeta plugin for Joomla!
 
@@ -13,7 +13,7 @@ Hummm... Difficult to say, but just let me ask you a simple question first...
 
 When you share a page of your Joomla! site on Facebook, what do you want to see ?
 -----
-![screenshot of the basic options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/post-compare.jpg)
+![screenshot of the basic options](http://flexicontent.net/img/socialmeta/post-compare.jpg)
 
 **If you prefer the second option (right side... just to be sure), you can keep on reading :P**
 
@@ -37,7 +37,7 @@ Download the project zip and install it like any other extension:
 ### Basic
 Actually no parameter is really required but if you wish the application to be really efficient, I recommend you to fill up at least the parameters **1, 4 and 6**.
 
-![screenshot of the basic options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-basic-conf.jpg)
+![screenshot of the basic options](http://flexicontent.net/img/socialmeta/socialmeta-plugin-basic-conf.jpg)
 Figure 1
 
 1. **Default's site image**  
@@ -71,13 +71,13 @@ You can modify here the size of the description in the character counter. The ac
 ### Components
 Here come the explanations about the components tab
 
-![screenshot of the advanced options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-components-conf.jpg)
+![screenshot of the advanced options](http://flexicontent.net/img/socialmeta/socialmeta-plugin-components-conf.jpg)
 Figure 1bis
 
 ### Advanced
 Don't be scared, there's nothing to do here except if you get some specific compatibility issues. In this particular case this settings will allow you to **disable globally** the creation of **some specific meta**. It may be the case for example if you have some kind of sharing button extension which already creates the fb:app_id meta.  
 
-![screenshot of the advanced options](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-plugin-advanced-conf.jpg)
+![screenshot of the advanced options](http://flexicontent.net/img/socialmeta/socialmeta-plugin-advanced-conf.jpg)
 Figure 2
 
 ## Usage
@@ -129,7 +129,7 @@ If, for whatever reason, the automatic mode does not produce the result you expe
 What makes this extension different from other implementations is precisely THIS feature. Socialmeta gives you the ability to override the automatic meta creation by your own input for each article. It gives the author/publisher a total flexibility on the way his content will be rendered on the social networks.
 
 This is how it looks in the Joomla! article view.  
-![screenshot of the article view](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-article-form.jpg)
+![screenshot of the article view](http://flexicontent.net/img/socialmeta/socialmeta-article-form.jpg)
 Figure 3
 
 1. **Image**  
@@ -159,14 +159,14 @@ These articles will help you do decide about your author/publisher strategy.
 
 If you wish each author to be linked with his publications on the facebook stream you can add his own Facebook profile URL and Twitter @username in the Contact component.
 To perform this just create a contact for each user for which you would like to override the general settings.  
-![screenshot of the contact creation](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-contact-form-link.jpg)  
+![screenshot of the contact creation](http://flexicontent.net/img/socialmeta/socialmeta-contact-form-link.jpg)  
 Figure 4
 
 1. Create a new contact  
 1. Give him a name and link it with a existing user (fig.4-1)  
 1. Go the social tab (fig.4-2)
 
-![screenshot of the contact creation social tab](https://dl.dropboxusercontent.com/u/11260729/socialmeta/socialmeta-contact-form-social.jpg)
+![screenshot of the contact creation social tab](http://flexicontent.net/img/socialmeta/socialmeta-contact-form-social.jpg)
 Figure 5
 
 1. Provide Facebook (fig.5-1) and Twitter (fig.5-2) credentials.  
