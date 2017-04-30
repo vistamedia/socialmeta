@@ -628,6 +628,12 @@ echo '</pre>';
 		$app  = JFactory::getApplication();
 		$name = $form->getName();
 
+		// Flexicontent v3.2+ (due to better supporting J3.7.0+) will trigger
+		// the onContentPrepareForm event with context 'com_content.article'
+		$jinput = JFactory::getApplication()->input;
+		$context = $jinput->get('option', '', 'CMD') . '.' . $jinput->get('view', '', 'CMD');
+		$name = $context == 'com_flexicontent.item' ? 'com_flexicontent.item' : $name;
+
 		// Check we are manipulating a -supported- form.
 		switch($name)
 		{
