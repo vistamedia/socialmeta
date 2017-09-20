@@ -32,7 +32,7 @@
           <downloadurl type="full" format="zip">https://github.com/vistamedia/socialmeta/archive/master.zip</downloadurl>
       </downloads>
       <tags>
-          <tag>beta</tag>
+          <tag>dev</tag>
       </tags>
       <maintainer>Emmanuel Danan</maintainer>
       <maintainerurl>https://github.com/vistamedia/socialmeta/</maintainerurl>
