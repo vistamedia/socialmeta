@@ -163,9 +163,9 @@ class PlgSystemSocialmeta extends JPlugin
 			$document->addScriptDeclaration($script);
 
 			// css to style the counter
-			$css = 
+			$css =
 				"
-				span.exceeded { color: #E00B0B; } 
+				span.exceeded { color: #E00B0B; }
 				.counter { padding-left: 15px; font-size: 11px; }
 				.media-body { padding-left: 15px; }
 				#videoscreen { background-image: url(../plugins/system/socialmeta/img/screen-mini.png); width:300px; height:246px; float: left; }
@@ -187,7 +187,7 @@ class PlgSystemSocialmeta extends JPlugin
 		{
 				return true;
 		}
-		
+
 		// Add Google structured data for publishers
 		if (!empty($this->facebookmeta_googleplus)) {
 			$googledata->publisher = new StdClass();
@@ -217,6 +217,7 @@ class PlgSystemSocialmeta extends JPlugin
 		if ($this->defaultimage && $size = @ getimagesize(JPath::clean(JPATH_SITE .'/'. $this->defaultimage)))
 		{
 			$metaimage 			= '<meta property="og:image" content="' . JURI::base() . $this->defaultimage .'" />';
+			$metaimagetw 			= '<meta name="twitter:image" content="' . JURI::base() . $this->defaultimage .'" />';
 			$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 			$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 			$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
@@ -311,6 +312,7 @@ class PlgSystemSocialmeta extends JPlugin
 			if ($facebookmeta_image && $size = @ getimagesize(JPath::clean(JPATH_SITE .'/'. $facebookmeta_image)))
 			{
 				$metaimage 			= '<meta property="og:image" content="' . JURI::base() . $facebookmeta_image .'" />';
+				$metaimagetw 			= '<meta property="name="twitter:image" content="' . JURI::base() . $facebookmeta_image .'" />';
 				$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 				$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 				$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
@@ -400,37 +402,42 @@ class PlgSystemSocialmeta extends JPlugin
 			// We use the title of the article if none is provided
 			if ($facebookmeta_title) {
 				$metatitle = '<meta property="og:title" content="' . $this->striptagsandcut ( $facebookmeta_title ) .'" />';
+				$metattitletw = '<meta name="twitter:title" content="' . $this->striptagsandcut ( $facebookmeta_title ) .'" />';
 				$googledata->headline = $this->striptagsandcut ( $facebookmeta_title );
 				$googledata->name = $this->striptagsandcut ( $facebookmeta_title );
 			} else {
 				$metatitle = '<meta property="og:title" content="' . $this->striptagsandcut ( $article->title, $this->facebookmeta_titlelimit ) .'" />';
+				$metattitletw = '<meta name="twitter:title" content="' . $this->striptagsandcut ( $article->title, $this->facebookmeta_titlelimit ) .'" />';
 				$googledata->headline = $this->striptagsandcut ( $this->striptagsandcut ( $article->title, $this->facebookmeta_titlelimit ) );
 				$googledata->name = $this->striptagsandcut ( $this->striptagsandcut ( $article->title, $this->facebookmeta_titlelimit ) );
 			}
 			// We use the introtext field if none is provided
 			if ($facebookmeta_desc) {
 				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $facebookmeta_desc ) .'" />';
+				$metadesctw = '<meta name="twitter:description" content="' . $this->striptagsandcut ( $facebookmeta_desc ) .'" />';
 				$googledata->description = $this->striptagsandcut ( $facebookmeta_desc );
 			}
 			elseif (!empty($article->metadesc)) {
 				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $article->metadesc ) .'" />';
+				$metadesctw = '<meta name="twitter:description" content="' . $this->striptagsandcut ( $article->metadesc ) .'" />';
 				$googledata->description = $this->striptagsandcut ( $article->metadesc );
 			} else {
 				$metadesc = '<meta property="og:description" content="' . $this->striptagsandcut ( $article->introtext, $this->facebookmeta_desclimit ) .'" />';
+				$metadesctw = '<meta name="twitter:description" content="' . $this->striptagsandcut ( $article->introtext, $this->facebookmeta_desclimit ) .'" />';
 				$googledata->description = $this->striptagsandcut ( $article->introtext, $this->facebookmeta_desclimit );
 			}
-			
+
 			// com_flexicontent specific routine to overrride image
 			if ( ( $option == 'com_flexicontent' && $view == 'item') ) {
-				
+
 				if ($this->flexicontent_image_field) {
-				
+
 					$image_field = $this->getFCfieldname($this->flexicontent_image_field);
-					
+
 					require_once (JPATH_SITE.DS.'components'.DS.'com_flexicontent'.DS.'classes'.DS.'flexicontent.fields.php');
-					    
+
 					$thumb_size = $this->flexicontent_imagesize_field;
-					
+
 					$thumbs_arr =
 					  FlexicontentFields::renderFields(
 					    $item_per_field=true,
@@ -440,13 +447,14 @@ class PlgSystemSocialmeta extends JPlugin
 					    $field_methods = array('display_'.$thumb_size.'_src'),
 					    $cfparams = array()
 					  );
-					
+
 					$thumb = $thumbs_arr[$article->id][$image_field]['display_'.$thumb_size.'_src'];
-					
+
 					if (!empty($thumb) && $size = @ getimagesize(JPath::clean(JPATH_SITE .'/'. substr($thumb, strlen(JURI::base(true)) + 1))))
 					{
 						// Override the og:image properties
 						$metaimage 			= '<meta property="og:image" content="' . JURI::base().substr($thumb, strlen(JURI::base(true)) + 1) .'" />';
+						$metaimagetw 			= '<meta name="twitter:image" content="' . JURI::base().substr($thumb, strlen(JURI::base(true)) + 1) .'" />';
 						$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 						$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 						$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
@@ -466,7 +474,7 @@ print_r( $googledata );
 //print_r( json_encode( $googledata ) );
 echo '</pre>';
 */
-		
+
 		$document->addCustomTag('<!-- BOF Socialmeta plugin for Joomla! https://github.com/vistamedia/socialmeta -->');
 
 		$document->addCustomTag('<!-- Google structured data -->');
@@ -504,6 +512,7 @@ echo '</pre>';
 		// og:image
 		if ($this->params->get('og_image',1) && @$metaimage) {
 			$document->addCustomTag($metaimage);
+			$document->addCustomTag($metaimagetw);
 			// og:image:width
 			$document->addCustomTag($metaimagewidth);
 			// og:image:height
@@ -587,6 +596,9 @@ echo '</pre>';
 		if ($this->params->get('twitter_card',1)) {
 			$document->addCustomTag('<!-- Twitter Specific -->');
 			$document->addCustomTag($metatypetw);
+			$document->addCustomTag($metattitletw);
+			$document->addCustomTag($metadesctw);
+			$document->addCustomTag($metaimagetw);
 		}
 		// twitter:site
 		if ($this->params->get('twitter_site',1)) {
@@ -834,7 +846,7 @@ echo '</pre>';
 	private function decideFCimageFieldThumb( $fieldname )
 	{
 		$img_fieldname = '';
-		
+
 		$user 	= JFactory::getUser();
 		$db 	= JFactory::getDBO();
 		$query 	= 'SELECT attribs #__flexicontent_fields WHERE `name`='. $db->Quote($img_fieldname);
@@ -849,10 +861,10 @@ echo '</pre>';
 			return false;
 		}
 		$fparams = new JRegistry($data->attribs);
-		
+
 		$w_l = $fparams->get('w_l');
 		$h_l = $fparams->get('h_l');
-		
+
 		$sizes = array('s', 'm', 'l');
 		$size_found = false;
 		foreach($sizes as $size)
@@ -902,7 +914,7 @@ echo '</pre>';
 			}
 			return false;
 
-		} 
+		}
 		elseif ( $data->published != 1 ) // is the field published
 		{
 			$isSuperAdmin = $user->authorise('core.admin', 'root.1');
@@ -917,7 +929,7 @@ echo '</pre>';
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Check if the image field is an image and is published
 	 *
@@ -935,7 +947,7 @@ echo '</pre>';
 		$query->where($db->quoteName('id')." = ".$db->quote($id));
 		$db->setQuery($query);
 		$fieldname = $db->loadResult();
-	
+
 		return $fieldname;
 	}
 
@@ -956,11 +968,11 @@ echo '</pre>';
 		$query->where($db->quoteName('name')." = ".$db->quote('plg_system_languagecode'));
 		$db->setQuery($query);
 		$params = $db->loadResult();
-		
+
 		$lcparams = new JRegistry($params);
-		
+
 		$newtag = $lcparams->get(strtolower($tag));
-		
+
 /*
 echo '<pre>';
 print_r( $lcparams->get(strtolower($tag)) );
@@ -968,6 +980,6 @@ echo '</pre>';
 */
 
 		return (!empty($newtag)) ? $newtag : $tag;
-	}	
+	}
 
 }
