@@ -312,7 +312,7 @@ class PlgSystemSocialmeta extends JPlugin
 			if ($facebookmeta_image && $size = @ getimagesize(JPath::clean(JPATH_SITE .'/'. $facebookmeta_image)))
 			{
 				$metaimage 			= '<meta property="og:image" content="' . JURI::base() . $facebookmeta_image .'" />';
-				$metaimagetw 			= '<meta property="name="twitter:image" content="' . JURI::base() . $facebookmeta_image .'" />';
+				$metaimagetw 			= '<meta name="twitter:image" content="' . JURI::base() . $facebookmeta_image .'" />';
 				$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 				$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 				$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
