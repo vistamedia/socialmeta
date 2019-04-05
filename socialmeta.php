@@ -316,7 +316,8 @@ class PlgSystemSocialmeta extends JPlugin
 				$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 				$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 				$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
-				$googledata->image 				= new StdClass();
+				$googledata->image 			= new StdClass();
+				$googledata->image->{'@type'} 		= 'ImageObject';
 				$googledata->image->url 		= JURI::base() . $facebookmeta_image;
 				$googledata->image->width 		= $size[0];
 				$googledata->image->height 		= $size[1];
@@ -458,10 +459,11 @@ class PlgSystemSocialmeta extends JPlugin
 						$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
 						$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 						$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
-						$googledata->image	= new StdClass();
-						$googledata->image->url 		= JURI::base().substr($thumb, strlen(JURI::base(true)) + 1);
-						$googledata->image->width 		= $size[0];
-						$googledata->image->height 		= $size[1];
+						$googledata->image		= new StdClass();
+						$googledata->image->{'@type'} 	= 'ImageObject';
+						$googledata->image->url 	= JURI::base().substr($thumb, strlen(JURI::base(true)) + 1);
+						$googledata->image->width 	= $size[0];
+						$googledata->image->height 	= $size[1];
 						$googledata->image->fileFormat	= $size['mime'];
 					}
 				}
