@@ -218,11 +218,11 @@ class PlgSystemSocialmeta extends JPlugin
 		// We intialize the meta image property with the default image if set
 		if ($this->defaultimage && $size = @ getimagesize(JPath::clean(JPATH_SITE .'/'. $this->defaultimage)))
 		{
-			$metaimage 			= '<meta property="og:image" content="' . JURI::base() . $this->defaultimage .'" />';
-			$metaimagetw 			= '<meta name="twitter:image" content="' . JURI::base() . $this->defaultimage .'" />';
-			$metaimagewidth 	= '<meta property="og:image:width" content="' . $size[0] .'" />';
-			$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
-			$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
+			$metaimage 			            = '<meta property="og:image" content="' . JURI::base() . $this->defaultimage .'" />';
+			$metaimagetw 			        = '<meta name="twitter:image" content="' . JURI::base() . $this->defaultimage .'" />';
+			$metaimagewidth 	            = '<meta property="og:image:width" content="' . $size[0] .'" />';
+			$metaimageheight 	            = '<meta property="og:image:height" content="' . $size[1] .'" />';
+			$metaimagemime	 	            = '<meta property="og:image:type" content="' . $size['mime'] .'" />';
 			$googledata->image 				= new StdClass();
 			$googledata->image->{'@type'} 	= 'ImageObject';
 			$googledata->image->url 		= JURI::base() . $this->defaultimage;
@@ -474,8 +474,11 @@ class PlgSystemSocialmeta extends JPlugin
 
 		$document->addCustomTag('<!-- BOF Socialmeta plugin for Joomla! https://github.com/vistamedia/socialmeta -->');
 
-		$document->addCustomTag('<!-- Google structured data -->');
-		$document->addCustomTag( '<script type="application/ld+json">'.json_encode( $googledata ).'</script>' );
+		if ($this->params->get('structureddata',1))
+		{
+			$document->addCustomTag('<!-- Google structured data -->');
+			$document->addCustomTag('<script type="application/ld+json">' . json_encode($googledata) . '</script>');
+		}
 
 		// og:site_name
 		if ($this->params->get('og_site_name',1)) {
