@@ -41,9 +41,11 @@ class PlgSystemSocialmeta extends JPlugin
 	 * Constructor.
 	 *
 	 * @param   object  &$subject  The object to observe.
-	 * @param   array   $config    An optional associative array of configuration settings.
+	 * @param   array    $config   An optional associative array of configuration settings.
 	 *
+	 * @throws Exception
 	 * @since   1.0
+	 *
 	 */
 	public function __construct(&$subject, $config)
 	{
@@ -69,7 +71,6 @@ class PlgSystemSocialmeta extends JPlugin
 		{
 			$this->app = JFactory::getApplication();
 		}
-
 	}
 
 	/**
@@ -118,6 +119,7 @@ class PlgSystemSocialmeta extends JPlugin
 	 *
 	 * @return  void
 	 *
+	 * @throws Exception
 	 * @since   1.0
 	 */
 	public function onBeforeCompileHead()
@@ -317,7 +319,7 @@ class PlgSystemSocialmeta extends JPlugin
 				$metaimageheight 	= '<meta property="og:image:height" content="' . $size[1] .'" />';
 				$metaimagemime	 	= '<meta property="og:image:type" content="' . $size['mime'] .'" />';
 				$googledata->image 			= new StdClass();
-				$googledata->image->{'@type'} 		= 'ImageObject';
+				$googledata->image->{'@type'} 	= 'ImageObject';
 				$googledata->image->url 		= JURI::base() . $facebookmeta_image;
 				$googledata->image->width 		= $size[0];
 				$googledata->image->height 		= $size[1];
@@ -396,7 +398,6 @@ class PlgSystemSocialmeta extends JPlugin
 					} else {
 						$metavideosecureourl = "";
 					}
-
 				}
 			}
 
@@ -470,12 +471,6 @@ class PlgSystemSocialmeta extends JPlugin
 			}
 		}
 
-/*
-echo '<pre>';
-print_r( $googledata );
-//print_r( json_encode( $googledata ) );
-echo '</pre>';
-*/
 
 		$document->addCustomTag('<!-- BOF Socialmeta plugin for Joomla! https://github.com/vistamedia/socialmeta -->');
 
@@ -974,12 +969,6 @@ echo '</pre>';
 		$lcparams = new JRegistry($params);
 
 		$newtag = $lcparams->get(strtolower($tag));
-
-/*
-echo '<pre>';
-print_r( $lcparams->get(strtolower($tag)) );
-echo '</pre>';
-*/
 
 		return (!empty($newtag)) ? $newtag : $tag;
 	}
