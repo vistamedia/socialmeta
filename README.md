@@ -78,7 +78,7 @@ Figure 1bis
 Don't be scared, there's nothing to do here except if you get some specific compatibility issues. In this particular case this settings will allow you to **disable globally** the creation of **some specific meta**. It may be the case for example if you have some kind of sharing button extension which already creates the fb:app_id meta.  
 
 ![screenshot of the advanced options](http://flexicontent.net/img/socialmeta/socialmeta-plugin-advanced-conf.jpg)
-Figure 2
+Figure 2 - This screen needs an update
 
 ## Usage
 
@@ -101,12 +101,6 @@ If, for whatever reason, the automatic mode does not produce the result you expe
 | og:image:width          | automatic from og:image                                                            |      -      |
 | og:image:height         | automatic from og:image                                                            |      -      |
 | og:image:type           | automatic from og:image                                                            |      -      |
-| og:video                | only available manually                                                            |     yes     |
-| og:video:url            | automatic from og:video                                                            |      -      |
-| og:video:secure_url     | automatic from og:video                                                            |      -      |
-| og:video:type           | semi-automatic from og:video with fetch button                                     |     yes     |
-| og:video:width          | semi-automatic from og:video with fetch button                                     |     yes     |
-| og:video:height         | semi-automatic from og:video with fetch button                                     |     yes     |
 | og:see_also             | only available manually (article selector to link related items)                   |     yes     |
 | og:updated_time         | automatic from object table **modified** in ISO8601                                |             |
 | article:author          | socialmeta configuration (fig.2-4) overridable in contact view                     |             |
@@ -120,9 +114,6 @@ If, for whatever reason, the automatic mode does not produce the result you expe
 | fb:admins               | socialmeta configuration (fig.2-3)                                                 |             |
 | twitter:card            | idem og:type (article == summary_large_image) (video == player)                    |             |
 | twitter:site            | socialmeta configuration (fig.2-6) overridable in contact view                     |             |
-| twitter:player          | idem og:video                                                                      |     yes     |
-| twitter:player:width    | idem og:video:width                                                                |     yes     |
-| twitter:player:height   | idem og:video:height                                                               |     yes     |  
 
 
 ### Manual article override
@@ -140,17 +131,6 @@ If empty the article title will be used instead
 If empty the beginning of the article will be used instead (all html tags will be automatically striped)
 1. **Related article**  
 Add some related resources to try to gain related items from your site under your post in the stream.
-1. **Video HTTPS Url**  
-Enter the url of the video resource associated to your content. Note that Facebook and Twitter REQUIRE HTTPS to avoid mixed content browser errors when playing the video in the stream
-1. **Video MIME**  
-This field should be automatically populated by pressing the Fetch button. If not the accepted values are: application/x-shockwave-flash or video/mp4
-1. **Video width**  
-Width of your video in pixels
-1. **Video height**  
-Height of your video in pixels  
-1. **Content's main type**  
-You shouldn't touch anything except if you wish your article to be treated as a video content. It may then become streamable in Facebook and Twitter streams. The other interest of setting an article as video content is to try to get a video preview in Google search result.
-
 
 ### Sites with multiple authors
 > NOTE:  
