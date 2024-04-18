@@ -47,13 +47,15 @@
 				<field
 						name="facebookmeta_appid"
 						type="text"
-						label="PLG_SYSTEM_SOCIALMETA_FBAPPID"
+						_label="PLG_SYSTEM_SOCIALMETA_FBAPPID"
+						label="Facebook App id"
 						description="PLG_SYSTEM_SOCIALMETA_FBAPPID_DESC"
 				/>
 				<field
 						name="facebookmeta_appadmin"
 						type="text"
-						label="PLG_SYSTEM_SOCIALMETA_ADMINS"
+						_label="PLG_SYSTEM_SOCIALMETA_ADMINS"
+						label="Facebook App Admin id"
 						description="PLG_SYSTEM_SOCIALMETA_ADMINS_DESC"
 				/>
 				<field
@@ -79,7 +81,8 @@
 						name="facebookmeta_googleplus"
 						type="text"
 						default=""
-						label="PLG_SYSTEM_SOCIALMETA_GOOGLEPLUS"
+						_label="PLG_SYSTEM_SOCIALMETA_GOOGLEPLUS"
+						label="Google publisher name"
 						description="PLG_SYSTEM_SOCIALMETA_GOOGLEPLUS_DESC"
 				/>
 				<field
