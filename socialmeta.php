@@ -12,13 +12,19 @@
 
 defined('_JEXEC') or die;
 
-require_once JPATH_SITE . '/components/com_content/helpers/route.php';
+use Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
+version_compare(JVERSION, '4.0', 'lt')
+    ? require_once JPATH_SITE . '/components/com_content/helpers/route.php'
+    : require_once JPATH_SITE . '/components/com_content/src/Helper/RouteHelper.php';
 
 /**
  * Joomla! Socialmeta plugin.
  *
  * @since  1.0
  */
+#[AllowDynamicProperties] //php8.2 compatibility
 class PlgSystemSocialmeta extends JPlugin
 {
 	protected $defaultimage = '';
@@ -36,6 +42,7 @@ class PlgSystemSocialmeta extends JPlugin
 	protected $flexicontent_imagesize_field = '';
 	protected $db;
 	protected $autoloadLanguage = true;
+	private $app;
 
 	/**
 	 * Constructor.
@@ -67,10 +74,12 @@ class PlgSystemSocialmeta extends JPlugin
 		$this->flexicontent_imagesize_field = $this->params->get('facebookmeta_flexicontent_imagesize_field', 'medium');
 
 		// Get the application if not done by JPlugin. This may happen during upgrades from Joomla 2.5.
-		if (empty($this->app))
-		{
-			$this->app = JFactory::getApplication();
-		}
+		$this->app = $this->app ?? JFactory::getApplication();
+
+		// Is superadmin Flag
+		$this->isSuperAdmin = JFactory::getUser()->authorise('core.admin', 'root.1');
+		// Is debug Flag
+		$this->debug = JDEBUG || $this->isSuperAdmin;
 	}
 
 	/**
@@ -86,9 +95,9 @@ class PlgSystemSocialmeta extends JPlugin
 	 */
 	function onAfterRoute()
 	{
-		if ($this->app->isAdmin())
+		if ($this->app->isClient('administrator'))
 		{
-			return true;
+			return;
 		}
 
 		$unsupported = false;
@@ -117,78 +126,87 @@ class PlgSystemSocialmeta extends JPlugin
 	/**
 	 * Add the metatags.
 	 *
-	 * @return  void
+	 * @return  void|bool
 	 *
 	 * @throws Exception
 	 * @since   1.0
 	 */
 	public function onBeforeCompileHead()
 	{
-		$document                 = JFactory::getDocument();
-		$config                   = JFactory::getConfig();
-		$jinput                   = JFactory::getApplication()->input;
-		$option                   = $jinput->get('option', '', 'CMD');
-		$view                     = $jinput->get('view', '', 'CMD');
-		$context                  = $option . '.' . $view;
-		$id                       = (int) $jinput->get('id', '', 'CMD');
-		$allowed                  = array('com_content.article', 'com_flexicontent.item');
-		$googledata               = new StdClass();
-		$googledata->{'@context'} = 'http://schema.org/';
-		$googledata->{'@type'}    = 'Article';
+		// Common API instances
+		$document = JFactory::getDocument();
+		$config   = JFactory::getConfig();
+		$jinput   = JFactory::getApplication()->input;
+		$lang     = JFactory::getLanguage();
 
-		$objectype = "article"; // set a default object type
+		// Common view DATA (component and view names)
+		$option   = $jinput->get('option', '', 'CMD');
+		$view     = $jinput->get('view', '', 'CMD');
 
-		// Add some JS to the forms and Exclude meta creation in the Admin
-		if ($this->app->isAdmin())
+		// For views that have custom VIEW and custom ID ...
+		$view_actual = $jinput->get('view_actual', '', 'CMD');
+		$id_actual   = (int) $jinput->get('id_actual', '', 'CMD');
+		$view = $view_actual ?: $view;
+
+		/**
+		 * Add some JS to the forms and Exclude meta creation in the Admin
+		 */
+		if ($this->app->isClient('administrator'))
 		{
 			// A small test to integrate a character counter for the title
 			$script = "jQuery(document).ready(function($){
-						$('#jform_attribs_facebookmeta_title').characterCounter({
-							limit: " . $this->facebookmeta_titlelimit . ",
-							counterFormat: '%1 " . JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT') . "'
-						});
-						$('#jform_attribs_facebookmeta_desc').characterCounter({
-							limit: " . $this->facebookmeta_desclimit . ",
-							counterFormat: '%1 " . JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT') . "'
-						});
-						$('#jform_params_facebookmeta_title').characterCounter({
-							limit: " . $this->facebookmeta_titlelimit . ",
-							counterFormat: '%1 " . JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT') . "'
-						});
-						$('#jform_params_facebookmeta_desc').characterCounter({
-							limit: " . $this->facebookmeta_desclimit . ",
-							counterFormat: '%1 " . JText::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT') . "'
-						});
-					  });
-					  ";
+				$('#jform_attribs_facebookmeta_title, #jform_params_facebookmeta_title').characterCounter({
+					limit: " . $this->facebookmeta_titlelimit . ",
+					counterFormat: '%1 " . Text::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT') . "'
+				});
+				$('#jform_attribs_facebookmeta_desc, #jform_params_facebookmeta_desc').characterCounter({
+					limit: " . $this->facebookmeta_desclimit . ",
+					counterFormat: '%1 " . Text::_('PLG_SYSTEM_SOCIALMETA_CHARSLEFT') . "'
+				});
+			});
+			";
 			$document->addScript(JURI::root(true) . '/plugins/system/socialmeta/js/jquery.charactercounter.js');
 			$document->addScriptDeclaration($script);
 
 			// css to style the counter
-			$css =
-				"
+			$css = "
 				span.exceeded { color: #E00B0B; }
 				.counter { padding-left: 15px; font-size: 11px; }
 				.media-body { padding-left: 15px; }
 				#videoscreen { background-image: url(../plugins/system/socialmeta/img/screen-mini.png); width:300px; height:246px; float: left; }
 				#videoscreen img { padding: 11px 0 0 11px !important; width: 278px !important; height: 157px !important; }
-				";
+			";
 			$document->addStyleDeclaration($css);
 
 			return true;
 		}
 
-		// Don't process meta on RSS feeds to avoid crashes
-		if ($jinput->get('format', '', 'CMD') == 'feed')
+
+		/**
+		 * Don't process meta on non-HTML formats, e.g. RSS feeds
+		 */
+		if ($jinput->get('format', 'html', 'CMD') !== 'html')
 		{
 			return true;
 		}
 
-		// We check if the view is allowed
-		if (!in_array($context, $allowed))
+
+		/**
+		 * Check current component - view pair is supported
+		 */
+		$viewConfig = $this->_loadXmlConfig($option, $view);
+		if (!$viewConfig)
 		{
 			return true;
 		}
+
+
+		/**
+		 * Create google microdata
+		 */
+		$googledata               = new StdClass();
+		$googledata->{'@context'} = 'http://schema.org/';
+		$googledata->{'@type'}    = (string) $viewConfig->microdata->attributes()['type']; // TODO modify this to use microdata per flexicontent type
 
 		// Add Google structured data for publishers
 		if (!empty($this->facebookmeta_googleplus))
@@ -207,17 +225,19 @@ class PlgSystemSocialmeta extends JPlugin
 			$googledata->publisher->logo->fileFormat = $size['mime'];
 		}
 
-		// Find the language code of your page
-		$lang                   = JFactory::getLanguage();
-		$locale                 = $lang->getTag();
-		$languagecode_installed = JPluginHelper::isEnabled('system', 'languagecode');
-		if ($languagecode_installed)
-		{
-			$locale = $this->getNewLanguageCode($locale);
-		}
+
+		/**
+		 * Find the language code of your page
+		 */
+		$locale = JPluginHelper::isEnabled('system', 'languagecode')
+			? $this->getNewLanguageCode($lang->getTag())
+			: $lang->getTag();
 		$locale = str_replace('-', '_', $locale);
 
-		// We intialize the meta image property with the default image if set
+
+		/**
+		 * We initialize the meta image property with the default image if set - (plugin configuration)
+		 */
 		if ($this->defaultimage && $size = @ getimagesize(JPath::clean(JPATH_SITE . '/' . $this->defaultimage)))
 		{
 			$metaimage                     = '<meta property="og:image" content="' . JURI::base() . $this->defaultimage . '" />';
@@ -233,77 +253,124 @@ class PlgSystemSocialmeta extends JPlugin
 			$googledata->image->fileFormat = $size['mime'];
 		}
 
-		$metaurl                      = '<meta property="og:url" content="' . JURI::current() . '" />';
+		/**
+		 * We initialize other meta data if set - (plugin configuration)
+		 */
+		$metaurl                      = '<meta property="og:url" content="' . JURI::getInstance()->toString() . '" />';
 		$googledata->mainEntityOfPage = JURI::current();
 		$metatype                     = '<meta property="og:type" content="article" />';
-		$metatypetw                   = '<meta name="twitter:card" content="summary_large_image" />';
+		//$metatypetw                   = '<meta name="twitter:card" content="summary_large_image" />';  // THIS IS NOT WORKING, use line below
+		$metatypetw                   = '<meta name="twitter:card" content="summary" />';
 		$metasitename                 = '<meta property="og:site_name" content="' . $config->get('sitename') . '" />';
 		$metalocale                   = '<meta property="og:locale" content="' . $locale . '" />';
 		$googledata->inLanguage       = $lang->getTag();
-		if ($this->fbappid)
-		{
-			$metafbappid = '<meta property="fb:app_id" content="' . $this->fbappid . '" />';
-		}
-		else
-		{
-			$metafbappid = '';
-		}
-		if ($this->facebookmeta_admin)
-		{
-			$metafbadmins = '<meta property="fb:admins" content="' . $this->facebookmeta_admin . '" />';
-		}
-		else
-		{
-			$metafbadmins = '';
-		}
+		$metafbappid                  = $this->fbappid ? '<meta property="fb:app_id" content="' . $this->fbappid . '" />' : '';
+		$metafbadmins                 = $this->facebookmeta_admin ? '<meta property="fb:admins" content="' . $this->facebookmeta_admin . '" />' : '';
 
-		// Handle values of the content table
-		if (($option == 'com_content' && $view == 'article') || ($option == 'com_flexicontent' && $view == 'item'))
+
+		/**
+		 * Default handler, handles com_content.article, com_flexicontent.item and standard pattern views ...
+		 */
+		$is_com_content      = ($option == 'com_content' && $view == 'article') || ($option == 'com_flexicontent' && $view == 'item');
+		$use_default_handler = $is_com_content || true;  // ... TODO examine more
+
+		if ($use_default_handler)
 		{
-			$article            = $this->getObjectContent($id);
-			$article->tags      = new JHelperTags;
-			$category           = $this->getObjectContent($article->catid, 'category');
-			$images             = json_decode($article->images);
-			$facebookmeta_image = '';
+			// Component - View context and ID of record
+			$context      = $option . '.' . $view;
+			$id           = (int) $jinput->get('id', '', 'CMD');
+			// For views that have custom ID ...
+			$id = $id_actual ?: $id;
+
+			// Tags context, J-Table name, J-Table prefix
+			$tags_context = $is_com_content ? 'com_content.content' : $context;
+			$jtable       = (string) $viewConfig->dbdata->attributes()['jtable'];
+			$prefix       = (string) $viewConfig->dbdata->attributes()['prefix'];
+
+			// Load item and category data from correct j-table
+			Table::addIncludePath(JPATH_ADMINISTRATOR . '/component/' . $option . '/tables');
+
+			$article    = $this->getObjectContent($id, $jtable, $prefix);
+			if (!$article) return;
+			//echo '<pre>'; print_r($article); exit;
+
+			// Get category but do not abort if none
+			$category   = !empty($article->catid) ? $this->getObjectContent($article->catid, 'category') : false;
+			//if (!$category) return;
+
+			// Non com-content components use description field
+			$title_dbcol       = (string) $viewConfig->title->attributes()['dbcolumn'];
+			$introtext_dbcol   = (string) $viewConfig->introtext->attributes()['dbcolumn'];
+			$fulltext_dbcol    = (string) $viewConfig->fulltext->attributes()['dbcolumn'];
+
+			$image_conf        = $viewConfig->image;
+			$image_dbcol       = !empty($image_conf) ? (string) $image_conf->attributes()['dbcolumn'] : false;
+			$image_srcprop     = !empty($image_conf) ? (string) $image_conf->attributes()['sourceproperty'] : false;
+			$image_isjson      = !empty($image_conf) ? (int) $image_conf->attributes()['isjson'] : 0;
+			$image_ismultiple  = !empty($image_conf) ? (int) $image_conf->attributes()['ismultiple'] : 0;
+
+			$article_title     = $article->{$title_dbcol};
+			$article_introtext = $article->{$introtext_dbcol};
+			$article_fulltext  = $article->{$fulltext_dbcol};
+			$article_image     = $image_dbcol ? $article->{$image_dbcol} : false;
+
+			// Get item's category and (for com-content only) decode json of (intro/full)-text images
+			$images   = $is_com_content ? json_decode($article->images) : (object)['image_fulltext'=>'', 'image_intro'=>''];
 
 			// Logic and pattern partially borrowed from SocialMetaTags plugin https://github.com/hans2103/pkg_SocialMetaTags
+			$facebookmeta_image = '';
 			if ($this->facebookmeta_article_image != 0)
 			{
-				// Sets default images
-				if (strpos($article->fulltext, '<img') !== false)
+				/**
+				 * Get img tag from article description text(s)
+				 * Priority (high to low): [0] via configuration, [1] (intro/full)-text images (com-content only), [2] introtext, [3] fulltext
+				 */
+				// [0]
+				if ($article_image)
 				{
-					// Get img tag from article
-					preg_match('/(?<!_)src=([\'"])?(.*?)\\1/', $article->fulltext, $articleimages);
+					$facebookmeta_image = $image_isjson ? json_decode($article_image, true) : $article_image;
+					$facebookmeta_image = $facebookmeta_image && $image_ismultiple ? reset($facebookmeta_image) : $facebookmeta_image;
+					$facebookmeta_image = $facebookmeta_image && $image_srcprop ? $facebookmeta_image[$image_srcprop] : $facebookmeta_image;
+				}
+
+				// [1]
+				if (!$facebookmeta_image)
+				{
+					$facebookmeta_image = $this->facebookmeta_article_image == 2 && !empty($images->image_fulltext) ? $images->image_fulltext : $facebookmeta_image;
+					$facebookmeta_image = $this->facebookmeta_article_image == 1 && !empty($images->image_intro) ? $images->image_intro : $facebookmeta_image;
+				}
+
+				// [2]
+				if (!$facebookmeta_image && strpos($article_introtext, '<img') !== false)
+				{
+					preg_match('/(?<!_)src=([\'"])?(.*?)\\1/', $article_introtext, $articleimages);
 					$facebookmeta_image = $articleimages[2];
 				}
-				if (strpos($article->introtext, '<img') !== false)
+
+				// [3]
+				if (!$facebookmeta_image && strpos($article_fulltext, '<img') !== false)
 				{
 					// Get img tag from article
-					preg_match('/(?<!_)src=([\'"])?(.*?)\\1/', $article->introtext, $articleimages);
+					preg_match('/(?<!_)src=([\'"])?(.*?)\\1/', $article_fulltext, $articleimages);
 					$facebookmeta_image = $articleimages[2];
-				}
-				if ($this->facebookmeta_article_image == 2)
-				{
-					if (!empty($images->image_fulltext))
-					{
-						$facebookmeta_image = $images->image_fulltext;
-					}
-				}
-				if ($this->facebookmeta_article_image == 1)
-				{
-					if (!empty($images->image_intro))
-					{
-						$facebookmeta_image = $images->image_intro;
-					}
 				}
 			}
 
 			// Add the tags to the article object
 			if (!empty($article->id))
 			{
-				$article->tags->getItemTags('com_content.article', $article->id);
+				$article->tags = new JHelperTags;
+				$article->tags->getItemTags($tags_context, $article->id);
 			}
-			$attribs = json_decode($article->attribs);
+
+			// Get current record data
+			// NOTE: Current item attributes will be empty if the edit form has not been saved after the plugin was installed and enabled
+			$form_fields_group = $viewConfig->form->attributes()['fields_group'] ?? false;
+			try {
+				$attribs = $form_fields_group ? json_decode($article->{$form_fields_group}) : false;
+			} catch (\Throwable $e){
+				$attribs = new stdClass();
+			}
 
 			// we set the article type as default type if no data is provided
 			$facebookmeta_ogtype           = @$attribs->facebookmeta_og_type ? $attribs->facebookmeta_og_type : "article";
@@ -322,60 +389,78 @@ class PlgSystemSocialmeta extends JPlugin
 			$facebookmeta_video_height     = @$attribs->facebookmeta_video_height;
 
 
-			// We have to set the article sharing image https://developers.facebook.com/docs/sharing/best-practices#images
-			if ($facebookmeta_image && $size = @ getimagesize(JPath::clean(JPATH_SITE . '/' . $facebookmeta_image)))
+			// Check image is absolute url
+			$facebookmeta_image_is_abs   = (boolean) parse_url($facebookmeta_image, PHP_URL_SCHEME); // preg_match("#^http|^https#i", $facebookmeta_image);
+			// Check image is local site
+			$facebookmeta_image_is_local = !$facebookmeta_image_is_abs || strpos($facebookmeta_image, JURI::base()) === 0;
+
+			// Get full image url and full image file path, if external URL then we use the URL itself as file path getimagesize() supports this
+			if ($facebookmeta_image && $facebookmeta_image_is_local)
 			{
-				$metaimage                     = '<meta property="og:image" content="' . JURI::base() . $facebookmeta_image . '" />';
-				$metaimagetw                   = '<meta name="twitter:image" content="' . JURI::base() . $facebookmeta_image . '" />';
-				$metaimagewidth                = '<meta property="og:image:width" content="' . $size[0] . '" />';
-				$metaimageheight               = '<meta property="og:image:height" content="' . $size[1] . '" />';
-				$metaimagemime                 = '<meta property="og:image:type" content="' . $size['mime'] . '" />';
+				$facebookmeta_image_url  = $facebookmeta_image_is_abs ? $facebookmeta_image : JURI::base() . $facebookmeta_image;
+				$facebookmeta_image_file = $facebookmeta_image_is_abs
+					? str_replace(JURI::base(), JPATH_SITE . '/', $facebookmeta_image)
+					: JPATH_SITE . '/' . $facebookmeta_image;
+			}
+			else
+			{
+				$facebookmeta_image_file = $facebookmeta_image;
+				$facebookmeta_image_url  = $facebookmeta_image;
+			}
+
+			// !! Do not try to get size of external image URLs to avoid random long delays
+			$size = $facebookmeta_image_file && $facebookmeta_image_is_local ? @ getimagesize(JPath::clean($facebookmeta_image_file)) :false;
+
+			// We have to set the article sharing image https://developers.facebook.com/docs/sharing/best-practices#images
+			if ($facebookmeta_image_url)
+			{
+				$metaimage       = '<meta property="og:image" content="' . $facebookmeta_image_url . '" />';
+				$metaimagetw     = '<meta name="twitter:image" content="' . $facebookmeta_image_url . '" />';
+				$metaimagewidth  = $size ? '<meta property="og:image:width" content="' . $size[0] . '" />' : '';
+				$metaimageheight = $size ? '<meta property="og:image:height" content="' . $size[1] . '" />' : '';
+				$metaimagemime   = $size ? '<meta property="og:image:type" content="' . $size['mime'] . '" />' : '';
+
 				$googledata->image             = new StdClass();
 				$googledata->image->{'@type'}  = 'ImageObject';
-				$googledata->image->url        = JURI::base() . $facebookmeta_image;
-				$googledata->image->width      = $size[0];
-				$googledata->image->height     = $size[1];
-				$googledata->image->fileFormat = $size['mime'];
+				$googledata->image->url        = $facebookmeta_image_url;
+				if ($size)
+				{
+					$googledata->image->width = $size[0];
+					$googledata->image->height = $size[1];
+					$googledata->image->fileFormat = $size['mime'];
+				}
 			}
-			if ($article->modified)
-			{
-				$metaupdated = '<meta property="og:updated_time" content="' . $this->to8601($article->modified) . '" />';
-			}
-			else
-			{
-				$metaupdated = '';
-			}
-			if ($this->facebookmeta_auth)
-			{
-				$metaauth = '<meta property="article:author" content="' . ($facebookmeta_author ? $facebookmeta_author : $this->facebookmeta_auth) . '" />';
-			}
-			else
-			{
-				$metaauth = '';
-			}
+
+			$metaupdated  = $article->modified
+				? '<meta property="og:updated_time" content="' . $this->to8601($article->modified) . '" />' : '';
+			$metaauth     = $this->facebookmeta_auth
+				? '<meta property="article:author" content="' . ($facebookmeta_author ? $facebookmeta_author : $this->facebookmeta_auth) . '" />'
+					//. "\n" . '	<meta content="' . ($facebookmeta_author ? $facebookmeta_author : $this->facebookmeta_auth) . '" property="author" >'
+				: '';
+
 			$googledata->author            = new StdClass();
 			$googledata->author->{'@type'} = 'Person';
-			$googledata->author->name      = $article->created_by_alias ? $article->created_by_alias : $this->getUserName($article->created_by);
-			if ($this->facebookmeta_twittersite)
-			{
-				$metaauthtw = '<meta name="twitter:site" content="' . ($facebookmeta_authortw ? $facebookmeta_authortw : $this->facebookmeta_twittersite) . '" />';
-			}
-			else
-			{
-				$metaauthtw = '';
-			}
-			if ($this->facebookmeta_pub)
-			{
-				$metapublisher = '<meta property="article:publisher" content="' . $this->facebookmeta_pub . '" />';
-			}
-			$metasection                = '<meta property="article:section" content="' . $category->title . '" />';
-			$googledata->articleSection = $category->title;
+			$googledata->author->name      = !empty($article->created_by_alias) ? $article->created_by_alias : $this->getUserName($article->created_by);
+
+			$metaauthtw    = $this->facebookmeta_twittersite
+				? '<meta name="twitter:site" content="' . ($facebookmeta_authortw ? $facebookmeta_authortw : $this->facebookmeta_twittersite) . '" />' : '';
+			$metapublisher = $this->facebookmeta_pub
+				? '<meta property="article:publisher" content="' . $this->facebookmeta_pub . '" />' : '';
+
+			$metasection                = $category ? '<meta property="article:section" content="' . $category->title . '" />' : '';
+			$googledata->articleSection = $category ? $category->title : '';
 			$metapub                    = array();
 			$metapub['modified']        = '<meta property="article:modified_time" content="' . $this->to8601($article->modified) . '" />';
 			$googledata->dateModified   = $this->to8601($article->modified);
-			$metapub['publish_ub']      = '<meta property="article:published_time" content="' . $this->to8601($article->publish_up) . '" />';
+			$article->publish_up        = !empty($article->publish_up) && $article->publish_up != '0000-00-00 00:00:00'
+				? $article->publish_up
+				: (!empty($article->created) ? $article->created : '');
+
+			$metapub['publish_up']      = '<meta property="article:published_time" content="' . $this->to8601($article->publish_up) . '" />'
+				//. "\n" . '	<meta content="' . $this->to8601($article->publish_up) . '" property="pubdate">'
+				;
 			$googledata->datePublished  = $this->to8601($article->publish_up);
-			if ($article->publish_down != '0000-00-00 00:00:00')
+			if (!empty($article->publish_down) && $article->publish_down != '0000-00-00 00:00:00')
 			{
 				$metapub['publish_down'] = '<meta property="article:expiration_time" content="' . $this->to8601($article->publish_down) . '" />';
 			}
@@ -445,12 +530,12 @@ class PlgSystemSocialmeta extends JPlugin
 			}
 			else
 			{
-				$metatitle            = '<meta property="og:title" content="' . $this->striptagsandcut($article->title, $this->facebookmeta_titlelimit) . '" />';
-				$metattitletw         = '<meta name="twitter:title" content="' . $this->striptagsandcut($article->title, $this->facebookmeta_titlelimit) . '" />';
-				$googledata->headline = $this->striptagsandcut($this->striptagsandcut($article->title, $this->facebookmeta_titlelimit));
-				$googledata->name     = $this->striptagsandcut($this->striptagsandcut($article->title, $this->facebookmeta_titlelimit));
+				$metatitle            = '<meta property="og:title" content="' . $this->striptagsandcut($article_title, $this->facebookmeta_titlelimit) . '" />';
+				$metattitletw         = '<meta name="twitter:title" content="' . $this->striptagsandcut($article_title, $this->facebookmeta_titlelimit) . '" />';
+				$googledata->headline = $this->striptagsandcut($this->striptagsandcut($article_title, $this->facebookmeta_titlelimit));
+				$googledata->name     = $this->striptagsandcut($this->striptagsandcut($article_title, $this->facebookmeta_titlelimit));
 			}
-			// We use the introtext field if none is provided
+			// We use the introtext or description field if none is provided
 			if ($facebookmeta_desc)
 			{
 				$metadesc                = '<meta property="og:description" content="' . $this->striptagsandcut($facebookmeta_desc) . '" />';
@@ -465,9 +550,9 @@ class PlgSystemSocialmeta extends JPlugin
 			}
 			else
 			{
-				$metadesc                = '<meta property="og:description" content="' . $this->striptagsandcut($article->introtext, $this->facebookmeta_desclimit) . '" />';
-				$metadesctw              = '<meta name="twitter:description" content="' . $this->striptagsandcut($article->introtext, $this->facebookmeta_desclimit) . '" />';
-				$googledata->description = $this->striptagsandcut($article->introtext, $this->facebookmeta_desclimit);
+				$metadesc                = '<meta property="og:description" content="' . $this->striptagsandcut($article_introtext, $this->facebookmeta_desclimit) . '" />';
+				$metadesctw              = '<meta name="twitter:description" content="' . $this->striptagsandcut($article_introtext, $this->facebookmeta_desclimit) . '" />';
+				$googledata->description = $this->striptagsandcut($article_introtext, $this->facebookmeta_desclimit);
 			}
 
 			// com_flexicontent specific routine to overrride image
@@ -563,7 +648,7 @@ class PlgSystemSocialmeta extends JPlugin
 		if ($this->params->get('og_image', 1) && @$metaimage)
 		{
 			$document->addCustomTag($metaimage);
-			$document->addCustomTag($metaimagetw);
+            if (!empty($metaimagetw)) $document->addCustomTag($metaimagetw);
 			// og:image:width
 			$document->addCustomTag($metaimagewidth);
 			// og:image:height
@@ -671,7 +756,7 @@ class PlgSystemSocialmeta extends JPlugin
 			$document->addCustomTag($metatypetw);
 			$document->addCustomTag($metattitletw);
 			$document->addCustomTag($metadesctw);
-			$document->addCustomTag($metaimagetw);
+			if (!empty($metaimagetw)) $document->addCustomTag($metaimagetw);
 		}
 		// twitter:site
 		if ($this->params->get('twitter_site', 1))
@@ -702,29 +787,30 @@ class PlgSystemSocialmeta extends JPlugin
 	}
 
 	/**
-	 * Get the modified language code if the plugin is enabled
+	 * Get the modified language code (URL segment) if the languagecode plugin is enabled
 	 *
-	 * @param   string  $tag  the language tag
+	 * @param    string  $tag  the language tag
 	 *
-	 * @return    string        $newtag        the modified language tag
+	 * @return   string        the modified language tag (used as URL segment)
 	 *
 	 * @since 1.1
 	 */
 	private function getNewLanguageCode($tag = 'en-GB')
 	{
-		$db    = JFactory::getDBO();
-		$query = $db->getQuery(true);
-		$query->select('params');
-		$query->from($db->quoteName('#__extensions'));
-		$query->where($db->quoteName('name') . " = " . $db->quote('plg_system_languagecode'));
-		$db->setQuery($query);
-		$params = $db->loadResult();
+		$db = JFactory::getDBO();
 
+		// Load language parameters
+		$params = $db->setQuery($db->getQuery(true)
+			->select('params')
+			->from($db->quoteName('#__extensions'))
+			->where($db->quoteName('name') . " = " . $db->quote('plg_system_languagecode'))
+		)->loadResult();
+
+		// Parse the parameters
 		$lcparams = new JRegistry($params);
 
-		$newtag = $lcparams->get(strtolower($tag));
-
-		return (!empty($newtag)) ? $newtag : $tag;
+		// Return the modified language tag (used as URL segment) (if it exists, otherwise return the given tag)
+		return $lcparams->get(strtolower($tag)) ?: $tag;
 	}
 
 	/**
@@ -732,23 +818,28 @@ class PlgSystemSocialmeta extends JPlugin
 	 *
 	 * @param   int     $id
 	 * @param   string  $table
+	 * @param   string  $prefix
 	 *
 	 * @return  object.
 	 *
 	 * @since   1.0
 	 */
-	private function getObjectContent($id, $table = 'content')
+	private function getObjectContent($id, $table = 'content', $prefix = 'JTable')
 	{
-		$db = JFactory::getDbo();
+		// Load record data
+		$dataobject = Table::getInstance($table, $prefix);
+		$dataobject ? $dataobject->load($id) : false;
 
-		$dataobject = JTable::getInstance($table);
-		$dataobject->load($id);
+		if ($this->debug && !$dataobject)
+		{
+			JFactory::getApplication()->enqueueMessage('socialmeta plg: Could not load JTable: ' . $prefix.$table, 'notice');
+		}
 
 		return $dataobject;
 	}
 
 	/**
-	 * Returns a the facebookprofile store in the contact
+	 * Returns the Facebook profile stored in the contact
 	 *
 	 * @TODO  : getExternalProperties(userid,property)
 	 *
@@ -759,60 +850,52 @@ class PlgSystemSocialmeta extends JPlugin
 	 */
 	private function getUserFacebookProfile($userid)
 	{
-		$db    = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('params');
-		$query->from($db->quoteName('#__contact_details'));
-		$query->where($db->quoteName('user_id') . " = " . $db->quote($userid));
+		$db = JFactory::getDbo();
 
-		// Reset the query using our newly populated query object.
-		$db->setQuery($query);
-		$userparams = $db->loadResult();
+		// Load user parameters of given user id
+		$userparams = $db->setQuery($db->getQuery(true)
+			->select('params')
+			->from($db->quoteName('#__contact_details'))
+			->where($db->quoteName('user_id') . " = " . $db->quote($userid))
+		)->loadResult();
 
-		if ($userparams)
-		{
-			$userparams = json_decode($userparams);
-			$fbprofile  = !empty($userparams->facebookmeta_fbuserprofile) ? $userparams->facebookmeta_fbuserprofile : '';
-		}
-		else
-		{
-			$fbprofile = '';
-		}
+		// Decode them
+		$userparams = $userparams ? json_decode($userparams) : false;
 
-		return $fbprofile;
+		// Return the Facebook profile URL (if it exists, otherwise empty)
+		return $userparams
+			? (!empty($userparams->facebookmeta_fbuserprofile) ? $userparams->facebookmeta_fbuserprofile : '')
+			: '';
 	}
 
 	/**
-	 * Returns a the twitterprofile store in the contact
+	 * Returns the Twitter profile stored in the contact
 	 *
 	 * @TODO  : getExternalProperties(userid,property)
 	 *
 	 * @param   int  $userid
 	 *
-	 * @return    string        Facebook profile URL of the user
+	 * @return    string        Twitter profile URL of the user
 	 * @since 1.0
 	 */
 	private function getUserTwitterProfile($userid)
 	{
-		$db    = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('params');
-		$query->from($db->quoteName('#__contact_details'));
-		$query->where($db->quoteName('user_id') . " = " . $db->quote($userid));
-		// Reset the query using our newly populated query object.
-		$db->setQuery($query);
-		$userparams = $db->loadResult();
-		if ($userparams)
-		{
-			$userparams = json_decode($userparams);
-			$twprofile  = !empty($userparams->facebookmeta_twitteruser) ? $userparams->facebookmeta_twitteruser : '';
-		}
-		else
-		{
-			$twprofile = '';
-		}
+		$db = JFactory::getDbo();
 
-		return $twprofile ? $twprofile : '';
+		// Load user parameters of given user id
+		$userparams = $db->setQuery($db->getQuery(true)
+			->select('params')
+			->from($db->quoteName('#__contact_details'))
+			->where($db->quoteName('user_id') . " = " . $db->quote($userid))
+		)->loadResult();
+
+		// Decode them
+		$userparams = $userparams ? json_decode($userparams) : false;
+
+		// Return the Twitter profile URL (if it exists, otherwise empty)
+		return $userparams
+			? (!empty($userparams->facebookmeta_twitteruser) ? $userparams->facebookmeta_twitteruser : '')
+			: '';
 	}
 
 	/**
@@ -831,7 +914,7 @@ class PlgSystemSocialmeta extends JPlugin
 	}
 
 	/**
-	 * Returns a the the name of a user
+	 * Returns the name of a user
 	 *
 	 * @TODO  : getExternalProperties(userid,property)
 	 *
@@ -842,15 +925,12 @@ class PlgSystemSocialmeta extends JPlugin
 	 */
 	private function getUserName($userid)
 	{
-		$db    = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('name');
-		$query->from($db->quoteName('#__users'));
-		$query->where($db->quoteName('id') . " = " . $db->quote($userid));
-		$db->setQuery($query);
-		$username = $db->loadResult();
-
-		return $username;
+		$db = JFactory::getDbo();
+		return $db->setQuery($db->getQuery(true)
+			->select('name')
+			->from($db->quoteName('#__users'))
+			->where($db->quoteName('id') . " = " . $db->quote($userid))
+		)->loadResult();
 	}
 
 	/**
@@ -893,14 +973,14 @@ class PlgSystemSocialmeta extends JPlugin
 		$cleantext = preg_replace('/[\p{Z}\s]{2,}/u', ' ', $cleantext);  // Unicode safe whitespace replacing
 
 		// Calculate length according to UTF-8 encoding
-		$uncut_length = JString::strlen($cleantext);
+		$uncut_length = \Joomla\String\StringHelper::strlen($cleantext);
 
 		// Cut off the text if required but reencode html entities before doing so
 		if ($chars)
 		{
 			if ($uncut_length > $chars)
 			{
-				$cleantext = JString::substr($cleantext, 0, $chars) . '...';
+				$cleantext = \Joomla\String\StringHelper::substr($cleantext, 0, $chars) . '...';
 			}
 		}
 
@@ -921,70 +1001,61 @@ class PlgSystemSocialmeta extends JPlugin
 	 */
 	private function getFCfieldname($id)
 	{
-		$db    = JFactory::getDBO();
-		$query = $db->getQuery(true);
-		$query->select('name');
-		$query->from($db->quoteName('#__flexicontent_fields'));
-		$query->where($db->quoteName('id') . " = " . $db->quote($id));
-		$db->setQuery($query);
-		$fieldname = $db->loadResult();
+		$db = JFactory::getDBO();
 
-		return $fieldname;
+		return $db->setQuery($db->getQuery(true)
+			->select('name')
+			->from($db->quoteName('#__flexicontent_fields'))
+			->where($db->quoteName('id') . " = " . $db->quote($id))
+		)->loadResult();
 	}
 
 	/**
-	 * Add the forms.
+	 * Add the social-meta form
 	 *
-	 * @return  void
+	 * @param $form  object|false  The JForm object
 	 *
-	 * @since   1.0
+	 * @return bool|void
+	 *
+	 * @throws Exception
+	 * @since version
 	 */
-	function onContentPrepareForm($form, $data)
+	function onContentPrepareForm($form)
 	{
+		// Common
+		$jinput  = JFactory::getApplication()->input;
+		$option  = $jinput->get('option', '', 'CMD');
+		$view    = $jinput->get('view', '', 'CMD');
+		$context = $form->getName();
+
+		// Sanity check form has been loaded
 		if (!($form instanceof JForm))
 		{
 			$this->_subject->setError('JERROR_NOT_A_FORM');
-
 			return false;
 		}
 
-		$app  = JFactory::getApplication();
-		$name = $form->getName();
-
-		// Flexicontent v3.2+ (due to better supporting J3.7.0+) will trigger
-		// the onContentPrepareForm event with context 'com_content.article'
-		$jinput  = JFactory::getApplication()->input;
-		$context = $jinput->get('option', '', 'CMD') . '.' . $jinput->get('view', '', 'CMD');
-		$name    = $context == 'com_flexicontent.item' ? 'com_flexicontent.item' : $name;
-
-		// Check we are manipulating a -supported- form.
-		switch ($name)
+		// Allow social meta editing only in backend
+		if (!$this->app->isClient('administrator'))
 		{
-			case 'com_content.article':
-				if ($app->isAdmin())
-				{
-					JForm::addFormPath(__DIR__ . '/forms');
-					$form->loadFile('com_content', false);
-				}
-
-				return true;
-			case 'com_contact.contact':
-				if ($app->isAdmin())
-				{
-					JForm::addFormPath(__DIR__ . '/forms');
-					$form->loadFile('com_contact', false);
-				}
-
-				return true;
-			case 'com_flexicontent.item':
-				if ($app->isAdmin())
-				{
-					JForm::addFormPath(__DIR__ . '/forms');
-					$form->loadFile('com_flexicontent', false);
-				}
-
-				return true;
+			return;
 		}
+
+		// Check current component - view pair is supported
+		$viewConfig = $this->_loadXmlConfig($option, $view, $context);
+		if (!$viewConfig)
+		{
+			return true;
+		}
+
+		// Load the XML form file of current component - view
+		// Default xpath is /form/.../field
+		$form_fields_group  = $viewConfig->form->attributes()['fields_group'] ?? false;
+		$xml_elements_xpath = '/form/fields' . ($form_fields_group ? "[@name='{$form_fields_group}']" : '');
+
+		// Load the XML form file of current component - view, limit to specific XML elements xpath
+		JForm::addFormPath(__DIR__ . '/forms');
+		$form->loadFile($option, false, $xml_elements_xpath);
 
 		return true;
 	}
@@ -1001,23 +1072,21 @@ class PlgSystemSocialmeta extends JPlugin
 	 */
 	private function decideFCimageFieldThumb($fieldname)
 	{
-		$img_fieldname = '';
+		$db   = JFactory::getDBO();
+		$data = $db->setQuery(
+			'SELECT attribs #__flexicontent_fields WHERE `name`=' . $db->Quote($fieldname)
+		)->loadAssocList();
 
-		$user  = JFactory::getUser();
-		$db    = JFactory::getDBO();
-		$query = 'SELECT attribs #__flexicontent_fields WHERE `name`=' . $db->Quote($img_fieldname);
-		$db->setQuery($query);
-		$data = $db->loadAssocList();
 		if (!$data)
 		{
-			$isSuperAdmin = $user->authorise('core.admin', 'root.1');
-			if (JDEBUG || $isSuperAdmin)
+			if ($this->debug)
 			{
-				JFactory::getApplication()->enqueueMessage('FLEXIcontent image field name : ' . $img_fieldname . ' was not found', 'notice');
+				JFactory::getApplication()->enqueueMessage('FLEXIcontent image field name : ' . $fieldname . ' was not found', 'notice');
 			}
 
 			return false;
 		}
+
 		$fparams = new JRegistry($data->attribs);
 
 		$w_l = $fparams->get('w_l');
@@ -1025,6 +1094,7 @@ class PlgSystemSocialmeta extends JPlugin
 
 		$sizes      = array('s', 'm', 'l');
 		$size_found = false;
+
 		foreach ($sizes as $size)
 		{
 			$width  = $fparams->get('w_' . $size);
@@ -1049,51 +1119,91 @@ class PlgSystemSocialmeta extends JPlugin
 	 */
 	private function isValidImageField($fieldname)
 	{
-		$user  = JFactory::getUser();
-		$db    = JFactory::getDBO();
-		$query = $db->getQuery(true);
-		$query->select('*');
-		$query->from($db->quoteName('#__flexicontent_fields'));
-		$query->where($db->quoteName('name') . " = " . $db->quote($fieldname));
-		$db->setQuery($query);
-		$data = $db->loadObject();
+		$db   = JFactory::getDBO();
+		$data = $db->setQuery($db->getQuery(true)
+			->select('*')
+			->from($db->quoteName('#__flexicontent_fields'))
+			->where($db->quoteName('name') . " = " . $db->quote($fieldname))
+		)->loadObject();
 
 		if (!$data) // does the field exist
 		{
-			$isSuperAdmin = $user->authorise('core.admin', 'root.1');
-			if (JDEBUG || $isSuperAdmin)
-			{
-				JFactory::getApplication()->enqueueMessage('FLEXIcontent field : ' . $fieldname . ' was not found', 'notice');
-			}
-
+			if ($this->debug) JFactory::getApplication()->enqueueMessage('FLEXIcontent field : ' . $fieldname . ' was not found', 'notice');
 			return false;
 		}
 		elseif ($data->field_type !== 'image') // is the field an image field
 		{
-			$isSuperAdmin = $user->authorise('core.admin', 'root.1');
-			if (JDEBUG || $isSuperAdmin)
-			{
-				JFactory::getApplication()->enqueueMessage('FLEXIcontent field : ' . $fieldname . ' is not an image', 'notice');
-			}
-
+			if ($this->debug) JFactory::getApplication()->enqueueMessage('FLEXIcontent field : ' . $fieldname . ' is not an image', 'notice');
 			return false;
-
 		}
 		elseif ($data->published != 1) // is the field published
 		{
-			$isSuperAdmin = $user->authorise('core.admin', 'root.1');
-			if (JDEBUG || $isSuperAdmin)
-			{
-				JFactory::getApplication()->enqueueMessage('FLEXIcontent image field name : ' . $fieldname . ' is unpublised', 'notice');
-			}
-
+			if ($this->debug) JFactory::getApplication()->enqueueMessage('FLEXIcontent image field name : ' . $fieldname . ' is unpublised', 'notice');
 			return false;
+		}
 
-		}
-		else
-		{
-			return true;
-		}
+		return true;
 	}
 
+
+	/**
+	 * Load and check that the XML form file for the given component-view pair
+	 *
+	 * @param   $option     string  The component name
+	 * @param   $view       string  The view name
+	 * @param   $context    string  The form context
+	 * @return  false|SimpleXMLElement
+	 *
+	 * @since version
+	 */
+	private function _loadXmlConfig($option, $view, $context = null)
+	{
+		if ($context)
+		{
+			list($option, $view) = explode('.', $context);
+		}
+
+		/**
+		 * Check current component is supported
+		 */
+		$component_form_path = JPath::clean(JPATH_ROOT.'/plugins/system/socialmeta/forms/' . $option .'.xml');
+		if (!file_exists($component_form_path))
+		{
+			return false;
+		}
+
+
+		/**
+		 * Attempt to parse the XML file
+		 */
+		try {
+			$xml = simplexml_load_file($component_form_path);
+		} catch (\Throwable $e) {
+			$xml = false;
+		}
+
+		if (!$xml)
+		{
+			if ($this->debug) $this->app->enqueueMessage('Error parsing component XML file: "' . $component_form_path . '". Social data could not be loaded', 'warning');
+			return false;
+		}
+
+		// context
+		/*if ($context)
+		{
+			foreach($xml->config->views as $config_view)
+			{
+				$config_view_form_context = $config_view->form->attributes()['context'] ?? false;
+				if ($config_view_form_context && $config_view_form_context === $context) return $config_view;
+			}
+			return false;
+		}*/
+
+		/**
+		 * We check if the view is allowed
+		 */
+		//print_r($option . ' - ' . $view); print_r($context); exit;
+		$viewConfig = $xml->config->views->{$view} ?? false;
+		return $viewConfig;
+	}
 }
